@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "ft_traceroute.h": "c",
+    "cstdlib": "c"
+  }
+}
