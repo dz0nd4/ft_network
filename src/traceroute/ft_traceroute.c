@@ -11,19 +11,16 @@
 /* ************************************************************************** */
 
 #include "ft_traceroute.h"
-#define __USE_BSD	/* use bsd'ish ip header */
-#include <sys/socket.h>	/* these headers are for a Linux system, but */
-#include <netinet/in.h>	/* the names on other systems are easy to guess.. */
-#include <netinet/ip.h>
-#define __FAVOR_BSD	/* use bsd'ish tcp header */
-#include <netinet/tcp.h>
-#include <unistd.h>
-#include<errno.h>
-#include<time.h>
 
 void ft_exit(char *s)
 {
 	perror(s);
+	exit(EXIT_FAILURE);
+}
+
+void ft_traceroute_exit(char *s)
+{
+	fprintf(stderr, "%s\n", s);
 	exit(EXIT_FAILURE);
 }
 
@@ -63,37 +60,37 @@ static void write_server(SOCKET sock, SOCKADDR_IN *sin, const char *buffer)
 	 }
 }
 
-int			ft_traceroute_wait(t_trace *ctx)
-{
-	fd_set 	rdfs;
-	int			ready_for_reading = 0;
-	SOCKADDR_IN to = { 0 };
-	SOCKADDR_IN from = { 0 };
-	char buffer[BUF_SIZE];
+// int			ft_traceroute_wait(t_trace *ctx)
+// {
+// 	fd_set 	rdfs;
+// 	int			ready_for_reading = 0;
+// 	SOCKADDR_IN to = { 0 };
+// 	SOCKADDR_IN from = { 0 };
+// 	char buffer[BUF_SIZE];
 
-	FD_ZERO(&rdfs);
-	FD_SET(ctx->sock_icmp, &rdfs);
+// 	FD_ZERO(&rdfs);
+// 	FD_SET(ctx->sock_icmp, &rdfs);
 
-	ready_for_reading = select(ctx->sock_icmp + 1, &rdfs, NULL, NULL, NULL);
+// 	ready_for_reading = select(ctx->sock_icmp + 1, &rdfs, NULL, NULL, NULL);
 
-	if (ready_for_reading) {
-		printf("ready !!\n");
-	} else {
-		printf("error !!\n");
-	}
+// 	if (ready_for_reading) {
+// 		printf("ready !!\n");
+// 	} else {
+// 		printf("error !!\n");
+// 	}
 
-	if(FD_ISSET(ctx->sock_icmp, &rdfs))
-		{
-			int n = read_server(ctx->sock_icmp, &to, buffer);
-			/* server down */
-			if(n == 0) {
-				ft_exit("read_server()");
-			} else {
-				printf("receiving msg from server");
-			}
-			puts(buffer);
-		}
-}
+// 	if(FD_ISSET(ctx->sock_icmp, &rdfs))
+// 		{
+// 			int n = read_server(ctx->sock_icmp, &to, buffer);
+// 			/* server down */
+// 			if(n == 0) {
+// 				ft_exit("read_server()");
+// 			} else {
+// 				printf("receiving msg from server");
+// 			}
+// 			puts(buffer);
+// 		}
+// }
 
 int 		ft_traceroute_exec(t_trace *ctx)
 {
@@ -115,17 +112,18 @@ int             ready_for_reading = 0;
 
 	for (int i = 1; i < 30; i++) {
 
-		ctx->addr_in_to.sin_port = htons(port);
-		// to.sin_addr.s_addr = inet_addr(ctx->target_ipv4);
-		// to.sin_port = htons(++port);
-		// to.sin_family = AF_INET;
+		ft_traceroute_send(ctx, port + i, i);
+		// ctx->addr_in_to.sin_port = htons(port);
+		// // to.sin_addr.s_addr = inet_addr(ctx->target_ipv4);
+		// // to.sin_port = htons(++port);
+		// // to.sin_family = AF_INET;
 
-		int ttl = i;
-		if (setsockopt(ctx->sock_udp, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl)) < 0)
-      printf ("Warning: Cannot set TTL!\n");
+		// int ttl = i;
+		// if (setsockopt(ctx->sock_udp, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl)) < 0)
+    //   printf ("Warning: Cannot set TTL!\n");
 
-		write_server(ctx->sock_udp, &ctx->addr_in_to, buffer);
-		read_server(ctx->sock_icmp, &from, buffer);
+		// write_server(ctx->sock_udp, &ctx->addr_in_to, buffer);
+		// read_server(ctx->sock_icmp, &from, buffer);
 	}
 
 	return (EXIT_SUCCESS);

@@ -19,6 +19,15 @@
 # include <arpa/inet.h>
 #include <netinet/in.h>
 #include <errno.h> 
+#define __USE_BSD	/* use bsd'ish ip header */
+#include <sys/socket.h>	/* these headers are for a Linux system, but */
+#include <netinet/in.h>	/* the names on other systems are easy to guess.. */
+#include <netinet/ip.h>
+#define __FAVOR_BSD	/* use bsd'ish tcp header */
+#include <netinet/tcp.h>
+#include <unistd.h>
+#include<errno.h>
+#include<time.h>
 
 # include "../ft_network_global.h"
 
@@ -26,6 +35,8 @@
 #define DEFAULT_RECV_TIMEOUT   6000     // six second
 #define DEFAULT_TTL            30       // default timeout
 #define BUF_SIZE 1024
+
+#define FT_ADDRSTRLEN 16
 
 // Global variables
 
@@ -44,13 +55,19 @@
 #define closesocket(s) close(s)
 
 typedef int SOCKET;
+typedef int t_socket;
 typedef struct sockaddr_in SOCKADDR_IN;
+typedef struct sockaddr_in  t_sockaddr_in;
 typedef struct sockaddr SOCKADDR;
+typedef struct sockaddr t_sockaddr;
 typedef struct in_addr IN_ADDR;
+typedef struct in_addr t_in_addr;
 
 typedef struct		s_traceroute
 {
   const char  *target_ipv4;
+  char        *host_name;
+  char        host_ipv4[FT_ADDRSTRLEN];
   int         hops;
   int         byte_packets;
   IN_ADDR     in_addr;
@@ -62,6 +79,7 @@ typedef struct		s_traceroute
 int			ft_traceroute(int argc, const char *argv[]);
 
 int			ft_traceroute_init(t_trace *ctx, const char *ipv4);
+int     ft_traceroute_send(t_trace *ctx, int port, int ttl);
 
 void 	  ft_exit(char *s);
 
