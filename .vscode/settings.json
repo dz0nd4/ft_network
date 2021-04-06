@@ -1,6 +1,11 @@
 {
   "files.associations": {
     "ft_traceroute.h": "c",
-    "cstdlib": "c"
+    "cstdlib": "c",
+    "stdlib.h": "c",
+    "inet.h": "c",
+    "types.h": "c",
+    "in.h": "c",
+    "socket.h": "c"
   }
 }
