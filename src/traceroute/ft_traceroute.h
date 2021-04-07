@@ -65,22 +65,21 @@ typedef struct in_addr t_in_addr;
 
 typedef struct		s_traceroute
 {
-  const char  *target_ipv4;
   char        *host_name;
   char        host_ipv4[FT_ADDRSTRLEN];
+  const char  *target_ipv4;
+  t_socket    sock_udp;
+  t_socket    sock_icmp;
   int         hops;
   int         byte_packets;
-  IN_ADDR     in_addr;
-  SOCKET      sock_udp;
-  SOCKET      sock_icmp;
-  SOCKADDR_IN addr_in_to;
+  t_sockaddr_in to;
 }					t_trace;
 
 int			ft_traceroute(int argc, const char *argv[]);
 
 int			ft_traceroute_init(t_trace *ctx, const char *ipv4);
 int     ft_traceroute_send(t_trace *ctx, int port, int ttl);
-
+int     ft_traceroute_receive(t_trace *ctx, int ttl);
 void 	  ft_exit(char *s);
 
 #endif

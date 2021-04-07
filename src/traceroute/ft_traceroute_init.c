@@ -104,31 +104,31 @@ int				ft_traceroute_init(t_trace *ctx, const char *ipv4)
 
 	// char *ip = tr_get_ip_from_hostname(ipv4);
 
+	ctx->host_name = ipv4;
+	ft_host_name_to_host_ipv4(ctx->host_name, ctx->host_ipv4);
 
-	ft_host_name_to_host_ipv4(ipv4, ctx->host_ipv4);
-
-	printf("%s\n", ctx->host_ipv4);
+	// printf("%s\n", ctx->host_ipv4);
 
 
-	if (ft_ipv4_to_struct(&ctx->in_addr, ctx->host_ipv4) == EXIT_FAILURE) {
-		return (EXIT_FAILURE);
-	}
-	ctx->target_ipv4 = ipv4;
+	// if (ft_ipv4_to_struct(&ctx->in_addr, ctx->host_ipv4) == EXIT_FAILURE) {
+	// 	return (EXIT_FAILURE);
+	// }
+	// ctx->target_ipv4 = ipv4;
 
-	if ((ctx->sock_udp = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET) {
+	if ((ctx->sock_udp = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
 		ft_exit("socket()");
 	}
 	// if ((ctx->sock_udp = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) == INVALID_SOCKET) {
 	// 	return (EXIT_FAILURE);
 	// }
 
-	// if ((ctx->sock_icmp = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET) {
-	// 	return (EXIT_FAILURE);
-	// }
+	if ((ctx->sock_icmp = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET) {
+		return (EXIT_FAILURE);
+	}
 
-	ctx->addr_in_to.sin_family = AF_INET;
-	ctx->addr_in_to.sin_addr.s_addr = inet_addr(ctx->target_ipv4);
-	ctx->addr_in_to.sin_port = htons(33435);
+	ctx->to.sin_family = AF_INET;
+	ctx->to.sin_port = htons(33435);
+	ctx->to.sin_addr.s_addr = inet_addr(ctx->host_ipv4);
 
 	ctx->hops = 30;
 	ctx->byte_packets = 60;

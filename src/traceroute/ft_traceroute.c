@@ -12,6 +12,19 @@
 
 #include "ft_traceroute.h"
 
+static int			ft_traceroute_help()
+{
+	printf("Usage:\n");
+	printf(" <sudo> ft_traceroute host\n");
+	return (EXIT_FAILURE);
+}
+
+static int			ft_traceroute_perm()
+{
+	printf("/!\\ You don't have root privileges /!\\\n");
+	return (ft_traceroute_help());
+}
+
 void ft_exit(char *s)
 {
 	perror(s);
@@ -22,42 +35,6 @@ void ft_traceroute_exit(char *s)
 {
 	fprintf(stderr, "%s\n", s);
 	exit(EXIT_FAILURE);
-}
-
-static int read_server(SOCKET sock, SOCKADDR_IN *sin, char *buffer)
-{
-   int n = 0;
-   size_t sinsize = sizeof *sin;
-
-	struct sockaddr_in source;
-
-	memset(&source, 0, sizeof(source));
-
-   if((n = recvfrom(sock, buffer, BUF_SIZE - 1, 0, (SOCKADDR *) sin, &sinsize)) < 0)
-   {
-      perror("recvfrom()");
-      exit(errno);
-   }
-
-   buffer[n] = 0;
-
-	struct ip *iph = (struct ip *)buffer;
-	source.sin_addr.s_addr = iph->ip_dst.s_addr;
-			char *str = inet_ntoa(sin->sin_addr);
-			printf("%s\n", str);
-
-   return n;
-}
-
-static void write_server(SOCKET sock, SOCKADDR_IN *sin, const char *buffer)
-{
-   if(sendto(sock, buffer, strlen(buffer), 0, (SOCKADDR *) sin, sizeof *sin) < 0)
-   {
-      perror("sendto()");
-      exit(errno);
-   } else {
-		 printf("Send!\n");
-	 }
 }
 
 // int			ft_traceroute_wait(t_trace *ctx)
@@ -108,11 +85,12 @@ int             ready_for_reading = 0;
 
 	// ft_traceroute_wait(ctx);
 
-	printf("traceroute to %s (%s), %d hops, %d byte packets\n", ctx->target_ipv4, ctx->target_ipv4, ctx->hops, ctx->byte_packets);
+	printf("traceroute to %s (%s), %d hops max, %d byte packets\n", ctx->host_name, ctx->host_ipv4, ctx->hops, ctx->byte_packets);
 
-	for (int i = 1; i < 30; i++) {
+	for (int i = 1; i < ctx->hops; i++) {
 
 		ft_traceroute_send(ctx, port + i, i);
+		ft_traceroute_receive(ctx, i);
 		// ctx->addr_in_to.sin_port = htons(port);
 		// // to.sin_addr.s_addr = inet_addr(ctx->target_ipv4);
 		// // to.sin_port = htons(++port);
@@ -129,14 +107,20 @@ int             ready_for_reading = 0;
 	return (EXIT_SUCCESS);
 }
 
+
+
 int			ft_traceroute(int argc, const char *argv[])
 {
 	t_trace	ctx;
 
-	// printf("ft_traceroute \n");
-	if (ft_traceroute_init(&ctx, argv[1]) == EXIT_FAILURE) {
+	if(geteuid() != 0)
+		return (ft_traceroute_perm());
+
+	if (argv[1] == NULL || ft_strequal(argv[1], "-h"))
+		return (ft_traceroute_help());
+
+	if (ft_traceroute_init(&ctx, argv[1]) == EXIT_FAILURE)
 		ft_exit("traceroute_init()");
-	}
 
 	ft_traceroute_exec(&ctx);
 	// ft_traceroute_wait(&ctx);
