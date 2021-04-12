@@ -21,5 +21,7 @@ SUBFILE = \
 			traceroute/ft_traceroute.c \
 			traceroute/ft_traceroute_init.c \
 			traceroute/ft_traceroute_send.c \
+			traceroute/ft_traceroute_print.c \
+			traceroute/ft_traceroute_errors.c \
 			\
 			nmap/ft_nmap.c \

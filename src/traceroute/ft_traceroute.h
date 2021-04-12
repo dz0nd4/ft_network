@@ -15,19 +15,16 @@
 
 # include <stdio.h>
 # include <string.h>
+
 # include <sys/socket.h>
+# include <sys/time.h>
+# include <sys/types.h>
+
+# include <time.h>
 # include <arpa/inet.h>
-#include <netinet/in.h>
-#include <errno.h> 
-#define __USE_BSD	/* use bsd'ish ip header */
-#include <sys/socket.h>	/* these headers are for a Linux system, but */
-#include <netinet/in.h>	/* the names on other systems are easy to guess.. */
-#include <netinet/ip.h>
-#define __FAVOR_BSD	/* use bsd'ish tcp header */
-#include <netinet/tcp.h>
-#include <unistd.h>
-#include<errno.h>
-#include<time.h>
+# include <netinet/in.h>
+# include <errno.h> 
+# include <netdb.h>
 
 # include "../ft_network_global.h"
 
@@ -36,7 +33,8 @@
 #define DEFAULT_TTL            30       // default timeout
 #define BUF_SIZE 1024
 
-#define FT_ADDRSTRLEN 16
+# define FT_ADDRSTRLEN 16
+# define FT_PORT_DEFAULT  33435
 
 // Global variables
 
@@ -63,6 +61,9 @@ typedef struct sockaddr t_sockaddr;
 typedef struct in_addr IN_ADDR;
 typedef struct in_addr t_in_addr;
 
+typedef struct timeval t_timeval;
+
+
 typedef struct		s_traceroute
 {
   char        *host_name;
@@ -72,14 +73,27 @@ typedef struct		s_traceroute
   t_socket    sock_icmp;
   int         hops;
   int         byte_packets;
+  t_sockaddr_in from;
+  char        last_addr[FT_ADDRSTRLEN];
   t_sockaddr_in to;
+  t_timeval   tv;
 }					t_trace;
 
 int			ft_traceroute(int argc, const char *argv[]);
 
 int			ft_traceroute_init(t_trace *ctx, const char *ipv4);
 int     ft_traceroute_send(t_trace *ctx, int port, int ttl);
+// int     ft_traceroute_receive(t_trace *ctx, int ttl);
 int     ft_traceroute_receive(t_trace *ctx, int ttl);
+int     ft_traceroute_print(t_trace *ctx, int ttl, int probe, int cc);
+
+/*
+ *  Errors
+*/
+
+int			ft_traceroute_help();
+int			ft_traceroute_perm();
 void 	  ft_exit(char *s);
+void    ft_traceroute_exit(char *s);
 
 #endif
