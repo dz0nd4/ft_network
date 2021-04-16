@@ -52,7 +52,7 @@ int ft_tr_resolve(t_sockaddr_in *from, char *name)
     return 0;
 }
 
-int   ft_traceroute_print(t_trace *ctx, int ttl, int probe, int cc)
+int   ft_traceroute_print(t_trace *ctx, int cc)
 {
   char str[FT_ADDRSTRLEN];
   char str2[FT_ADDRSTRLEN];
@@ -99,16 +99,16 @@ int   ft_traceroute_print(t_trace *ctx, int ttl, int probe, int cc)
   //   printf(" %d  %s (%s)", ttl, name, ctx->last_addr);
   // }
   
-  if (probe == 0)
-    printf(" %d", ttl);
+  if (ctx->args.probes == 0)
+    printf(" %d", ctx->args.hops);
 
-  if (!ft_strequal(ctx->last_addr, str)) {
-    ft_strcpy(ctx->last_addr, str);
+  if (!ft_strequal(ctx->host.ip_last, str)) {
+    ft_strcpy(ctx->host.ip_last, str);
 
     char name[NI_MAXHOST];
     ft_tr_resolve(&ctx->from, name);
 
-    printf("  %s (%s)", name, ctx->last_addr);
+    printf("  %s (%s)", name, ctx->host.ip_last);
   }
 
   if (cc == 0) {

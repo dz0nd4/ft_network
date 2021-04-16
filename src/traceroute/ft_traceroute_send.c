@@ -14,13 +14,13 @@
 
 int waittime = 5;		/* time to wait for response (in seconds) */
 
-int   ft_traceroute_receive(t_trace *ctx, int ttl)
+int   ft_traceroute_receive(t_trace *ctx)
 {
 	fd_set fds;
 	struct timeval wait;
 
 	FD_ZERO(&fds);
-	FD_SET(ctx->sock_icmp, &fds);
+	FD_SET(ctx->sock.icmp, &fds);
 	wait.tv_sec = waittime; wait.tv_usec = 0;
 
   char buffer[BUF_SIZE];
@@ -32,8 +32,8 @@ int   ft_traceroute_receive(t_trace *ctx, int ttl)
 	// memset(&from, 0, sizeof(from));
   from_size = sizeof(ctx->from);
 
-	if (select(ctx->sock_icmp + 1, &fds, (fd_set *)0, (fd_set *)0, &wait) > 0)
-    if((n = recvfrom(ctx->sock_icmp, buffer, BUF_SIZE - 1, 0, (t_sockaddr *)&ctx->from, &from_size)) < 0)
+	if (select(ctx->sock.icmp + 1, &fds, (fd_set *)0, (fd_set *)0, &wait) > 0)
+    if((n = recvfrom(ctx->sock.icmp, buffer, BUF_SIZE - 1, 0, (t_sockaddr *)&ctx->from, &from_size)) < 0)
     {
       perror("recvfrom()");
       exit(errno);
@@ -42,32 +42,29 @@ int   ft_traceroute_receive(t_trace *ctx, int ttl)
   return (n);
 }
 
-int   ft_traceroute_send(t_trace *ctx, int port, int ttl)
+int   ft_traceroute_send(t_trace *ctx)
 {
   t_sockaddr_in to;
-  t_socket      sfd;
   struct timeval tv;
-  char buffer[60];
+  char buffer[32];
+  int port = 33435;
 
-  ft_bzero(buffer, 60);
+  ft_bzero(buffer, 32);
+  ft_strcpy(buffer, "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_");
   // char buffer[BUF_SIZE];
 
-  // ft_memset(&to, 0, sizeof(ctx->to));
-	// to.sin_family = AF_INET;
-	// to.sin_addr.s_addr = inet_addr(ctx->host_ipv4);
-	ctx->to.sin_port = htons(port);
-
-  // if ((sfd = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
-	// 	ft_exit("socket()");
+  ft_memset(&to, 0, sizeof(to));
+	to.sin_family = AF_INET;
+  to.sin_port = htons(port + ctx->args.hops + ctx->args.probes);
+	to.sin_addr.s_addr = inet_addr(ctx->host.ip);
 
   gettimeofday(&ctx->tv, NULL);
 
-  // printf("%ld %ld\n", tv.tv_sec, tv.tv_usec);
-
-  if (setsockopt(ctx->sock_udp, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl)) < 0)
+  if (setsockopt(ctx->sock.udp, IPPROTO_IP, IP_TTL,
+        &ctx->args.hops, sizeof(ctx->args.hops)) < 0)
 		ft_exit("setsockopt()");
 
-  if (sendto(ctx->sock_udp, buffer, sizeof(buffer), 0, (t_sockaddr *)&ctx->to, sizeof(t_sockaddr)) < 0)
+  if (sendto(ctx->sock.udp, buffer, sizeof(buffer), 0, (t_sockaddr *)&to, sizeof(t_sockaddr)) < 0)
 		ft_exit("sendto()");
 
   return (EXIT_SUCCESS);

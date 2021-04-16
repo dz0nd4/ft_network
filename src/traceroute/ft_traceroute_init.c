@@ -40,54 +40,11 @@
 // 	return (ipv4);
 // }
 
-// int		ft_host_name_to_host_ipv4(char *host_name, char *host_ipv4)
-// {
-// 	struct addrinfo		hints;
-// 	struct addrinfo		*result;
-// 	struct addrinfo		*rp;
-// 	int sfd;
-// 	struct sockaddr_in	*sa_in;
-// 	char *str;
-
-// 	// ft_memset(res, 0, sizeof(*res));
-// 	// ft_memset(sa_in, 0, sizeof(*sa_in));
-
-// 	ft_memset(&hints, 0, sizeof(hints));
-// 	hints.ai_family = AF_INET;
-// 	hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
-// 	hints.ai_flags = 0;
-// 	hints.ai_protocol = 0;          /* Any protocol */
-
-// 	if (getaddrinfo(host_name, NULL, &hints, &result) != 0)
-// 		return (EXIT_FAILURE);// ft_exit("getaddrinfo()");
-	
-// 	for (rp = result; rp != NULL; rp = rp->ai_next) {
-// 		sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-// 		if (sfd != INVALID_SOCKET)
-// 			break;
-// 	}
-
-// 	if (rp == NULL) {               /* No address succeeded */
-// 			// fprintf(stderr, "Could not connect\n");
-// 			return (EXIT_FAILURE);// exit(EXIT_FAILURE);
-// 	}
-
-// 	sa_in = (struct sockaddr_in *)rp->ai_addr;
-
-// 	// inet_ntop(res->ai_family, &(sa_in->sin_addr), ip_share, INET_ADDRSTRLEN);
-// 	if ((str = inet_ntoa(sa_in->sin_addr)) == NULL)
-// 		return (EXIT_FAILURE);
-
-// 	ft_memcpy(host_ipv4, str, ft_strlen(str));
-
-// 	return (EXIT_SUCCESS);
-// }
-
 static int 	ft_tr_init_target(t_trace *ctx)
 {
-	struct addrinfo		hints;
-	struct addrinfo		*result;
-	struct addrinfo		*rp;
+	t_addrinfo		hints;
+	t_addrinfo		*result;
+	t_addrinfo		*rp;
 	int sfd;
 	struct sockaddr_in	*sa_in;
 	char *str;
@@ -101,7 +58,7 @@ static int 	ft_tr_init_target(t_trace *ctx)
 	hints.ai_flags = 0;
 	hints.ai_protocol = 0;          /* Any protocol */
 
-	if (getaddrinfo(ctx->host_name, NULL, &hints, &result) != 0)
+	if (getaddrinfo(ctx->host.name, NULL, &hints, &result) != 0)
 		return (EXIT_FAILURE);// ft_exit("getaddrinfo()");
 	
 	for (rp = result; rp != NULL; rp = rp->ai_next) {
@@ -119,45 +76,87 @@ static int 	ft_tr_init_target(t_trace *ctx)
 	if ((str = inet_ntoa(sa_in->sin_addr)) == NULL)
 		return (EXIT_FAILURE);
 
-	ft_memcpy(ctx->host_ipv4, str, ft_strlen(str));
-	ctx->to.sin_family = AF_INET;
-	ctx->to.sin_port = htons(FT_PORT_DEFAULT);
-	ctx->to.sin_addr.s_addr = inet_addr(ctx->host_ipv4);
+	ft_memcpy(ctx->host.ip, str, ft_strlen(str));
+	// ctx->to.sin_family = AF_INET;
+	// ctx->to.sin_port = htons(FT_PORT_DEFAULT);
+	// ctx->to.sin_addr.s_addr = inet_addr(ctx->host_ipv4);
 
-	if (ctx->to.sin_addr.s_addr == -1)
-		return (EXIT_FAILURE);
+	// if (ctx->to.sin_addr.s_addr == -1)
+	// 	return (EXIT_FAILURE);
 	
 	return (EXIT_SUCCESS);
 }
 
 static int	ft_tr_init_sockets(t_trace *ctx)
 {
-	if ((ctx->sock_udp = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET)
+	t_addrinfo hints;
+	t_addrinfo *res;
+	t_addrinfo *rp;
+
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_RAW;
+	hints.ai_flags = AI_PASSIVE;
+	hints.ai_protocol = IPPROTO_ICMP;
+	hints.ai_canonname = NULL;
+	hints.ai_addr = NULL;
+	hints.ai_next = NULL;
+
+	// if (getaddrinfo(NULL, NULL, &hints, &res) != 0) {
+	// 	fprintf(stderr, "Could not getaddrinfo\n");
+	// 	return (EXIT_FAILURE);
+	// }
+	// rp = res;
+	// while (rp != NULL) {
+	// 	ctx->sock.icmp = socket(rp->ai_family, rp->ai_socktype,
+  //   									rp->ai_protocol);
+	// 	if (ctx->sock.icmp == INVALID_SOCKET)
+	// 		continue;
+		
+	// 	if (bind(ctx->sock.icmp, rp->ai_addr, rp->ai_addrlen) == 0)
+	// 		break;
+
+	// 	close(ctx->sock.icmp);
+	// }
+	// if (rp == NULL) {
+	// 	fprintf(stderr, "Could not bind\n");
+	// 	return (EXIT_FAILURE);
+	// }
+
+	if ((ctx->sock.udp = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET)
 		return (EXIT_FAILURE);
 
-	if ((ctx->sock_icmp = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET)
+	if ((ctx->sock.icmp = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET)
 		return (EXIT_FAILURE);
 
 	return (EXIT_SUCCESS);
 }
 
+static int	ft_tr_init_args(t_trace *ctx)
+{
+	ctx->args.hops = 1;
+	ctx->args.hops_max = 30;
+	ctx->args.probes_max = 3;
+	ctx->args.byte_packets = 60;
+	return (EXIT_SUCCESS);
+}
+
 int				ft_traceroute_init(t_trace *ctx, const char *ipv4)
 {
-	ctx->host_name = ipv4;
+	ctx->host.name = ipv4;
 
 	// if (ft_host_name_to_host_ipv4(ctx->host_name, ctx->host_ipv4) == EXIT_FAILURE)
 	// 	return (EXIT_FAILURE);
-	if(geteuid() != EXIT_SUCCESS)
-		return (ft_traceroute_perm());
+	// if(geteuid() != EXIT_SUCCESS)
+	// 	return (ft_traceroute_perm());
 
-	if (ft_tr_init_target(ctx) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	// if (ft_tr_init_target(ctx) == EXIT_FAILURE)
+	// 	return (EXIT_FAILURE);
 
-	if (ft_tr_init_sockets(ctx) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	// if (ft_tr_init_sockets(ctx) == EXIT_FAILURE)
+	// 	return (EXIT_FAILURE);
 
-	ctx->hops = 30;
-	ctx->byte_packets = 60;
+	ft_tr_init_args(ctx);
 
 	return (EXIT_SUCCESS);
 }
