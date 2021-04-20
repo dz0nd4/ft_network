@@ -1,41 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute.c                                    :+:      :+:    :+:   */
+/*   ft_traceroute_init.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/06 13:17:47 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:13:35 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_traceroute.h"
 
-int 		ft_traceroute_exec(t_trace *ctx)
-{
-	int hops;
-	int probes;
-	int cc;
+// int			ft_ipv4_to_struct(struct in_addr *addr, char *ipv4)
+// {
+// 	int domain;
+// 	int	s;
 
-	hops = 1;
-	while (ctx->args.hops <= ctx->args.hops_max) {
-		ctx->args.probes = 0;
-		while (ctx->args.probes < ctx->args.probes_max) {
-			ft_traceroute_send(ctx);
-			cc = ft_traceroute_receive(ctx);
-			ft_traceroute_print(ctx, cc);
+// 	domain = AF_INET;
+// 	s = inet_pton(domain, ipv4, addr);
+// 	if (s <= 0) {
+// 			if (s == 0)
+// 					fprintf(stderr, "Not in presentation format\n");
+// 			else
+// 					perror("inet_pton");
+// 			return(EXIT_FAILURE);
+// 	}
+// 	return (EXIT_SUCCESS);
+// }
 
-			ctx->args.probes++;
-		}
-		
-		printf("\n");
+// char*			ft_struct_to_ipv4(struct in_addr *addr)
+// {
+// 	char *ipv4;
 
-		if (ft_strequal(ctx->host.ip, inet_ntoa(ctx->from.sin_addr)))
-			break;
-
-		ctx->args.hops++;
-	}
-
-	return (EXIT_SUCCESS);
-}
+// 	if ((ipv4 = inet_ntoa(*addr)) == NULL) {
+// 			perror("inet_ntop");
+// 			return (NULL);
+// 	}
+// 	return (ipv4);
+// }

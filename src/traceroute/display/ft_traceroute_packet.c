@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute.c                                    :+:      :+:    :+:   */
+/*   ft_traceroute_packet.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/06 13:17:47 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/04/20 15:43:05 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ int   ft_traceroute_print(t_trace *ctx, int cc)
   //   printf(" %d  %s (%s)", ttl, name, ctx->last_addr);
   // }
   
-  if (ctx->args.probes == 0)
-    printf(" %d", ctx->args.hops);
+  if (ctx->opts.probes == 0)
+    printf(" %d", ctx->opts.hops);
 
   if (!ft_strequal(ctx->host.ip_last, str)) {
     ft_strcpy(ctx->host.ip_last, str);
