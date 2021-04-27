@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute_parser.c                             :+:      :+:    :+:   */
+/*   ft_traceroute_parse.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/20 16:11:23 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/04/27 12:56:13 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_traceroute.h"
 
-static int	ft_tr_opt_dispatch(t_trace *ctx, int argc, const char *argv[])
+static int	ft_traceroute_parse_opt(t_trace *ctx, int argc, const char *argv[])
 {
 	static t_tr_opt_d	ft_tr_opt[FT_TR_OPT_MAX] = {
 		{ FT_TR_OPT_F, "f", ft_tr_opt_f },
@@ -31,17 +31,23 @@ static int	ft_tr_opt_dispatch(t_trace *ctx, int argc, const char *argv[])
 	return (ft_tr_error_bad_opt(ctx, opt_name));
 }
 
-int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])
+static int	ft_traceroute_parse_init(t_trace *ctx)
 {
 	ctx->argi = 1;
+	ctx->opts.hops = FT_DEFAULT_HOPS;
+	ctx->opts.hops_max = FT_DEFAULT_HOPS_MAX;
+	ctx->opts.probes_max = FT_DEFAULT_PROBES_MAX;
+	ctx->opts.port = FT_DEFAULT_PORT;
+	ctx->opts.packetlen = sizeof(t_ip) + 40;
+	return (EXIT_SUCCESS);
+}
 
-	// ft_tr_init_args(ctx);
-
-	// if (argv[ctx->argi] == NULL)
-	// 	return (ft_traceroute_help((char *)argv[0]));
+int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])
+{
+	ft_traceroute_parse_init(ctx);
 
 	while (argv[ctx->argi] && *argv[ctx->argi] == '-') {
-		if (ft_tr_opt_dispatch(ctx, argc, argv) == EXIT_FAILURE)
+		if (ft_traceroute_parse_opt(ctx, argc, argv) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		ctx->argi += 2;
 	}
@@ -49,11 +55,11 @@ int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])
 	if (argv[ctx->argi] == NULL)
 		return (ft_tr_error_host());
 
-	ctx->host.name = argv[ctx->argi++];
+	if (ft_tr_arg_host(ctx, argv[ctx->argi++]) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 
-	if (argv[ctx->argi] != NULL) {
+	if (argv[ctx->argi] != NULL)
 		ft_tr_arg_packetlen(ctx, argv[ctx->argi]);
-	}
 
 	return (EXIT_SUCCESS);
 }

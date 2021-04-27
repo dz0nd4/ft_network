@@ -6,28 +6,12 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/20 16:40:42 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/04/27 12:57:29 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_TRACEROUTE_H
 # define FT_TRACEROUTE_H
-
-# include <stdio.h>
-# include <string.h>
-
-# include <sys/socket.h>
-# include <sys/time.h>
-# include <sys/types.h>
-
-# include <time.h>
-# include <arpa/inet.h>
-# include <netinet/in.h>
-# include <errno.h> 
-# include <netdb.h>
-
-# include <netinet/ip.h>
-# include <netinet/udp.h>
 
 # include "../ft_network_global.h"
 
@@ -49,35 +33,6 @@
 # define FT_DEFAULT_PACKET_LEN sizeof(struct ip) + 40
 
 # define FT_PACKET_LEN_MAX      65000
-
-// Global variables
-
-// int   gAddressFamily = AF_UNSPEC,         // Address family to use
-//       gProtocol      = IPPROTO_ICMP,      // Protocol value
-//       gTtl           = DEFAULT_TTL,       // Default TTL value
-//       gTimeout       = DEFAULT_RECV_TIMEOUT; // Amount of data to send
-// int  bResolve       = 1;              // Resolve addresses to host names
-
-// char *gDestination   = NULL;              // Destination
-
-// /**/
-
-#define INVALID_SOCKET -1
-#define SOCKET_ERROR -1
-#define closesocket(s) close(s)
-
-
-
-typedef int t_socket;
-typedef struct sockaddr_in  t_sockaddr_in;
-typedef struct sockaddr t_sockaddr;
-typedef struct in_addr t_in_addr;
-typedef struct addrinfo t_addrinfo;
-typedef struct ip t_ip;
-typedef struct udphdr t_udp;
-typedef struct icmp t_icmp;
-
-typedef struct timeval t_timeval;
 
 struct opacket {
 	struct ip ip;
@@ -103,6 +58,8 @@ typedef struct    s_tr_sock
   int   udp;
   int   icmp;
   t_tr_pack udp_pack;
+  char  *data;
+  int   datalen;
 }                 t_tr_sock;
 
 typedef struct    s_tr_host
@@ -112,6 +69,7 @@ typedef struct    s_tr_host
   char  ip_last[FT_ADDRSTRLEN];
   t_sockaddr_in from;
   t_sockaddr_in to;
+  t_addrinfo    *result;
 }                 t_tr_host;
 
 typedef struct    s_tr_options
@@ -159,29 +117,14 @@ typedef struct			s_tr_opt_dispatch
 }						t_tr_opt_d;
 
 int			ft_traceroute(int argc, const char *argv[]);
-
-// int			ft_traceroute_init(t_trace *ctx, int argc, const char *argv[]);
-// int	    ft_tr_init_args(t_trace *ctx);
-int 	  ft_tr_init_target(t_trace *ctx);
-int 	  ft_tr_init_target_debug(t_trace *ctx);
-int	ft_tr_init_sockets(t_trace *ctx);
-int		ft_tr_init_opts(t_trace *ctx);
-
-// int			ft_traceroute_args(t_trace *ctx, int argc, const char *argv[]);
-// int 		ft_traceroute_exec(t_trace *ctx);
-
-// int     ft_traceroute_send(t_trace *ctx);
-// int     ft_traceroute_receive(t_trace *ctx, int ttl);
-// int     ft_traceroute_receive(t_trace *ctx);
-int 	  ft_tr_init_local(t_trace *ctx);
-/*
- *  Errors
-*/
+int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[]);
+int 		ft_traceroute_execute(t_trace *ctx);
 
 /*
  *  Display
 */
 
+int     ft_traceroute_display_infos_host(t_trace *ctx);
 int			ft_traceroute_usage(char *prgm);
 int     ft_traceroute_print(t_trace *ctx, int cc);
 
@@ -189,7 +132,6 @@ int     ft_traceroute_print(t_trace *ctx, int cc);
  *  Parser
 */
 
-int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[]);
 int			ft_traceroute_parse_debug(t_trace *ctx);
 
 int			ft_tr_opt_f(t_trace *ctx, char *arg);
@@ -198,27 +140,35 @@ int			ft_tr_opt_q(t_trace *ctx, char *arg);
 int			ft_tr_opt_w(t_trace *ctx, char *arg);
 int			ft_tr_opt_h(t_trace *ctx, char *arg);
 
+int			ft_tr_arg_host(t_trace *ctx, char *arg);
 int			ft_tr_arg_packetlen(t_trace *ctx, char *arg);
 
 /*
- *  Exec
+ *  Socket
 */
 
-int 		ft_traceroute_exec(t_trace *ctx);
-int     ft_traceroute_exec_send(t_trace *ctx);
-int     ft_traceroute_exec_receive(t_trace *ctx);
+int     ft_traceroute_packet_init(t_trace *ctx);
+int     ft_traceroute_packet_set_header(t_trace *ctx);
+
+int     ft_traceroute_socket_send_init(t_trace *ctx);
+int     ft_traceroute_socket_send(t_trace *ctx);
+
+int     ft_traceroute_socket_receive_init(t_trace *ctx);
+int     ft_traceroute_socket_receive(t_trace *ctx);
 
 /*
  *  Errors
 */
 
-int			ft_traceroute_help(char *prgm);
-int			ft_traceroute_perm();
 void 	  ft_exit(char *s);
 void    ft_traceroute_exit(char *s);
+
 int 	  ft_tr_error_bad_opt(t_trace *ctx, char *opt);
 int 	  ft_tr_error_arg(t_trace *ctx, char *opt, char *arg);
 int 	  ft_tr_error_arg_handle(t_trace *ctx, char *opt, char *arg);
+
 int 	  ft_tr_error_host();
+int 	  ft_tr_error_host_resolve(t_trace *ctx, char *arg);
+int 	  ft_tr_error_packetlen(t_trace *ctx, char *opt, char *arg);
 
 #endif
