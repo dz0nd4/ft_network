@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/23 12:40:39 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/04/27 16:29:53 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int 	ft_tr_error_host_resolve(t_trace *ctx, char *arg)
 {
 	fprintf(stderr, "%s: Échec temporaire dans la résolution du nom\n", arg);
 	fprintf(stderr, "Cannot handle \"host\" cmdline arg `%s' (argc %d)",
-						arg, ctx->argi);
+						arg, ctx->opts.argi);
 	return (EXIT_FAILURE);
 }
 

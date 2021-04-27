@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/27 12:57:29 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/04/27 17:53:45 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ struct opacket {
 typedef struct  s_tr_packet {
   t_ip  ip;
   t_udp udp;
+  char  *data;
+  int   datalen;
 }       t_tr_pack;
 
 typedef struct    s_tr_time
@@ -55,25 +57,35 @@ typedef struct    s_tr_time
 
 typedef struct    s_tr_sock
 {
-  int   udp;
-  int   icmp;
   t_tr_pack udp_pack;
   char  *data;
   int   datalen;
 }                 t_tr_sock;
 
-typedef struct    s_tr_host
+typedef struct    s_tr_from
 {
-  char  *name;
-  char  ip[FT_ADDRSTRLEN];
-  char  ip_last[FT_ADDRSTRLEN];
-  t_sockaddr_in from;
-  t_sockaddr_in to;
-  t_addrinfo    *result;
-}                 t_tr_host;
+  int             sfd;
+  t_sockaddr_in   saddrin;
+  t_timeval       wait;
+  char            buffer[BUF_SIZE];
+  int             cc;
+  int             code;
+  char            ip_last[FT_ADDRSTRLEN];
+}                 t_tr_from;
+
+typedef struct    s_tr_to
+{
+  int             sfd;
+  t_addrinfo      *addrinfo;
+  t_sockaddr_in   saddrin;
+  char            *name;
+  char            ip[FT_ADDRSTRLEN];
+  t_tr_pack       pack;
+}                 t_tr_to;
 
 typedef struct    s_tr_options
 {
+  int   argi;
   int   hops;
   int   hops_max;
   int   probes;
@@ -84,14 +96,10 @@ typedef struct    s_tr_options
 
 typedef struct		s_traceroute
 {
-  int         argi;
-  t_tr_sock   sock;
-  t_tr_time   time;
-  t_tr_host   host;
   t_tr_opt    opts;
-  t_sockaddr_in from;
-  t_sockaddr_in to;
-  t_timeval   tv;
+  t_tr_to     to;
+  t_tr_from   from;
+  t_tr_time   time;
 }					t_trace;
 
 typedef int   t_tr_ft_arg(t_trace *ctx, char *arg);
@@ -129,10 +137,8 @@ int			ft_traceroute_usage(char *prgm);
 int     ft_traceroute_print(t_trace *ctx, int cc);
 
 /*
- *  Parser
+ *  Parse
 */
-
-int			ft_traceroute_parse_debug(t_trace *ctx);
 
 int			ft_tr_opt_f(t_trace *ctx, char *arg);
 int			ft_tr_opt_m(t_trace *ctx, char *arg);
@@ -149,12 +155,13 @@ int			ft_tr_arg_packetlen(t_trace *ctx, char *arg);
 
 int     ft_traceroute_packet_init(t_trace *ctx);
 int     ft_traceroute_packet_set_header(t_trace *ctx);
+int     ft_traceroute_packet_check(t_trace *ctx, char *buffer);
 
 int     ft_traceroute_socket_send_init(t_trace *ctx);
 int     ft_traceroute_socket_send(t_trace *ctx);
 
 int     ft_traceroute_socket_receive_init(t_trace *ctx);
-int     ft_traceroute_socket_receive(t_trace *ctx);
+int     ft_traceroute_socket_receive(t_trace *ctx, char *buffer);
 
 /*
  *  Errors

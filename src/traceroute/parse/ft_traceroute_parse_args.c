@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute_args.c                               :+:      :+:    :+:   */
+/*   ft_traceroute_parse_args.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/26 11:45:19 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/04/27 17:51:50 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int			ft_tr_arg_host(t_trace *ctx, char *arg)
 	hints.ai_socktype = SOCK_RAW;
 	hints.ai_protocol = IPPROTO_UDP;
 
-	ctx->host.name = arg;
-	if (getaddrinfo(arg, NULL, &hints, &ctx->host.result) != 0)
+	ctx->to.name = arg;
+	if (getaddrinfo(arg, NULL, &hints, &ctx->to.addrinfo) != 0)
 		return (ft_tr_error_host_resolve(ctx, arg));
 
 	// rp = result;
 	// while (rp != NULL) {
-	// 	ctx->sock.udp = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-	// 	if (ctx->sock.udp != INVALID_SOCKET)
+	// 	ctx->to.sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+	// 	if (ctx->to.sfd != INVALID_SOCKET)
 	// 		break;
 	// 	rp = rp->ai_next;
 	// }
@@ -46,14 +46,14 @@ int			ft_tr_arg_host(t_trace *ctx, char *arg)
 	// if (rp == NULL)
 	// 	return (EXIT_FAILURE);
 
-	// ft_memcpy(&ctx->host.to, rp->ai_addr, sizeof(rp->ai_addr));
-	// ft_memcpy(ctx->host.ip, inet_ntoa(ctx->host.to.sin_addr), FT_ADDRSTRLEN);
+	// ft_memcpy(&ctx->to.saddrin, rp->ai_addr, sizeof(rp->ai_addr));
+	// ft_memcpy(ctx->to.ip, inet_ntoa(ctx->to.saddrin.sin_addr), FT_ADDRSTRLEN);
 
 	// free(result);
 
 	// const int on = 1;
 
-  // if (setsockopt (ctx->sock.udp, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
+  // if (setsockopt (ctx->to.sfd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
 	// 	return (EXIT_FAILURE);
   
 	return (EXIT_SUCCESS);

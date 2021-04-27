@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute_packet.c                             :+:      :+:    :+:   */
+/*   ft_traceroute_display_packet.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/20 15:43:05 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/04/27 17:52:33 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ int   ft_traceroute_print(t_trace *ctx, int cc)
 {
   char str[FT_ADDRSTRLEN];
   char str2[FT_ADDRSTRLEN];
-  char *tmp = inet_ntoa(ctx->from.sin_addr);
+  char *tmp = inet_ntoa(ctx->from.saddrin.sin_addr);
   ft_strcpy(str, tmp);
-  // tmp = inet_ntoa(ctx->from.sin_addr);
+  // tmp = inet_ntoa(ctx->from.saddrin.sin_addr);
   // ft_strcpy(str2, tmp);
 
     t_timeval tv;
@@ -66,19 +66,19 @@ int   ft_traceroute_print(t_trace *ctx, int cc)
 
     gettimeofday(&tv, NULL);
     
-    // timersub(&tv, &ctx->tv, &res);
+    // timersub(&tv, &ctx->time.start, &res);
 
-    // printf("took %lu us\n", (tv.tv_sec - ctx->tv.tv_sec) * 1000000 + tv.tv_usec - ctx->tv.tv_usec); 
+    // printf("took %lu us\n", (tv.tv_sec - ctx->time.start.tv_sec) * 1000000 + tv.tv_usec - ctx->time.start.tv_usec); 
 
-    // tvsub(&tv, &ctx->tv);
+    // tvsub(&tv, &ctx->time.start);
 	  // int dt = tv.tv_sec*1000 + (tv.tv_usec + 500)/1000;
 
-  // double dt = (double)(tv.tv_usec - ctx->tv.tv_usec) / 1000 + (double)(tv.tv_sec - ctx->tv.tv_sec);
+  // double dt = (double)(tv.tv_usec - ctx->time.start.tv_usec) / 1000 + (double)(tv.tv_sec - ctx->time.start.tv_sec);
   
-  double start = (ctx->tv.tv_sec) * 1000 + (ctx->tv.tv_usec) / 1000;
+  double start = (ctx->time.start.tv_sec) * 1000 + (ctx->time.start.tv_usec) / 1000;
   double stop = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000 ;
 
-  // long long start = ctx->tv.tv_sec*1000LL + ctx->tv.tv_usec/1000; // calculate milliseconds
+  // long long start = ctx->time.start.tv_sec*1000LL + ctx->time.start.tv_usec/1000; // calculate milliseconds
   // long long stop = tv.tv_sec*1000LL + tv.tv_usec/1000; // calculate milliseconds
   // printf(" %ld %ld", start, stop);
 
@@ -87,14 +87,14 @@ int   ft_traceroute_print(t_trace *ctx, int cc)
   // long long dt = stop - start;
 
   // if (!ft_strequal(str, ctx->last_addr)) {
-  //   // ft_memcpy(&ctx->from, from, sizeof(ctx->from));
+  //   // ft_memcpy(&ctx->from.saddrin, from, sizeof(ctx->from.saddrin));
 
   //   ft_strcpy(ctx->last_addr, str);
   //   // struct hostent *he;
 
-  //   // he = gethostbyaddr(inet_ntoa(ctx->from.sin_addr), sizeof(from), 0);
+  //   // he = gethostbyaddr(inet_ntoa(ctx->from.saddrin.sin_addr), sizeof(from), 0);
   //   char name[NI_MAXHOST];
-  //   ft_tr_resolve(&ctx->from, name);
+  //   ft_tr_resolve(&ctx->from.saddrin, name);
 
   //   printf(" %d  %s (%s)", ttl, name, ctx->last_addr);
   // }
@@ -102,13 +102,13 @@ int   ft_traceroute_print(t_trace *ctx, int cc)
   if (ctx->opts.probes == 0)
     printf(" %d", ctx->opts.hops);
 
-  if (!ft_strequal(ctx->host.ip_last, str)) {
-    ft_strcpy(ctx->host.ip_last, str);
+  if (!ft_strequal(ctx->from.ip_last, str)) {
+    ft_strcpy(ctx->from.ip_last, str);
 
     char name[NI_MAXHOST];
-    ft_tr_resolve(&ctx->from, name);
+    ft_tr_resolve(&ctx->from.saddrin, name);
 
-    printf("  %s (%s)", name, ctx->host.ip_last);
+    printf("  %s (%s)", name, ctx->from.ip_last);
   }
 
   if (cc == 0) {
