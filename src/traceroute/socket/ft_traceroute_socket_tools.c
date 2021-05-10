@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 13:05:16 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/10 18:21:17 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int ft_tr_resolve(t_sockaddr_in *from, char *name)
 {
     struct sockaddr_in sa;    /* input */
     socklen_t len;         /* input */
-    char hbuf[NI_MAXHOST];
+    char hbuf[FT_NI_MAXHOST];
 
     memset(&sa, 0, sizeof(struct sockaddr_in));
 
@@ -103,22 +103,22 @@ int ft_tr_resolve(t_sockaddr_in *from, char *name)
     return 0;
 }
 
-// int			ft_ipv4_to_struct(struct in_addr *addr, char *ipv4)
-// {
-// 	int domain;
-// 	int	s;
+int			ft_ipv4_to_struct(struct in_addr *addr, char *ipv4)
+{
+	int domain;
+	int	s;
 
-// 	domain = AF_INET;
-// 	s = inet_pton(domain, ipv4, addr);
-// 	if (s <= 0) {
-// 			if (s == 0)
-// 					fprintf(stderr, "Not in presentation format\n");
-// 			else
-// 					perror("inet_pton");
-// 			return(EXIT_FAILURE);
-// 	}
-// 	return (EXIT_SUCCESS);
-// }
+	domain = AF_INET;
+	s = inet_pton(domain, ipv4, addr);
+	if (s <= 0) {
+			if (s == 0)
+					fprintf(stderr, "Not in presentation format\n");
+			else
+					perror("inet_pton");
+			return(EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
 
 // char*			ft_struct_to_ipv4(struct in_addr *addr)
 // {
