@@ -12,22 +12,22 @@
 
 #include "ft_bits.h"
 
-uint32_t	ft_rotr_uint32(uint32_t word, uint32_t bits)
+t_uint32	ft_rotr_uint32(t_uint32 word, t_uint32 bits)
 {
 	return ((word >> bits) | (word << (32 - bits)));
 }
 
-uint32_t	ft_rotl_uint32(uint32_t word, uint32_t bits)
+t_uint32	ft_rotl_uint32(t_uint32 word, t_uint32 bits)
 {
 	return ((word << bits) | (word >> (32 - bits)));
 }
 
-uint64_t	ft_rotr_uint64(uint64_t word, uint64_t bits)
+t_uint64	ft_rotr_uint64(t_uint64 word, t_uint64 bits)
 {
 	return ((word >> bits) | (word << (64 - bits)));
 }
 
-uint64_t	ft_rotl_uint64(uint64_t word, uint64_t bits)
+t_uint64	ft_rotl_uint64(t_uint64 word, t_uint64 bits)
 {
 	return ((word << bits) | (word >> (64 - bits)));
 }

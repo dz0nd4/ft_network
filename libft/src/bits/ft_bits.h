@@ -15,18 +15,26 @@
 
 # include <stdlib.h>
 
+# if __APPLE__
+  typedef uint32_t  t_uint32;
+  typedef uint64_t  t_uint64;
+#elif __linux__
+  typedef u_int32_t  t_uint32;
+  typedef u_int64_t  t_uint64;
+#endif
+
 unsigned int	ft_align_bits(size_t offset, size_t align);
 
-uint32_t		ft_rotr_uint32(uint32_t word, uint32_t bits);
-uint32_t		ft_rotl_uint32(uint32_t word, uint32_t bits);
-uint32_t		ft_shiftr_uint32(uint32_t word, uint32_t bits);
-uint32_t		ft_shiftl_uint32(uint32_t word, uint32_t bits);
-uint32_t		ft_swap_uint32(uint32_t *val);
+t_uint32		ft_rotr_uint32(t_uint32 word, t_uint32 bits);
+t_uint32		ft_rotl_uint32(t_uint32 word, t_uint32 bits);
+t_uint32		ft_shiftr_uint32(t_uint32 word, t_uint32 bits);
+t_uint32		ft_shiftl_uint32(t_uint32 word, t_uint32 bits);
+t_uint32		ft_swap_uint32(t_uint32 *val);
 
-uint64_t		ft_rotr_uint64(uint64_t word, uint64_t bits);
-uint64_t		ft_rotl_uint64(uint64_t word, uint64_t bits);
-uint64_t		ft_shiftr_uint64(uint64_t word, uint64_t bits);
-uint64_t		ft_shiftl_uint64(uint64_t word, uint64_t bits);
-uint64_t		ft_swap_uint64(uint64_t *val);
+t_uint64		ft_rotr_uint64(t_uint64 word, t_uint64 bits);
+t_uint64		ft_rotl_uint64(t_uint64 word, t_uint64 bits);
+t_uint64		ft_shiftr_uint64(t_uint64 word, t_uint64 bits);
+t_uint64		ft_shiftl_uint64(t_uint64 word, t_uint64 bits);
+t_uint64		ft_swap_uint64(t_uint64 *val);
 
 #endif

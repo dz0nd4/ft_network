@@ -12,14 +12,14 @@
 
 #include "ft_bits.h"
 
-uint32_t	ft_swap_uint32(uint32_t *val)
+t_uint32	ft_swap_uint32(t_uint32 *val)
 {
 	*val = ((*val << 8) & 0xFF00FF00) | ((*val >> 8) & 0xFF00FF);
 	*val = (*val << 16) | (*val >> 16);
 	return (*val);
 }
 
-uint64_t	ft_swap_uint64(uint64_t *val)
+t_uint64	ft_swap_uint64(t_uint64 *val)
 {
 	*val = ((*val << 8) & 0xFF00FF00FF00FF00ULL) |
 		((*val >> 8) & 0x00FF00FF00FF00FFULL);
