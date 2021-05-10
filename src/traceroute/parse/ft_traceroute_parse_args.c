@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/27 17:51:50 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/10 12:00:23 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@
 */
 int			ft_tr_arg_host(t_trace *ctx, char *arg)
 {
-	t_addrinfo		hints;
-	t_addrinfo		*result;
-	t_addrinfo		*rp;
+	// t_addrinfo		hints;
+	// t_addrinfo		*result;
+	// t_addrinfo		*rp;
 
-	ft_memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_RAW;
-	hints.ai_protocol = IPPROTO_UDP;
+	// ft_memset(&hints, 0, sizeof(hints));
+	// hints.ai_family = AF_INET;
+	// hints.ai_socktype = SOCK_RAW;
+	// hints.ai_protocol = IPPROTO_UDP;
 
 	ctx->to.name = arg;
-	if (getaddrinfo(arg, NULL, &hints, &ctx->to.addrinfo) != 0)
-		return (ft_tr_error_host_resolve(ctx, arg));
+	// if (getaddrinfo(arg, NULL, &hints, &ctx->to.addrinfo) != 0)
+	// 	return (ft_tr_error_host_resolve(ctx, arg));
 
 	// rp = result;
 	// while (rp != NULL) {
