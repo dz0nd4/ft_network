@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+         #
+#    By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/10 21:08:47 by dzonda            #+#    #+#              #
-#    Updated: 2021/02/03 13:05:13 by dzonda           ###   ########lyon.fr    #
+#    Updated: 2021/05/10 17:10:18 by user42           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ SUBFILE = \
 			is/isalnum.c \
 			is/isdir.c \
 			is/isreg.c \
+			is/ft_isdigitstr.c \
 			lst/lstdelone.c \
 			lst/lstmap.c \
 			lst/lstadd.c \
