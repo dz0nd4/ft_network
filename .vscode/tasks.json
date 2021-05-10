@@ -1,0 +1,22 @@
+{
+  "tasks": [
+    {
+      "label": "C/C++: Build",
+      "type": "shell",
+      "command": "make",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Tâche générée par le débogueur."
+    }
+  ],
+  "version": "2.0.0"
+}

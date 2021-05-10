@@ -1,0 +1,1 @@
+echo user42 | sudo -S /usr/bin/gdb "$@"
