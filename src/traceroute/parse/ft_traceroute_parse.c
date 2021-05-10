@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/27 16:29:53 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/10 17:21:30 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	ft_traceroute_parse_opt(t_trace *ctx, int argc, const char *argv[])
 	while (++opt_key < FT_TR_OPT_MAX)
 		if (ft_strequ(ft_tr_opt[opt_key].opt_name, opt_name))
 			return (ft_tr_opt[opt_key].opt_dist(ctx, argv[ctx->opts.argi + 1]));
-	return (ft_tr_error_bad_opt(ctx, opt_name));
+	return (ft_trace_error_opt_bad(ctx, opt_name));
 }
 
 int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute_opts.c                               :+:      :+:    :+:   */
+/*   ft_traceroute_parse_opts.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/20 15:49:40 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/10 17:22:28 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ int			ft_tr_opt_f(t_trace *ctx, char *arg)
 
 	i = -1;
 	if (arg == NULL)
-		return (ft_tr_error_arg(ctx, "-f", "first_ttl"));
-	while (arg[++i])
-		if (!ft_isdigit(arg[i]))
-			return (ft_tr_error_arg_handle(ctx, "-f", arg));
+		return (ft_trace_error_opt_arg_require(ctx, "-f", "first_ttl"));
+	if (!ft_isdigitstr(arg))
+		return (ft_trace_error_opt_arg_handle(ctx, "-f", arg));
 	ctx->opts.hops = ft_atoi(arg);
 	if (ctx->opts.hops > ctx->opts.hops_max) {
 		fprintf(stderr, "first hop out of range\n");
@@ -52,10 +51,10 @@ int			ft_tr_opt_m(t_trace *ctx, char *arg)
 
 	i = -1;
 	if (arg == NULL)
-		return (ft_tr_error_arg(ctx, "-m", "max_ttl"));
+		return (ft_trace_error_opt_arg_require(ctx, "-m", "max_ttl"));
 	while (arg[++i])
 		if (!ft_isdigit(arg[i]))
-			return (ft_tr_error_arg_handle(ctx, "-m", arg));
+			return (ft_trace_error_opt_arg_handle(ctx, "-m", arg));
 	ctx->opts.hops_max = ft_atoi(arg);
 	if (ctx->opts.hops > ctx->opts.hops_max) {
 		fprintf(stderr, "first hop out of range\n");
@@ -78,10 +77,10 @@ int			ft_tr_opt_q(t_trace *ctx, char *arg)
 
 	i = -1;
 	if (arg == NULL)
-		return (ft_tr_error_arg(ctx, "-q", "nqueries"));
+		return (ft_trace_error_opt_arg_require(ctx, "-q", "nqueries"));
 	while (arg[++i])
 		if (!ft_isdigit(arg[i]))
-			return (ft_tr_error_arg_handle(ctx, "-q", arg));
+			return (ft_trace_error_opt_arg_handle(ctx, "-q", arg));
 	ctx->opts.probes_max = ft_atoi(arg);
 	if (ctx->opts.probes_max < 1 || ctx->opts.probes_max > 10) {
 		fprintf(stderr, "no more than 10 probes per hop\n");
@@ -101,7 +100,7 @@ int			ft_tr_opt_q(t_trace *ctx, char *arg)
 int			ft_tr_opt_w(t_trace *ctx, char *arg)
 {
 	if (arg == NULL)
-		return (ft_tr_error_arg(ctx, "-w", "MAX,HERE,NEAR"));
+		return (ft_trace_error_opt_arg_require(ctx, "-w", "MAX,HERE,NEAR"));
 	return (EXIT_SUCCESS);
 }
 
