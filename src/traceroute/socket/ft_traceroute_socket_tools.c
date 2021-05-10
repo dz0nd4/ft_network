@@ -1,16 +1,107 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute_init.c                               :+:      :+:    :+:   */
+/*   ft_traceroute_socket_tools.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/06 13:13:35 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/10 13:05:16 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_traceroute.h"
+
+int    ft_socket_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
+{
+	int saddrin_size;
+	int i;
+
+	saddrin_size = sizeof(t_sockaddr);
+	i = recvfrom(fd, data, datalen, 0, (t_sockaddr *)saddrin, &saddrin_size);
+	if (i < 0)
+		return (-1);
+	// if (i < 0) {
+	// 	ft_exit("sendto()");
+	// }
+	return (i);
+}
+
+int    ft_socket_send(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
+{
+	int i;
+
+	i = sendto(fd, data, datalen, 0, (t_sockaddr *)saddrin, sizeof(t_sockaddr));
+	if (i < 0)
+		return (EXIT_FAILURE);
+	// if (i < 0) {
+	// 	ft_exit("sendto()");
+	// }
+	return (EXIT_SUCCESS);
+}
+
+int    ft_socket_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
+{
+  int           sfd;
+	t_addrinfo		hints;
+	t_addrinfo		*result;
+	t_addrinfo		*rp;
+
+	ft_memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_RAW;
+	hints.ai_protocol = IPPROTO_UDP;
+
+  if (getaddrinfo(host, NULL, &hints, &result) != 0)
+    return (EXIT_FAILURE);
+
+  rp = result;
+	while (rp != NULL) {
+		sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+		if (sfd != INVALID_SOCKET)
+			break;
+		rp = rp->ai_next;
+	}
+	if (rp == NULL)
+		return (EXIT_FAILURE);
+  
+	ft_memcpy(host_addrinfo, rp, sizeof(t_addrinfo));
+
+	freeaddrinfo(result);
+
+  return (EXIT_SUCCESS);
+}
+
+int ft_tr_resolve(t_sockaddr_in *from, char *name)
+{
+    struct sockaddr_in sa;    /* input */
+    socklen_t len;         /* input */
+    char hbuf[NI_MAXHOST];
+
+    memset(&sa, 0, sizeof(struct sockaddr_in));
+
+    char *s = NULL;
+
+    /* For IPv4*/
+    sa.sin_family = AF_INET;
+    sa.sin_addr.s_addr = inet_addr(inet_ntoa(from->sin_addr));
+    len = sizeof(struct sockaddr_in);
+
+    if (getnameinfo((struct sockaddr *) &sa, len, hbuf, sizeof(hbuf), 
+        NULL, 0, NI_NAMEREQD)) {
+        // printf("could not resolve hostname\n");
+        // s = malloc(sizeof(NI_MAXHOST));
+        ft_strcpy(name, inet_ntoa(from->sin_addr));
+
+    }
+    else {
+        // printf("host=%s\n", hbuf);
+        // s = malloc(sizeof(NI_MAXHOST));
+        ft_strcpy(name, hbuf);
+    }
+
+    return 0;
+}
 
 // int			ft_ipv4_to_struct(struct in_addr *addr, char *ipv4)
 // {
