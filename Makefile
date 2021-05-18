@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+         #
+#    By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/11 05:46:03 by dzonda            #+#    #+#              #
-#    Updated: 2021/03/23 19:10:26 by dzonda           ###   ########lyon.fr    #
+#    Updated: 2021/05/10 21:55:55 by user42           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_traceroute
+NAME = ft_ping
 SRCDIR = src
 OBJDIR = obj
 LIBDIR = libft
