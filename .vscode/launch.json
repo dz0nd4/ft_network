@@ -8,7 +8,7 @@
       "name": "ft_network",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/ft_traceroute",
+      "program": "${workspaceFolder}/ft_ping",
       "args": [
         "www.geeksforgeeks.org"
       ],
@@ -16,7 +16,6 @@
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      // "miDebuggerPath": "${workspaceFolder}/.vscode/gdb",
       "MIMode": "gdb",
       "preLaunchTask": "C/C++: Build"
     }

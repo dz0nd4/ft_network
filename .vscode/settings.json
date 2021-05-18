@@ -6,6 +6,8 @@
     "inet.h": "c",
     "types.h": "c",
     "in.h": "c",
-    "socket.h": "c"
+    "socket.h": "c",
+    "ft_ping.h": "c",
+    "ft_network_global.h": "c"
   }
 }
