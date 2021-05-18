@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/23 14:43:39 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/18 03:04:27 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@
 # include <netinet/udp.h>
 # include <netinet/ip_icmp.h>
 
+# define FT_SUCCESS   0
+# define FT_FAILURE   1
+
+# define FT_EXOK      0
+# define FT_EXFAIL    1
+
 # define INVALID_SOCKET -1
 # define SOCKET_ERROR -1
 # define closesocket(s) close(s)
@@ -44,7 +50,11 @@ typedef struct addrinfo     t_addrinfo;
 typedef struct ip           t_ip;
 typedef struct udphdr       t_udp;
 typedef struct icmp         t_icmp;
+typedef struct icmphdr      t_icmphdr;
 
 typedef struct timeval t_timeval;
+
+typedef struct msghdr       t_msghdr;
+typedef struct iovec        t_iovec;
 
 #endif

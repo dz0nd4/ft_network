@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 18:21:17 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/18 23:10:57 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int    ft_socket_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 
 	saddrin_size = sizeof(t_sockaddr);
 	i = recvfrom(fd, data, datalen, 0, (t_sockaddr *)saddrin, &saddrin_size);
-	if (i < 0)
+	if (i <= 0)
 		return (-1);
 	// if (i < 0) {
 	// 	ft_exit("sendto()");
@@ -32,8 +32,10 @@ int    ft_socket_send(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 	int i;
 
 	i = sendto(fd, data, datalen, 0, (t_sockaddr *)saddrin, sizeof(t_sockaddr));
-	if (i < 0)
+	if (i <= 0) {
+		perror("sendto");
 		return (EXIT_FAILURE);
+	}
 	// if (i < 0) {
 	// 	ft_exit("sendto()");
 	// }
@@ -50,7 +52,7 @@ int    ft_socket_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
 	ft_memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_RAW;
-	hints.ai_protocol = IPPROTO_UDP;
+	hints.ai_protocol = IPPROTO_ICMP; // ! should be change
 
   if (getaddrinfo(host, NULL, &hints, &result) != 0)
     return (EXIT_FAILURE);
@@ -103,7 +105,7 @@ int ft_tr_resolve(t_sockaddr_in *from, char *name)
     return 0;
 }
 
-int			ft_ipv4_to_struct(struct in_addr *addr, char *ipv4)
+int			ft_ipv4_to_struct(t_in_addr *addr, char *ipv4)
 {
 	int domain;
 	int	s;
