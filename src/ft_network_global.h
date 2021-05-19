@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 03:04:27 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 16:09:46 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct udphdr       t_udp;
 typedef struct icmp         t_icmp;
 typedef struct icmphdr      t_icmphdr;
 
-typedef struct timeval t_timeval;
+typedef struct timeval      t_timeval;
 
 typedef struct msghdr       t_msghdr;
 typedef struct iovec        t_iovec;
