@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 23:09:16 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 15:33:05 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ int		ft_ping_exec_receive(t_pg_sock sock, t_pg_stats *stats)
         ft_ping_execute_calc_rtt(time);
         ft_ping_exec_print_pckt(cc - sizeof(t_ip), addr, packet, time);
 
+    } else {
+        fprintf(stderr, "Received %s\n", strerror(errno));
     }
 
     return cc;

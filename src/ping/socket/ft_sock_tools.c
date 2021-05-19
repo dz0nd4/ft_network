@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_socket_checksum.c                               :+:      :+:    :+:   */
+/*   ft_sock_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 23:08:32 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 15:49:14 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,6 @@ unsigned short ft_sock_cksum(void *b, int len)
 }
 
 /*
- * ft_sock_ntop
- *
- * Description:
- *    Abstraction over inet_ntop function.
- * 		It assumes 'ip' length is FT_ADDRSTRLEN
- * Returns:
- *    EXIT_SUCCESS or EXIT_FAILURE if inet_ntop fail
-*/
-int		ft_sock_ntop(t_in_addr *src, char *dst)
-{
-	// ft_bzero(dst, FT_ADDRSTRLEN);
-	if (inet_ntop(AF_INET, src, dst, FT_ADDRSTRLEN) == NULL) {
-      fprintf(stderr, "inet_ntop\n");
-      return(EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-
-
-/*
  * ft_sock_gettime
  *
  * Description:
@@ -75,44 +54,14 @@ int		ft_sock_gettime(t_timeval *tv)
 }
 
 /*
- * ft_sock_recvmsg
- *
- * Description:
- *    Abstraction over recvmsg function.
- * Returns:
- *    The number of data read or -1
-*/
-int     ft_sock_recvmsg(int sfd, char *addr, char *packet, int packetlen)
-{
-    t_iovec iov;
-    t_msghdr msg;
-    int cc;
-
-    ft_memset(&iov, 0, sizeof(iov));
-    ft_memset(&msg, 0, sizeof(msg));
-
-    iov.iov_base = packet;
-    iov.iov_len = packetlen;
-    msg.msg_name = addr;
-    msg.msg_namelen = FT_ADDRSTRLEN;
-    msg.msg_iov = &iov;
-    msg.msg_iovlen = 1;
-
-    cc = recvmsg(sfd, &msg, MSG_WAITALL);
-    if (cc < 0)
-        return (-1);
-    return (cc);
-}
-
-/*
- * ft_sock_recvmsg
+ * ft_sock_delay
  *
  * Description:
  *    Simple delay function.
  * Returns:
  *    The number of data read or -1
 */
-int		ft_ping_delay()
+int		ft_sock_delay()
 {
 	t_tr_time delay;
 	double elapsedTime;

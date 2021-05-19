@@ -17,4 +17,6 @@ SUBFILES_PING = \
 			ping/options/ft_ping_opts.c \
 			ping/options/ft_ping_opts_parse.c \
 			\
-			ping/socket/ft_ping_socket.c
+			ping/socket/ft_sock_recv.c \
+			ping/socket/ft_sock_to.c \
+			ping/socket/ft_sock_tools.c

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 23:01:38 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 15:49:58 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,21 +69,21 @@ typedef struct    s_ping_opts
 /*
  *  Socket
 */
+
+typedef struct s_pg_pckt
+{
+	t_icmphdr   hdr;
+  char        msg[PACKETSIZE - sizeof(t_icmphdr)];
+}             t_pg_pckt;
+
+
 typedef struct s_pg_sock
 {
   int         id;
   int         fd;
   t_addrinfo  addrinfo;
+  t_pg_pckt pckt;
 }              t_pg_sock;
-
-/*
- *  Packet
-*/
-typedef struct s_ping_packet
-{
-	t_icmp      icmp;
-  char        msg[PACKETSIZE - sizeof(t_icmphdr)];
-}             t_pg_pckt;
 
 /*
  *  Statistics
@@ -141,7 +141,7 @@ int     ft_ping_opt_v(t_pg_opts *opts, const char *arg);
  *  Execute
 */
 int     ft_ping_exec(const char *dst, t_pg_opts opts);
-int		  ft_ping_exec_send(t_pg_sock sock, t_pg_opts opts, t_pg_stats *stats);
+int		  ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
 int		  ft_ping_exec_receive(t_pg_sock sock, t_pg_stats *stats);
 
 void 	  ft_ping_exec_sigint(int signo);
@@ -162,12 +162,12 @@ int     ft_ping_error_host(const char *dest);
 /*
  *  Socket
 */
+int     ft_sock_recvmsg(int sfd, char *addr, char *packet, int packetlen);
 
-int		ft_sock_ntop(t_in_addr *src, char *dst);
+int		  ft_sock_ntop(t_in_addr *src, char *dst);
 
 unsigned short ft_sock_cksum(void *b, int len);
 int		  ft_sock_gettime(t_timeval *tv);
-int     ft_sock_recvmsg(int sfd, char *addr, char *packet, int packetlen);
-int		  ft_ping_delay();
+int		  ft_sock_delay();
 
 #endif

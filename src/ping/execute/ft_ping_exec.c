@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 23:10:03 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 15:49:12 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int  ft_ping_exec(const char *dst, t_pg_opts opts)
 	
 	ft_sock_gettime(&stats.time.start);
 	while (g_ping_run) {
-		if (ft_ping_exec_send(sock, opts, &stats) ==  FT_EXFAIL)
+		if (ft_ping_exec_send(&sock, opts, &stats) ==  FT_EXFAIL)
 			return (FT_EXFAIL);
 		ft_ping_exec_receive(sock, &stats);
-		ft_ping_delay();
+		ft_sock_delay();
 	}
 	ft_sock_gettime(&stats.time.stop);
 
