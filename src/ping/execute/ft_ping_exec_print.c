@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 22:49:18 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/19 21:26:11 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int  ft_ping_exec_print_stats(const char *dst, t_pg_stats stats)
 	printf("%0.f/%0.f/%0.f/0.000\n", stats.minTime, stats.avgTime / stats.nbPcktReceive, stats.maxTime);
 }
 
-int		ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock)
+int		ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock, t_pg_opts opts)
 {
 	t_sockaddr_in sockaddr_in;
 	char ip[FT_ADDRSTRLEN];
@@ -40,29 +40,22 @@ int		ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock)
 	ft_memcpy(&sockaddr_in, sock.addrinfo.ai_addr, sizeof(t_sockaddr_in));
 	if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ip) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	
-	printf("PING %s (%s) 56(84) bytes of data.\n", dst, ip);
+
+	printf("PING %s (%s) %d(%d) bytes of data.\n", dst, ip, opts.packetsize, opts.packetsize + FT_PING_ICMPHDR);
 	return (EXIT_SUCCESS);
 }
 
-void     ft_ping_exec_print_pckt(int cc, char *addrbuf, char *packet, double time)
+int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double time)
 {
-    t_ip *ip;
-    t_icmp *icmp;
-    int ttl;
-    int seq;
 	  char ipv4[FT_ADDRSTRLEN];
 	  t_sockaddr_in sockaddr_in;
   
-    ft_memcpy(&sockaddr_in, addrbuf, sizeof(t_sockaddr_in));
+    ft_memcpy(&sockaddr_in, addr, sizeof(t_sockaddr_in));
 
     if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
-	  	return;
-    
-    ip = (t_ip *)&packet[0];
-    icmp = (t_icmp *)&packet[sizeof(t_ip)];
-    seq = icmp->icmp_hun.ih_idseq.icd_seq;
-    ttl = ip->ip_ttl;
+	  	return (FT_EXFAIL);
+
     printf("%d bytes from %s (%s): ", cc, ipv4, ipv4);
     printf("icmp_seq=%u ttl=%d, time=%0.2f ms\n", seq, ttl, time);
+		return (FT_EXOK);
 }
