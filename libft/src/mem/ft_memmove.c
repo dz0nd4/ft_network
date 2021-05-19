@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_memmove.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:11:30 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:38:03 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_mem.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
+void			*ft_memmove(void *dst, const void *src, size_t len)
+{
+	const unsigned char *srce;
+	unsigned char *dest;
 
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+	srce = src;
+	dest = dst;
+	if (srce <= dest)
+	{
+		srce += len - 1;
+		dest += len - 1;
+		while (len--)
+			*dest-- = *srce--;
+	}
+	else
+		return (ft_memcpy(dst, src, len));
+	return (dst);
+}

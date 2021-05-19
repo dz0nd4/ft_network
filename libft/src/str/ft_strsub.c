@@ -1,26 +1,34 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_strsub.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:14:26 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:38:39 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_str.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
+char		*ft_strsub(const char *s, unsigned int start, size_t len)
+{
+	char	*str;
+	int		i;
 
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+	if (s)
+	{
+		i = -1;
+		if (!(str = ft_strnew(len)))
+			return (NULL);
+		while (++i < (int)len)
+		{
+			str[i] = s[start];
+			start++;
+		}
+		return (str);
+	}
+	return (NULL);
+}

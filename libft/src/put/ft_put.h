@@ -1,13 +1,14 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_put.h                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/13 03:34:15 by dzonda            #+#    #+#             */
-/*   Updated: 2021/02/18 16:25:27 by dzonda           ###   ########lyon.fr   */
-/*                                                                            */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   ft_put.h                                         .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/12/13 03:34:15 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/12/13 03:38:12 by dzonda      ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
 /* ************************************************************************** */
 
 #ifndef FT_PUT_H
@@ -15,8 +16,8 @@
 
 # include "../to/ft_to.h"
 
-int		ft_putchar_fd(char c, int fd);
-int		ft_putchar(int c);
+int 	ft_putchar_fd(char c, int fd);
+int	    ft_putchar(int c);
 
 void	ft_putendl_fd(const char *s, int fd);
 void	ft_putendl(const char *s);
@@ -42,4 +43,4 @@ void	ft_putstr(const char *s);
 void	ft_putstrpad_fd(const char *s, size_t len, int fd);
 void	ft_putstrpad(const char *s, size_t len);
 
-#endif
+#endif 

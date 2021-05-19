@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_nbrlen.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:11:40 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:38:07 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_to.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
+size_t		ft_nbrlen(int n)
+{
+	size_t i;
 
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+	i = 0;
+	if (n == 0)
+		return (1);
+	while (n)
+	{
+		n /= 10;
+		++i;
+	}
+	return (i);
+}

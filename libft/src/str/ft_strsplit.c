@@ -1,26 +1,42 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_strsplit.c                                    .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:14:20 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:38:37 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_str.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
+char		**ft_strsplit(const char *s, char c)
+{
+	char	**tab;
+	size_t	w;
+	size_t	i;
+	int		v;
 
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+	i = 0;
+	if (!(s))
+		return (NULL);
+	w = ft_wordcount(s, c);
+	if (!(tab = (char **)malloc(sizeof(char *) * (w + 1))))
+		return (NULL);
+	v = 0;
+	while (s[i] != '\0')
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i] != '\0')
+		{
+			tab[v++] = ft_strsub(s, ((int)i), ft_wordlen(s, c, i));
+			i += ft_wordlen(s, c, i);
+		}
+	}
+	tab[v] = (NULL);
+	return (tab);
+}

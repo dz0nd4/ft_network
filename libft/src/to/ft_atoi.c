@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_atoi.c                                        .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:08:57 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:33:46 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_to.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
+int				ft_atoi(const char *nptr)
+{
+	int			i;
+	int			nb;
+	char		neg;
 
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+	i = 0;
+	nb = 0;
+	neg = '\0';
+	while (ft_isspace(nptr[i]))
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+		neg = nptr[i];
+	i += neg ? 1 : 0;
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+		nb = nb * 10 + (nptr[i++] - '0');
+	return (neg == '-' ? nb * (-1) : nb);
+}

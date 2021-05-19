@@ -6,7 +6,7 @@
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/19 16:47:05 by dzonda            #+#    #+#             */
-/*   Updated: 2021/02/18 16:36:18 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/18 23:44:05 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include "../str/ft_str.h"
+# include "ft_str.h"
 
 typedef struct		s_line
 {
@@ -32,6 +32,5 @@ typedef struct		s_line
 }					t_line;
 
 int					get_next_line(const int fd, char **line);
-int					ft_get_input(char *file, char **input);
 
 #endif

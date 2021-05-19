@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_strlcat.c                                     .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:13:27 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:38:27 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_str.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t i;
+	size_t dst_size;
+	size_t src_size;
 
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+	i = 0;
+	dst_size = ft_strlen(dst);
+	src_size = ft_strlen(src);
+	if (size > 1)
+	{
+		while (src[i] != '\0' && ((dst_size + i) < (size - 1)))
+		{
+			dst[dst_size + i] = src[i];
+			i++;
+		}
+	}
+	dst[dst_size + i] = '\0';
+	return (src_size + ((dst_size < size) ? dst_size : size));
+}

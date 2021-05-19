@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/09 20:43:25 by dz0nda            #+#    #+#             */
-/*   Updated: 2021/05/19 00:14:24 by dzonda           ###   ########lyon.fr   */
+/*   Created: 2017/12/12 20:09:34 by dzonda            #+#    #+#             */
+/*   Updated: 2021/05/18 23:44:30 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "ft_is.h"
 
-# include "./src/is/ft_is.h"
-# include "./src/mem/ft_mem.h"
-# include "./src/str/ft_str.h"
-# include "./src/put/ft_put.h"
-# include "./src/to/ft_to.h"
-
-#endif
+int		ft_isascii(int c)
+{
+	if (c >= 0 && c <= 128)
+		return (1);
+	return (0);
+}

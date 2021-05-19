@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_to.h                                          .::    .:/ .      .::   */
+/*   ft_memcmp.c                                      .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:38:51 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:40:02 by dzonda      ###    #+. /#+    ###.fr     */
+/*   Created: 2017/12/12 20:11:12 by dzonda       #+#   ##    ##    #+#       */
+/*   Updated: 2018/07/12 11:38:00 by dzonda      ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef FT_TO_H
-# define FT_TO_H
+#include "ft_mem.h"
 
-# include "../is/ft_is.h"
-# include "../str/ft_str.h"
-
-int	    ft_atoi(const char *nptr);
-int		ft_toupper(int c);
-int		ft_tolower(int c);
-char    *ft_itoa(int input, char *buffer, int radix);
-size_t  ft_nbrlen(int n);
-
-#endif
+int		ft_memcmp(const void *s1, const void *s2, size_t n)
+{
+	unsigned char *uc1;
+	unsigned char *uc2;
+	size_t i;
+	
+	uc1 = (unsigned char *)s1;
+	uc2 = (unsigned char *)s2;
+	i = 0;
+	while (i < n && uc1[i] && uc2[i] && uc1[i] == uc2[i])
+		i++;
+	i = uc1[i] = uc2[i];
+	return (i);
+}
