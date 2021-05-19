@@ -10,6 +10,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/ft_ping",
       "args": [
+        "-s",
+        "84",
         "www.geeksforgeeks.org"
       ],
       "stopAtEntry": false,
