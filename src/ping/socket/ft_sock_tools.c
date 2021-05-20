@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/19 19:31:26 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 18:34:38 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,39 @@ int		ft_sock_delay()
 	return 0;
 }
 
+/*
+ * ft_sock_timediff()
+ *
+ * Description:
+ *    Subtract 2 timeval structs to get the elapsed time.
+ * Returns:
+ *    The elapsed time
+*/
+double     ft_sock_timediff(t_timeval *out, t_timeval *in)
+{
+    double elapsedTime = (out->tv_sec - in->tv_sec) * 1000.0;      
+    elapsedTime += (out->tv_usec - in->tv_usec) / 1000.0;  
+    return elapsedTime;
+}
+
+/*
+ * ft_sock_getelapsedtime()
+ *
+ * Description:
+ *    Subtract 2 timeval structs to get the elapsed time.
+ * Returns:
+ *    The elapsed time
+*/
+double     ft_sock_getelapsedtime(t_timeval *in)
+{
+        t_timeval out;
+
+        ft_sock_gettime(&out);
+    return (ft_sock_timediff(&out, in));
+}
+
  
+
 #ifndef HEXDUMP_COLS
 #define HEXDUMP_COLS 16
 #endif
@@ -126,4 +158,23 @@ void hexdump(void *mem, unsigned int len)
                         putchar('\n');
                 }
         }
+}
+
+int    ft_socket_getnameinfo(t_sockaddr_in *host, char *name)
+{
+    socklen_t len;
+    char hbuf[FT_NI_MAXHOST];
+
+    len = sizeof(t_sockaddr_in);
+
+    if (getnameinfo((t_sockaddr *) host, len, hbuf, sizeof(hbuf), 
+        NULL, 0, NI_NAMEREQD)) {
+        fprintf(stderr, "could not resolve hostname\n");
+        // s = malloc(sizeof(NI_MAXHOST));
+    }
+    else {
+        ft_strcpy(name, hbuf);
+    }
+
+    return 0;
 }

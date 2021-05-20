@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/19 21:26:11 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 17:47:01 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,25 @@ int  ft_ping_exec_print_stats(const char *dst, t_pg_stats stats)
 	printf("%0.f/%0.f/%0.f/0.000\n", stats.minTime, stats.avgTime / stats.nbPcktReceive, stats.maxTime);
 }
 
+int  ft_ping_exec_print_stats2(t_pg_stats stats)
+{
+	int nbPcktLoss;
+	int percentPcktLoss;
+	double time;
+
+	nbPcktLoss = stats.nbPcktSend - stats.nbPcktReceive;
+	percentPcktLoss = nbPcktLoss / stats.nbPcktSend;
+	time = ft_ping_execute_recv_print_time(&stats.time);
+	printf("--- %s ping statistics ---\n", "");
+	printf("%d packets transmitted, ", stats.nbPcktSend);
+	printf("%d packets received, ", stats.nbPcktReceive);
+	printf("%d%% packets packet loss, ", percentPcktLoss);
+	printf("time %0.fms\n", time);
+	printf("rtt min/avg/nax/mdev = ");
+	printf("%0.f/%0.f/%0.f/0.000\n", stats.minTime, stats.avgTime / stats.nbPcktReceive, stats.maxTime);
+}
+
+
 int		ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock, t_pg_opts opts)
 {
 	t_sockaddr_in sockaddr_in;
@@ -37,15 +56,34 @@ int		ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock, t_pg_opts opts)
 
 	ft_memset(&sockaddr_in, 0, sizeof(t_sockaddr_in));
 	ft_bzero(ip, FT_ADDRSTRLEN);
-	ft_memcpy(&sockaddr_in, sock.addrinfo.ai_addr, sizeof(t_sockaddr_in));
-	if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ip) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	// ft_memcpy(&sockaddr_in, sock.addrinfo.ai_addr, sizeof(t_sockaddr_in));
+	// if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ip) == EXIT_FAILURE)
+	// 	return (EXIT_FAILURE);
 
 	printf("PING %s (%s) %d(%d) bytes of data.\n", dst, ip, opts.packetsize, opts.packetsize + FT_PING_ICMPHDR);
 	return (EXIT_SUCCESS);
 }
 
 int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double time)
+{
+	  char ipv4[FT_ADDRSTRLEN];
+		char hostname[FT_NI_MAXHOST];
+	  t_sockaddr_in sockaddr_in;
+  
+    ft_memcpy(&sockaddr_in, addr, sizeof(t_sockaddr_in));
+
+    if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
+	  	return (FT_EXFAIL);
+
+		ft_socket_getnameinfo(&sockaddr_in, hostname);
+
+    printf("%d bytes from %s (%s): ", cc, hostname, ipv4);
+    printf("icmp_seq=%u ttl=%d, time=%0.2f ms\n", seq, ttl, time);
+		return (FT_EXOK);
+}
+
+
+int     ft_ping_exec_print_pckt_exceed(char *addr, int seq)
 {
 	  char ipv4[FT_ADDRSTRLEN];
 	  t_sockaddr_in sockaddr_in;
@@ -55,7 +93,7 @@ int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double tim
     if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
 	  	return (FT_EXFAIL);
 
-    printf("%d bytes from %s (%s): ", cc, ipv4, ipv4);
-    printf("icmp_seq=%u ttl=%d, time=%0.2f ms\n", seq, ttl, time);
+    printf("From %s (%s): ", ipv4);
+    printf("icmp_seq=%u Time to live exceeded ms\n", seq);
 		return (FT_EXOK);
 }

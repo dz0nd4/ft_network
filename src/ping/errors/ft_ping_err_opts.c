@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ping_exec_signal.c                              :+:      :+:    :+:   */
+/*   ft_ping_errors_opts.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 18:45:56 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 12:57:03 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_ping.h"
 
-void 	ft_ping_exec_sigint(int signo)
+int 	ft_ping_error_opt_ttl()
 {
-	free(g_pg.sock.pckt);
-
-	ft_ping_exec_print_stats2(g_pg.stats);
-	exit(0);
-}
-
-void 	ft_ping_exec_sigarlm(int signo)
-{
-	// printf("hello there\n");
-	// alarm(1);
-	ft_ping_exec_send(&g_pg.sock, g_pg.opts, &g_pg.stats);
-	alarm(1);
+  fprintf(stderr, "ping: can't set unicast time-to-live: Argument invalide\n");
+	return (FT_EXFAIL);
 }

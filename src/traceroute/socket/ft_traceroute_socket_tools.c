@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/18 23:10:57 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 17:18:26 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int    ft_socket_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
   
 	ft_memcpy(host_addrinfo, rp, sizeof(t_addrinfo));
 
+	close(sfd);
 	freeaddrinfo(result);
 
   return (EXIT_SUCCESS);

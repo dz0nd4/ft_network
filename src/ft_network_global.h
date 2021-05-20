@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/19 16:09:46 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 15:19:01 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,17 @@ typedef struct timeval      t_timeval;
 
 typedef struct msghdr       t_msghdr;
 typedef struct iovec        t_iovec;
+
+// typedef struct s_addrinfo
+// {
+//   int ai_flags;			          /* Input flags.  */
+//   int ai_family;		          /* Protocol family for socket.  */
+//   int ai_socktype;		        /* Socket type.  */
+//   int ai_protocol;		        /* Protocol for socket.  */
+//   socklen_t ai_addrlen;		    /* Length of socket address.  */
+//   struct sockaddr *ai_addr;	  /* Socket address for socket.  */
+//   char *ai_canonname;		      /* Canonical name for service location.  */
+//   struct s_addrinfo *ai_next;	/* Pointer to next in list.  */
+// } t_addrinfo;
 
 #endif

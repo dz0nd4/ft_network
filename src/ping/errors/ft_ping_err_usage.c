@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ping_exec_signal.c                              :+:      :+:    :+:   */
+/*   ft_ping_err_usage.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 18:45:56 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 12:58:30 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_ping.h"
+#include "ft_ping.h"
 
-void 	ft_ping_exec_sigint(int signo)
+int  ft_ping_exit(char *s)
 {
-	free(g_pg.sock.pckt);
-
-	ft_ping_exec_print_stats2(g_pg.stats);
-	exit(0);
+	// perror(s);
+  fprintf(stderr, "Error: %s\n", s);
+	return(EXIT_FAILURE);
 }
 
-void 	ft_ping_exec_sigarlm(int signo)
+int  ft_ping_usage()
 {
-	// printf("hello there\n");
-	// alarm(1);
-	ft_ping_exec_send(&g_pg.sock, g_pg.opts, &g_pg.stats);
-	alarm(1);
+	fprintf(stderr, "Usage: ping [-ahv] destination\n");
+	return(EXIT_FAILURE);
 }

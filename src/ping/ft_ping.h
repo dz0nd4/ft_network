@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/19 21:26:27 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 18:34:46 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@
 extern int g_ping_run;
 extern int g_ping_send;
 
+typedef unsigned char     t_uchar;
+typedef struct s_pg       t_pg;
+extern t_pg g_pg;
 
 typedef struct s_ping_args  t_pg_args;
 typedef struct s_ping_opts  t_pg_opts;
@@ -63,7 +66,9 @@ typedef enum			e_ping_opt_key
 {
 	FT_PING_OPT_H,
 	FT_PING_OPT_V,
+  FT_PING_OPT_N,
 	FT_PING_OPT_S,
+	FT_PING_OPT_T,
 	FT_PING_OPT_MAX
 }						t_ping_opt_key;
 
@@ -106,6 +111,8 @@ typedef struct s_pg_pckt_recv
   t_ip        ip;
 	t_icmphdr   hdr;
   char        *msg;
+  char        addr[128];
+  int         cc;
 }             t_pg_pckt_recv;
 
 typedef struct s_pg_sock
@@ -113,7 +120,13 @@ typedef struct s_pg_sock
   int         id;
   int         fd;
   t_addrinfo  addrinfo;
-  t_pg_pckt pckt;
+  t_sockaddr_in addrin;
+  unsigned char *pckt;
+  unsigned char *pckt_recv;
+  t_uchar     *send_pckt;
+  int         send_pckt_len;
+  t_uchar     *recv_pckt;
+  int         recv_pckt_len;
 }              t_pg_sock;
 
 /*
@@ -152,6 +165,12 @@ typedef struct		s_ping
   t_pg_stats  stats;
 }					t_ping;
 
+typedef struct s_pg
+{
+  t_pg_sock   sock;
+  t_pg_opts   opts;
+  t_pg_stats  stats;
+}         t_pg;
 
 /*
  *  FUNCTIONS PROTOYPES
@@ -168,14 +187,16 @@ int		ft_ping_opts_parse(t_pg_opts *opts, t_pg_args *args);
 
 int     ft_ping_opt_h(t_pg_opts *opts, t_pg_args *args);
 int     ft_ping_opt_v(t_pg_opts *opts, t_pg_args *args);
+int     ft_ping_opt_n(t_pg_opts *opts, t_pg_args *args);
 int     ft_ping_opt_s(t_pg_opts *opts, t_pg_args *args);
+int     ft_ping_opt_t(t_pg_opts *opts, t_pg_args *args);
 
 /*
  *  Execute
 */
 int     ft_ping_exec(const char *dst, t_pg_opts opts);
 int		  ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
-int		  ft_ping_exec_receive(t_pg_sock sock, t_pg_stats *stats);
+int		  ft_ping_exec_receive(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
 
 void 	  ft_ping_exec_sigint(int signo);
 void 	  ft_ping_exec_sigarlm(int signo);
@@ -183,7 +204,8 @@ void 	  ft_ping_exec_sigarlm(int signo);
 int		  ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock, t_pg_opts opts);
 int     ft_ping_exec_print_stats(const char *dst, t_pg_stats stats);
 int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double time);
-double   ft_ping_execute_recv_print_time(t_tr_time *time);
+double  ft_ping_execute_recv_print_time(t_tr_time *time);
+int     ft_ping_exec_print_stats2(t_pg_stats stats);
 
 /*
  *  Erros
@@ -191,6 +213,10 @@ double   ft_ping_execute_recv_print_time(t_tr_time *time);
 int     ft_ping_exit(char *s);
 int     ft_ping_usage();
 int     ft_ping_error_host(const char *dest);
+
+
+int 	  ft_ping_error_opt_ttl();
+int     ft_ping_err_exec_recv(const char *err);
 
 /*
  *  Socket
@@ -202,6 +228,9 @@ int		  ft_sock_ntop(t_in_addr *src, char *dst);
 unsigned short ft_sock_cksum(void *b, int len);
 int		  ft_sock_gettime(t_timeval *tv);
 int		  ft_sock_delay();
+double   ft_sock_timediff(t_timeval *out, t_timeval *in);
+int    ft_socket_getnameinfo(t_sockaddr_in *host, char *name);
+double     ft_sock_getelapsedtime(t_timeval *in);
 
 void hexdump(void *mem, unsigned int len);
 

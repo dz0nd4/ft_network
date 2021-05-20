@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/19 21:13:27 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/20 12:56:09 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int		ft_ping_opts_parse(t_pg_opts *opts, t_pg_args *args)
 	static t_ping_opt_d	ft_ping_opt[FT_PING_OPT_MAX] = {
 		{ FT_PING_OPT_H, "h", ft_ping_opt_h },
 		{ FT_PING_OPT_V, "v", ft_ping_opt_v },
+		{ FT_PING_OPT_N, "n", ft_ping_opt_n },
 		{ FT_PING_OPT_S, "s", ft_ping_opt_s },
+		{ FT_PING_OPT_T, "t", ft_ping_opt_t },
 	};
 	int							opt_key;
 	char						*opt_name;
