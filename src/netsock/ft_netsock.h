@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_netsock.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 15:12:13 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 20:40:01 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,33 @@ typedef struct addrinfo     t_addrinfo;
 typedef struct ip           t_ip;
 typedef struct udphdr       t_udp;
 typedef struct icmp         t_icmp;
-typedef struct icmphdr      t_icmphdr;
+// typedef struct icmphdr      t_icmphdr;
 
 typedef struct timeval      t_timeval;
 
 typedef struct msghdr       t_msghdr;
 typedef struct iovec        t_iovec;
+
+typedef struct icmphdr
+{
+  u_int8_t type;                /* message type */
+  u_int8_t code;                /* type sub-code */
+  u_int16_t checksum;
+  union
+  {
+    struct
+    {
+      u_int16_t        id;
+      u_int16_t        sequence;
+    } echo;                        /* echo datagram */
+    u_int32_t        gateway;        /* gateway address */
+    struct
+    {
+      u_int16_t        unused;
+      u_int16_t        mtu;
+    } frag;                        /* path mtu discovery */
+  } un;
+}     t_icmphdr;
 
 
 typedef struct  s_sock_icmp_type
@@ -65,6 +86,11 @@ typedef struct  s_sock_icmp_type
 */
 int       ft_sock_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin);
 int       ft_sock_recvmsg(int sfd, char *addr, char *packet, int packetlen);
+
+/*
+ *  SOCK SEND
+*/
+int    ft_sock_send(int fd, char *data, int datalen, t_sockaddr_in *saddrin);
 
 /*
  *  SOCK TO

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sock_time.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 15:11:00 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:38:40 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,8 @@
 */
 int		ft_sock_gettime(t_timeval *tv)
 {
-	if (gettimeofday(tv, NULL) == -1) {
-      // fprintf(stderr, "gettimeofday\n");
+	if (gettimeofday(tv, NULL) == -1)
       return(EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }
 
@@ -50,9 +48,9 @@ int		ft_sock_delay()
     elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;   // us to ms
 
 		if (elapsedTime > 1000)
-			return 1;
+			return (FT_EXOK);
 	}
-	return 0;
+	return (FT_EXFAIL);
 }
 
 /*
@@ -80,8 +78,8 @@ double     ft_sock_timediff(t_timeval *out, t_timeval *in)
 */
 double     ft_sock_getelapsedtime(t_timeval *in)
 {
-        t_timeval out;
+		t_timeval out;
 
-        ft_sock_gettime(&out);
+		ft_sock_gettime(&out);
     return (ft_sock_timediff(&out, in));
 }
