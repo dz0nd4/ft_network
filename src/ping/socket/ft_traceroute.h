@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 15:12:43 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:11:46 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #define DEFAULT_TTL            30       // default timeout
 #define BUF_SIZE 1024
 
-# define FT_ADDRSTRLEN 16
+// # define FT_ADDRSTRLEN 16
 # define FT_PORT_DEFAULT  33435
 
 # define FT_TR_ROOT             0
@@ -34,7 +34,7 @@
 
 # define FT_PACKET_LEN_MAX      65000
 
-// # define FT_NI_MAXHOST          1025
+// # define FT_NI_MAXHOST       1025
 # define FT_NI_MAXSERV          32
 
 // struct opacket {

@@ -6,67 +6,22 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 15:19:01 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:07:57 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_NETWORK_GLOBAL_H
 # define FT_NETWORK_GLOBAL_H
 
-# include "../libft/libft.h"
+# include "./netsock/ft_netsock.h"
 
 # include <stdio.h>
 # include <string.h>
 
-# include <sys/socket.h>
-# include <sys/time.h>
-# include <sys/types.h>
-
-# include <time.h>
-# include <arpa/inet.h>
-# include <netinet/in.h>
-# include <errno.h> 
-# include <netdb.h>
-
-# include <netinet/ip.h>
-# include <netinet/udp.h>
-# include <netinet/ip_icmp.h>
-
 # define FT_SUCCESS   0
 # define FT_FAILURE   1
 
-# define FT_EXOK      0
-# define FT_EXFAIL    1
-
-# define INVALID_SOCKET -1
-# define SOCKET_ERROR -1
-# define closesocket(s) close(s)
-
-typedef int                 t_socket;
-typedef struct sockaddr_in  t_sockaddr_in;
-typedef struct sockaddr     t_sockaddr;
-typedef struct in_addr      t_in_addr;
-typedef struct addrinfo     t_addrinfo;
-typedef struct ip           t_ip;
-typedef struct udphdr       t_udp;
-typedef struct icmp         t_icmp;
-typedef struct icmphdr      t_icmphdr;
-
-typedef struct timeval      t_timeval;
-
-typedef struct msghdr       t_msghdr;
-typedef struct iovec        t_iovec;
-
-// typedef struct s_addrinfo
-// {
-//   int ai_flags;			          /* Input flags.  */
-//   int ai_family;		          /* Protocol family for socket.  */
-//   int ai_socktype;		        /* Socket type.  */
-//   int ai_protocol;		        /* Protocol for socket.  */
-//   socklen_t ai_addrlen;		    /* Length of socket address.  */
-//   struct sockaddr *ai_addr;	  /* Socket address for socket.  */
-//   char *ai_canonname;		      /* Canonical name for service location.  */
-//   struct s_addrinfo *ai_next;	/* Pointer to next in list.  */
-// } t_addrinfo;
+// # define FT_EXOK      0
+// # define FT_EXFAIL    1
 
 #endif

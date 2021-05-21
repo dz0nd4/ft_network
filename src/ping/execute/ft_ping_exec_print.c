@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 14:43:51 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:05:13 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double tim
     if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
 	  	return (FT_EXFAIL);
 
-		ft_socket_getnameinfo(&sockaddr_in, hostname);
+		ft_sock_getnameinfo(&sockaddr_in, hostname);
 
     printf("%d bytes from %s (%s): ", cc, hostname, ipv4);
     printf("icmp_seq=%u ttl=%d, time=%0.2f ms\n", seq, ttl, time);
@@ -94,7 +94,7 @@ int     ft_pg_exec_print_pckt(char *addr, int seq, int icmp_type)
     if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
 	  	return (FT_EXFAIL);
 
-		ft_socket_getnameinfo(&sockaddr_in, hostname);
+		ft_sock_getnameinfo(&sockaddr_in, hostname);
 
     printf("From %s (%s): ", hostname, ipv4);
     printf("icmp_seq=%u %s\n", seq, ft_sock_get_icmp_type(icmp_type));

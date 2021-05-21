@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 13:45:07 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:03:11 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int  ft_ping_exec_init(const char *dst, t_pg_sock *sock, t_pg_opts opts)
 
 	ft_memset(&addrinfo, 0, sizeof(addrinfo));
 
-	if (ft_socket_getaddrinfo(dst, &addrinfo) == EXIT_FAILURE)
+	if (ft_sock_getaddrinfo(dst, &addrinfo) == EXIT_FAILURE)
 		return (ft_ping_error_host(dst));
 
 	sock->id = getpid() & 0xFFFF;

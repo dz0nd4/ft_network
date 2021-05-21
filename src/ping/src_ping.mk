@@ -2,7 +2,6 @@ SUBDIRS_PING = \
 			ping \
 			ping/execute \
 			ping/options \
-			ping/socket \
 			ping/errors
 
 SUBFILES_PING = \
@@ -17,10 +16,6 @@ SUBFILES_PING = \
 			\
 			ping/options/ft_ping_opts.c \
 			ping/options/ft_ping_opts_parse.c \
-			\
-			ping/socket/ft_sock_recv.c \
-			ping/socket/ft_sock_to.c \
-			ping/socket/ft_sock_tools.c \
 			\
 			ping/errors/ft_ping_err_exec.c \
 			ping/errors/ft_ping_err_opts.c \

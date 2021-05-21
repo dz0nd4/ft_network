@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 18:23:11 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:03:11 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int   ft_traceroute_execute_send_init(t_tr_to *to)
 {
   const int on = 1;
 
-	// if (ft_socket_getaddrinfo(to->name, &to->addrinfo) == EXIT_FAILURE)
+	// if (ft_sock_getaddrinfo(to->name, &to->addrinfo) == EXIT_FAILURE)
 	// 	return (EXIT_FAILURE);
 
 	to->sfd = socket(to->addrinfo.ai_family, to->addrinfo.ai_socktype, to->addrinfo.ai_protocol);

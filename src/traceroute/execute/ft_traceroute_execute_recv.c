@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/17 00:01:58 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:01:33 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int   ft_traceroute_execute_recv(t_trace *ctx, char *buffer, t_tr_from *from)
   hdr_udp = (t_tr_pack_hdr_udp *)&hdr_icmp->icmp.icmp_ip;
 
   gettimeofday(&ctx->time.stop, NULL);
-  from->cc = ft_socket_recv(from->sfd, &from->buffer, BUF_SIZE, &from->saddrin);
+  from->cc = ft_sock_recv(from->sfd, &from->buffer, BUF_SIZE, &from->saddrin);
 
   if (hdr_udp->udp.uh_sport == htons(getpid()))
     ft_traceroute_execute_recv_print(ctx);

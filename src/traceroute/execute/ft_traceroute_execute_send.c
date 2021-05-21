@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 15:14:43 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:02:40 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int   ft_traceroute_execute_send(t_trace *ctx, t_tr_opt *opts, t_tr_to *to)
   to->hdr->udp.uh_dport = htons(opts->port + opts->hops + opts->probes); 
   gettimeofday(&ctx->time.start, NULL);
 
-	if (ft_socket_send(to->sfd, to->pack.data, opts->packetlen, &to->saddrin) == EXIT_FAILURE)
+	if (ft_sock_send(to->sfd, to->pack.data, opts->packetlen, &to->saddrin) == EXIT_FAILURE)
 		return (0);
 
   return (1);

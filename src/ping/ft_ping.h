@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 14:21:50 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:11:56 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,6 @@ typedef struct			s_ping_args
 }						t_pg_args;
 
 
-typedef struct  s_sock_icmp_type
-{
-  int   type_int;
-  char  *type_str;
-}               t_sock_icmp_type;
 
 /*
  *  Options
@@ -224,21 +219,5 @@ int     ft_ping_error_host(const char *dest);
 int 	  ft_ping_error_opt_ttl();
 int     ft_ping_err_exec_recv(const char *err);
 
-/*
- *  Socket
-*/
-int     ft_sock_recvmsg(int sfd, char *addr, char *packet, int packetlen);
-
-int		  ft_sock_ntop(t_in_addr *src, char *dst);
-
-unsigned short ft_sock_cksum(void *b, int len);
-int		  ft_sock_gettime(t_timeval *tv);
-int		  ft_sock_delay();
-double   ft_sock_timediff(t_timeval *out, t_timeval *in);
-int    ft_socket_getnameinfo(t_sockaddr_in *host, char *name);
-double     ft_sock_getelapsedtime(t_timeval *in);
-char *ft_sock_get_icmp_type(int type);
-
-void hexdump(void *mem, unsigned int len);
 
 #endif

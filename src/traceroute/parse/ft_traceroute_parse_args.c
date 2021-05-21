@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 17:32:11 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 15:03:11 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 int			ft_tr_arg_host(t_trace *ctx, char *arg)
 {
 	ctx->to.name = arg;
-	if (ft_socket_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == EXIT_FAILURE)
+	if (ft_sock_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == EXIT_FAILURE)
 		return (ft_tr_error_host_resolve(ctx, arg));
 	return (EXIT_SUCCESS);
 }
