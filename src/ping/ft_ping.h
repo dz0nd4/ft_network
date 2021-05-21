@@ -6,7 +6,7 @@
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 23:40:20 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:47:34 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,17 @@
 # include <signal.h>
 
 # include "../ft_network_global.h"
-# include "../traceroute/ft_traceroute.h"
 
 # define FT_IPHDR_LEN                 20
 # define FT_ICMPHDR_LEN               8
 # define FT_TIMEVAL_LEN               16
-
 # define FT_PING_ICMPHDR              FT_IPHDR_LEN + FT_ICMPHDR_LEN
 
-# define PACKETSIZE	64
 # define FT_PING_PACKETSIZE_DEFAULT	  56
 # define FT_PING_PACKETSIZE_MAX	      65507
 # define FT_PING_DEFAULT_TTL      	  115
 # define FT_PING_DEFAULT_DELAY      	1
-# define FT_PING_DEFAULT_DELAY      	1
+# define FT_PING_DEFAULT_RECVTIMEOUT  1
 
 
 # define FT_PG_STOP                   0
@@ -40,13 +37,7 @@
  *  Globals
 */
 extern int g_ping;
-extern int g_ping_run;
-extern int g_ping_send;
-extern int g_pg_send;
-
-typedef unsigned char     t_uchar;
-typedef struct s_pg       t_pg;
-extern t_pg g_pg;
+typedef unsigned char       t_uchar;
 
 typedef struct s_ping_args  t_pg_args;
 typedef struct s_ping_opts  t_pg_opts;
@@ -64,8 +55,6 @@ typedef struct			s_ping_args
 	const char		  **argv;
 	int         	  argi;
 }						t_pg_args;
-
-
 
 /*
  *  Options
@@ -102,12 +91,6 @@ typedef struct    s_ping_opts
  *  Socket
 */
 
-// typedef struct s_pg_pckt
-// {
-// 	t_icmphdr   hdr;
-//   char        msg[PACKETSIZE - sizeof(t_icmphdr)];
-// }             t_pg_pckt;
-
 typedef struct s_pg_pckt
 {
 	t_icmphdr   hdr;
@@ -137,9 +120,16 @@ typedef struct s_pg_sock
 /*
  *  Statistics
 */
+
+typedef struct    s_pg_time
+{
+  t_timeval start;
+  t_timeval stop;
+}                 t_pg_time;
+
 typedef struct  s_ping_stats
 {
-  t_tr_time time;
+  t_pg_time time;
   int nbPcktSend;
   int nbPcktReceive;
   int nbPcktLoss;
@@ -147,28 +137,6 @@ typedef struct  s_ping_stats
   double avgTime;
   double maxTime;
 }               t_pg_stats;
-
-typedef struct  s_ping_msg
-{
-  t_msghdr msg;
-  t_iovec iov;
-  char packet[400];
-  char addrbuf[128];
-  int cc;
-}               t_pg_msg;
-
-typedef struct		s_ping
-{
-  int           sfd;
-  const char    *host;
-  t_pg_opts    opts;
-  char          send_buf[400];
-  char          *packet;
-  int           count;
-  t_pg_pckt      pckt;
-  t_tr_time     time;
-  t_pg_stats  stats;
-}					t_ping;
 
 typedef struct s_pg
 {

@@ -6,7 +6,7 @@
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 23:39:49 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:42:41 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void 	ft_ping_sigint()
 void 	ft_ping_sigarlm()
 {
 	g_ping = FT_PG_SEND;
-	alarm(1);
+	alarm(FT_PING_DEFAULT_DELAY);
 }
 
 int  ft_ping_usage()
@@ -51,7 +51,7 @@ int			ft_ping(int argc, const char *argv[])
 	signal(SIGINT, ft_ping_sigint);
 	signal(SIGALRM, ft_ping_sigarlm);
 	
-	alarm(1);
+	alarm(FT_PING_DEFAULT_DELAY);
 	while (g_ping) {
 		if (g_ping == FT_PG_SEND) {
 			if (ft_ping_exec_send(&sock, opts, &stats) == FT_EXOK)

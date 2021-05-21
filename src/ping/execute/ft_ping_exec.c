@@ -6,7 +6,7 @@
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 23:34:45 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:43:40 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int  ft_pg_exec_init_sock(const char *dst, t_pg_sock *sock, t_pg_opts opt
 
 	ft_memset(&addrinfo, 0, sizeof(addrinfo));
 	ft_memset(&tv, 0, sizeof(tv));
-	tv.tv_sec = 1;
+	tv.tv_sec = FT_PING_DEFAULT_RECVTIMEOUT;
 
 	if (ft_sock_getaddrinfo(dst, &addrinfo) == EXIT_FAILURE) {
 		fprintf(stderr, "%s: Échec temporaire dans la résolution du nom\n", dst);
