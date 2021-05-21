@@ -3,21 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping_opts_parse.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 12:56:09 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:39:41 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_ping.h"
 
-int 	ft_ping_opts_init(t_pg_opts	*opts)
+int 	ft_ping_opts_init(int argc, const char *argv[], t_pg_args *args, t_pg_opts	*opts)
 {
+	ft_memset(args, 0, sizeof(t_pg_args));
 	ft_memset(opts, 0, sizeof(t_pg_opts));
+
+	args->argc = argc;
+	args->argv = argv;
+	args->argi = 1;
 
 	opts->ttl = FT_PING_DEFAULT_TTL;
 	opts->packetsize = FT_PING_PACKETSIZE_DEFAULT;
+
 	return (EXIT_SUCCESS);
 }
 
@@ -38,5 +44,6 @@ int		ft_ping_opts_parse(t_pg_opts *opts, t_pg_args *args)
 	while (++opt_key < FT_PING_OPT_MAX)
 		if (ft_strequ(ft_ping_opt[opt_key].opt_name, opt_name))
 			return (ft_ping_opt[opt_key].opt_dist(opts, args));
-	return (ft_ping_exit(opt_name));
+	fprintf(stderr, "ft_ping: invalid option -- %s\n", opt_name);
+	return (FT_EXFAIL);
 }

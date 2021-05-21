@@ -3,42 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 13:54:20 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:39:49 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
-t_ping	g_ctx;
-t_pg	g_pg = { 0 };
-
-static void ft_ping_init_args(t_pg_args *args, int argc, const char *argv[])
+void 	ft_ping_sigint()
 {
-	ft_memset(args, 0, sizeof(t_pg_args));
-	args->argc = argc;
-	args->argv = argv;
-	args->argi = 1;
+	g_ping = FT_PG_STOP;
+}
+
+void 	ft_ping_sigarlm()
+{
+	g_ping = FT_PG_SEND;
+	alarm(1);
+}
+
+int  ft_ping_usage()
+{
+	fprintf(stderr, "Usage: ping [-ahv] destination\n");
+	return(EXIT_FAILURE);
 }
 
 int			ft_ping(int argc, const char *argv[])
 {
-	t_pg_args args;
-	t_pg_opts *opts = &g_pg.opts;
+	t_pg_args 	args;
+	t_pg_opts 	opts;
+	t_pg_sock 	sock;
+	t_pg_stats 	stats;
 
-	setuid(getuid());
-	ft_ping_init_args(&args, argc, argv);
-	ft_ping_opts_init(opts);
+	ft_ping_opts_init(argc, argv, &args, &opts);
 	while (argv[args.argi] && *argv[args.argi] == '-') {
-		if (ft_ping_opts_parse(opts, &args) == FT_EXFAIL)
+		if (ft_ping_opts_parse(&opts, &args) == FT_EXFAIL)
 			return (FT_EXFAIL);
 	}
 
-	if ((g_pg.sock.host = argv[args.argi]) == NULL)
+	if (argv[args.argi] == NULL)
 		return (ft_ping_usage());
 
-	// return 1;
-	return (ft_ping_exec(argv[args.argi], *opts));
+	if (ft_ping_exec_init(argv[args.argi], &sock, opts, &stats) == FT_EXFAIL)
+		return (FT_EXFAIL);
+
+	signal(SIGINT, ft_ping_sigint);
+	signal(SIGALRM, ft_ping_sigarlm);
+	
+	alarm(1);
+	while (g_ping) {
+		if (g_ping == FT_PG_SEND) {
+			if (ft_ping_exec_send(&sock, opts, &stats) == FT_EXOK)
+				ft_ping_exec_receive(&sock, opts, &stats);
+			g_ping = FT_PG_RUN;
+		}
+	}
+
+	ft_ping_exec_finish(argv[args.argi], &sock, &stats);
+
+	return (FT_EXOK);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 15:11:56 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:40:20 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,29 @@
 
 # define FT_IPHDR_LEN                 20
 # define FT_ICMPHDR_LEN               8
+# define FT_TIMEVAL_LEN               16
 
 # define FT_PING_ICMPHDR              FT_IPHDR_LEN + FT_ICMPHDR_LEN
 
 # define PACKETSIZE	64
 # define FT_PING_PACKETSIZE_DEFAULT	  56
 # define FT_PING_PACKETSIZE_MAX	      65507
-# define FT_PING_DEFAULT_TTL      	  64
+# define FT_PING_DEFAULT_TTL      	  115
 # define FT_PING_DEFAULT_DELAY      	1
 # define FT_PING_DEFAULT_DELAY      	1
 
+
+# define FT_PG_STOP                   0
+# define FT_PG_RUN                    1
+# define FT_PG_SEND                   2
 
 /*
  *  Globals
 */
+extern int g_ping;
 extern int g_ping_run;
 extern int g_ping_send;
+extern int g_pg_send;
 
 typedef unsigned char     t_uchar;
 typedef struct s_pg       t_pg;
@@ -104,16 +111,15 @@ typedef struct    s_ping_opts
 typedef struct s_pg_pckt
 {
 	t_icmphdr   hdr;
-  char        *msg;
+  int         msg_len;
 }             t_pg_pckt;
 
 typedef struct s_pg_pckt_recv
 {
-  t_ip        ip;
-	t_icmphdr   hdr;
-  char        *msg;
-  char        addr[128];
   int         cc;
+  char        addr[128];
+  char        *msg;
+  int         msg_len;
 }             t_pg_pckt_recv;
 
 typedef struct s_pg_sock
@@ -176,13 +182,15 @@ typedef struct s_pg
 */
 
 int			ft_ping(int argc, const char *argv[]);
+int     ft_ping_usage();
+void 	  ft_ping_sigint();
+void 	  ft_ping_sigarlm();
 
 /*
  *  Options
 */
-int 	  ft_ping_opts_init(t_pg_opts	*opts);
-int		ft_ping_opts_parse(t_pg_opts *opts, t_pg_args *args);
-// int		  ft_ping_opts_parse(t_pg_opts *opts, const char *opt, const char *arg);
+int 	  ft_ping_opts_init(int argc, const char *argv[], t_pg_args *args, t_pg_opts	*opts);
+int		  ft_ping_opts_parse(t_pg_opts *opts, t_pg_args *args);
 
 int     ft_ping_opt_h(t_pg_opts *opts, t_pg_args *args);
 int     ft_ping_opt_v(t_pg_opts *opts, t_pg_args *args);
@@ -194,30 +202,13 @@ int     ft_ping_opt_t(t_pg_opts *opts, t_pg_args *args);
  *  Execute
 */
 int     ft_ping_exec(const char *dst, t_pg_opts opts);
+int     ft_ping_exec_init(const char *dst, t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
+int     ft_ping_exec_finish(const char *dst, t_pg_sock *sock, t_pg_stats *stats);
+
 int		  ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
 int		  ft_ping_exec_receive(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
-int     ft_ping_exec_stats(t_pg_stats stats);
 
 void 	  ft_ping_exec_sigint(int signo);
 void 	  ft_ping_exec_sigarlm(int signo);
-
-int		  ft_ping_exec_print_infos(const char *dst, t_pg_sock	sock, t_pg_opts opts);
-int     ft_ping_exec_print_stats(const char *dst, t_pg_stats stats);
-int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double time);
-double  ft_ping_execute_recv_print_time(t_tr_time *time);
-int     ft_ping_exec_print_stats2(t_pg_stats stats);
-int     ft_pg_exec_print_pckt(char *addr, int seq, int icmp_type);
-
-/*
- *  Erros
-*/
-int     ft_ping_exit(char *s);
-int     ft_ping_usage();
-int     ft_ping_error_host(const char *dest);
-
-
-int 	  ft_ping_error_opt_ttl();
-int     ft_ping_err_exec_recv(const char *err);
-
 
 #endif

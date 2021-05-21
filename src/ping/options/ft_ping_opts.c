@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping_opts.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 12:56:58 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 23:33:00 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,10 @@ int  ft_ping_opt_s(t_pg_opts *opts, t_pg_args *args)
 */
 int  ft_ping_opt_t(t_pg_opts *opts, t_pg_args *args)
 {
-  if (!ft_isdigitstr(args->argv[args->argi + 1]))
-    return (ft_ping_error_opt_ttl());
+  if (!ft_isdigitstr(args->argv[args->argi + 1])) {
+    fprintf(stderr, "ping: can't set unicast time-to-live: Argument invalide\n");
+	  return (FT_EXFAIL);
+  }
   opts->ttl = ft_atoi(args->argv[args->argi + 1]);
   args->argi += 2;
   return (FT_EXOK);
