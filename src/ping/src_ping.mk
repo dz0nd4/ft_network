@@ -13,6 +13,7 @@ SUBFILES_PING = \
 			ping/execute/ft_ping_exec_recv.c \
 			ping/execute/ft_ping_exec_print.c \
 			ping/execute/ft_ping_exec_signal.c \
+			ping/execute/ft_ping_exec_stats.c \
 			\
 			ping/options/ft_ping_opts.c \
 			ping/options/ft_ping_opts_parse.c \

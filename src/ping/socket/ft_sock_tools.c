@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 18:34:38 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 14:24:59 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,40 @@ double     ft_sock_getelapsedtime(t_timeval *in)
     return (ft_sock_timediff(&out, in));
 }
 
+/*
+ * ft_sock_get_icmp_type()
+ *
+ * Description:
+ *    Get icmp type printable string
+ * Returns:
+ *    The elapsed time
+*/
+char *ft_sock_get_icmp_type(int type)
+{
+        static t_sock_icmp_type icmp[12] = {
+                { ICMP_UNREACH, "Destination unreachable" },
+                { ICMP_SOURCEQUENCH, "Packet lost" },
+                { ICMP_ROUTERADVERT, "Router advertisement" },
+                { ICMP_ROUTERSOLICIT, "Router soliciation" },
+                { ICMP_TIMXCEED, "Time exceeded" },
+                { ICMP_PARAMPROB, "Bad IP header" },
+                { ICMP_TSTAMP, "Timestamp request" },
+                { ICMP_TSTAMPREPLY, "Timestamp reply" },
+                { ICMP_IREQ, "Information request" },
+                { ICMP_IREQREPLY, "Information reply" },
+                { ICMP_MASKREQ, "Address mask request" },
+                { ICMP_MASKREPLY, "Address mask reply" },
+        };
+
+        int i;
+
+        i = -1;
+        while (++i < 12)
+                if (type == icmp[i].type_int)
+                        return  (icmp[i].type_str);
+        return ("Unkknown type");
+}
+
  
 
 #ifndef HEXDUMP_COLS
@@ -167,9 +201,11 @@ int    ft_socket_getnameinfo(t_sockaddr_in *host, char *name)
 
     len = sizeof(t_sockaddr_in);
 
-    if (getnameinfo((t_sockaddr *) host, len, hbuf, sizeof(hbuf), 
-        NULL, 0, NI_NAMEREQD)) {
-        fprintf(stderr, "could not resolve hostname\n");
+    if (getnameinfo((t_sockaddr *) host, len, hbuf, sizeof(hbuf), NULL, 0, NI_NAMEREQD)) {
+        // fprintf(stderr, "could not resolve hostname\n");
+        if (ft_sock_ntop((t_in_addr *)&host->sin_addr, hbuf) == EXIT_FAILURE)
+	        return (FT_EXFAIL);
+        ft_strcpy(name, hbuf);
         // s = malloc(sizeof(NI_MAXHOST));
     }
     else {

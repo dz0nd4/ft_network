@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 18:59:14 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 13:54:20 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int			ft_ping(int argc, const char *argv[])
 			return (FT_EXFAIL);
 	}
 
-	if (argv[args.argi] == NULL)
+	if ((g_pg.sock.host = argv[args.argi]) == NULL)
 		return (ft_ping_usage());
 
 	// return 1;

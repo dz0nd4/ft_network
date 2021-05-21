@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 17:47:01 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 14:43:51 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int  ft_ping_exec_print_stats(const char *dst, t_pg_stats stats)
 
 	nbPcktLoss = stats.nbPcktSend - stats.nbPcktReceive;
 	percentPcktLoss = nbPcktLoss / stats.nbPcktSend;
-	time = ft_ping_execute_recv_print_time(&stats.time);
+	// time = ft_ping_execute_recv_print_time(&stats.time);
 	printf("--- %s ping statistics ---\n", dst);
 	printf("%d packets transmitted, ", stats.nbPcktSend);
 	printf("%d packets received, ", stats.nbPcktReceive);
@@ -38,7 +38,7 @@ int  ft_ping_exec_print_stats2(t_pg_stats stats)
 
 	nbPcktLoss = stats.nbPcktSend - stats.nbPcktReceive;
 	percentPcktLoss = nbPcktLoss / stats.nbPcktSend;
-	time = ft_ping_execute_recv_print_time(&stats.time);
+	// time = ft_ping_execute_recv_print_time(&stats.time);
 	printf("--- %s ping statistics ---\n", "");
 	printf("%d packets transmitted, ", stats.nbPcktSend);
 	printf("%d packets received, ", stats.nbPcktReceive);
@@ -83,17 +83,20 @@ int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double tim
 }
 
 
-int     ft_ping_exec_print_pckt_exceed(char *addr, int seq)
+int     ft_pg_exec_print_pckt(char *addr, int seq, int icmp_type)
 {
-	  char ipv4[FT_ADDRSTRLEN];
 	  t_sockaddr_in sockaddr_in;
-  
+	  char ipv4[FT_ADDRSTRLEN];
+		char hostname[FT_NI_MAXHOST];
+
     ft_memcpy(&sockaddr_in, addr, sizeof(t_sockaddr_in));
 
     if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
 	  	return (FT_EXFAIL);
 
-    printf("From %s (%s): ", ipv4);
-    printf("icmp_seq=%u Time to live exceeded ms\n", seq);
+		ft_socket_getnameinfo(&sockaddr_in, hostname);
+
+    printf("From %s (%s): ", hostname, ipv4);
+    printf("icmp_seq=%u %s\n", seq, ft_sock_get_icmp_type(icmp_type));
 		return (FT_EXOK);
 }

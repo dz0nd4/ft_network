@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/20 18:34:46 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/21 14:21:50 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 # include "../ft_network_global.h"
 # include "../traceroute/ft_traceroute.h"
-
 
 # define FT_IPHDR_LEN                 20
 # define FT_ICMPHDR_LEN               8
@@ -58,6 +57,13 @@ typedef struct			s_ping_args
 	const char		  **argv;
 	int         	  argi;
 }						t_pg_args;
+
+
+typedef struct  s_sock_icmp_type
+{
+  int   type_int;
+  char  *type_str;
+}               t_sock_icmp_type;
 
 /*
  *  Options
@@ -119,10 +125,8 @@ typedef struct s_pg_sock
 {
   int         id;
   int         fd;
-  t_addrinfo  addrinfo;
+  const char  *host;
   t_sockaddr_in addrin;
-  unsigned char *pckt;
-  unsigned char *pckt_recv;
   t_uchar     *send_pckt;
   int         send_pckt_len;
   t_uchar     *recv_pckt;
@@ -197,6 +201,7 @@ int     ft_ping_opt_t(t_pg_opts *opts, t_pg_args *args);
 int     ft_ping_exec(const char *dst, t_pg_opts opts);
 int		  ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
 int		  ft_ping_exec_receive(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
+int     ft_ping_exec_stats(t_pg_stats stats);
 
 void 	  ft_ping_exec_sigint(int signo);
 void 	  ft_ping_exec_sigarlm(int signo);
@@ -206,6 +211,7 @@ int     ft_ping_exec_print_stats(const char *dst, t_pg_stats stats);
 int     ft_ping_exec_print_pckt(int cc, char *addr, int seq, int ttl, double time);
 double  ft_ping_execute_recv_print_time(t_tr_time *time);
 int     ft_ping_exec_print_stats2(t_pg_stats stats);
+int     ft_pg_exec_print_pckt(char *addr, int seq, int icmp_type);
 
 /*
  *  Erros
@@ -231,6 +237,7 @@ int		  ft_sock_delay();
 double   ft_sock_timediff(t_timeval *out, t_timeval *in);
 int    ft_socket_getnameinfo(t_sockaddr_in *host, char *name);
 double     ft_sock_getelapsedtime(t_timeval *in);
+char *ft_sock_get_icmp_type(int type);
 
 void hexdump(void *mem, unsigned int len);
 
