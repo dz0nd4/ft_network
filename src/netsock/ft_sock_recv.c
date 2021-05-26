@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sock_recv.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 16:53:36 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 23:25:03 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@ int    ft_sock_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 
 	saddrin_size = sizeof(t_sockaddr);
 	i = recvfrom(fd, data, datalen, 0, (t_sockaddr *)saddrin, &saddrin_size);
-	if (i <= 0)
+	if (i < 0) {
+        perror("recvfrom");
 		return (-1);
+    }
 	// if (i < 0) {
 	// 	ft_exit("sendto()");
 	// }

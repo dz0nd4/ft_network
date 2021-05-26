@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 14:23:29 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 22:44:20 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@
  * 		It assumes 'ip' length is FT_ADDRSTRLEN
  * 		NUMERIC to PRINTABLE
  * Returns:
- *    EXIT_SUCCESS or EXIT_FAILURE if inet_ntop fail
+ *    FT_EXOK or FT_EXFAIL if inet_ntop fail
 */
 int		ft_sock_ntop(t_in_addr *src, char *dst)
 {
 	if (inet_ntop(AF_INET, src, dst, FT_ADDRSTRLEN) == NULL) {
       fprintf(stderr, "inet_ntop\n");
-      return(EXIT_FAILURE);
+      return(FT_EXFAIL);
 	}
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }
 
 int			ft_sock_pton(t_in_addr *addr, char *ipv4)
@@ -43,18 +43,16 @@ int			ft_sock_pton(t_in_addr *addr, char *ipv4)
 			// 		fprintf(stderr, "Not in presentation format\n");
 			// else
 			// 		perror("inet_pton");
-			return(EXIT_FAILURE);
+			return(FT_EXFAIL);
 	}
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }
 
-// char*			ft_struct_to_ipv4(struct in_addr *addr)
-// {
-// 	char *ipv4;
-
-// 	if ((ipv4 = inet_ntoa(*addr)) == NULL) {
-// 			perror("inet_ntop");
-// 			return (NULL);
-// 	}
-// 	return (ipv4);
-// }
+int		ft_inet_ntoa(t_in_addr *src, char *dst)
+{
+	if ((dst = inet_ntoa(*src)) == NULL) {
+			perror("inet_ntoa");
+			return (FT_EXFAIL);
+	}
+	return (FT_EXOK);
+}
