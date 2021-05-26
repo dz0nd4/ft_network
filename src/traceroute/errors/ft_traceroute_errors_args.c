@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/04/27 16:29:53 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:36:43 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int 	ft_tr_error_host()
 	return (EXIT_FAILURE);
 }
 
-int 	ft_tr_error_host_resolve(t_trace *ctx, char *arg)
+int 	ft_tr_error_host_resolve(t_trace *ctx, const char *arg)
 {
 	fprintf(stderr, "%s: Échec temporaire dans la résolution du nom\n", arg);
 	fprintf(stderr, "Cannot handle \"host\" cmdline arg `%s' (argc %d)",
@@ -26,7 +26,7 @@ int 	ft_tr_error_host_resolve(t_trace *ctx, char *arg)
 	return (EXIT_FAILURE);
 }
 
-int 	ft_tr_error_packetlen(t_trace *ctx, char *opt, char *arg)
+int 	ft_tr_error_packetlen(t_trace *ctx, const char *opt, const char *arg)
 {
 	fprintf(stderr, "Cannot handle \"packetlen\" cmdline arg `q' on position 2 (argc 2)");
 	return (EXIT_FAILURE);

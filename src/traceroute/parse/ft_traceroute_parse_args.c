@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 15:03:11 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:38:05 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
  * Returns:
  *    EXIT_SUCCESS
 */
-int			ft_tr_arg_host(t_trace *ctx, char *arg)
+int			ft_tr_arg_host(t_trace *ctx, const char *arg)
 {
-	ctx->to.name = arg;
+	ctx->to.name = (char *)arg;
 	if (ft_sock_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == EXIT_FAILURE)
 		return (ft_tr_error_host_resolve(ctx, arg));
 	return (EXIT_SUCCESS);
@@ -36,7 +36,7 @@ int			ft_tr_arg_host(t_trace *ctx, char *arg)
  * Returns:
  *    EXIT_SUCCESS
 */
-int			ft_tr_arg_packetlen(t_trace *ctx, char *arg)
+int			ft_tr_arg_packetlen(t_trace *ctx, const char *arg)
 {
 	int i;
 

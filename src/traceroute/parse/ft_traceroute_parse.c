@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 17:21:30 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:33:29 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	ft_traceroute_parse_opt(t_trace *ctx, int argc, const char *argv[])
 		{ FT_TR_OPT_W, "w", ft_tr_opt_w },
 	};
 	int							opt_key;
-	char						*opt_name;
+	const char			*opt_name;
 
 	opt_key = -1;
 	opt_name = argv[ctx->opts.argi] + 1;

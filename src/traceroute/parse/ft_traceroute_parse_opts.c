@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 17:22:28 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:35:08 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * Returns:
  *   EXIT_SUCCESS or EXIT_FAILURE if hops greater than hops_max
 */
-int			ft_tr_opt_f(t_trace *ctx, char *arg)
+int			ft_tr_opt_f(t_trace *ctx, const char *arg)
 {
 	int i;
 
@@ -45,7 +45,7 @@ int			ft_tr_opt_f(t_trace *ctx, char *arg)
  * Returns:
  *   EXIT_SUCCESS
 */
-int			ft_tr_opt_m(t_trace *ctx, char *arg)
+int			ft_tr_opt_m(t_trace *ctx, const char *arg)
 {
 	int i;
 
@@ -71,7 +71,7 @@ int			ft_tr_opt_m(t_trace *ctx, char *arg)
  * Returns:
  *   EXIT_SUCCESS
 */
-int			ft_tr_opt_q(t_trace *ctx, char *arg)
+int			ft_tr_opt_q(t_trace *ctx, const char *arg)
 {
 	int i;
 
@@ -97,7 +97,7 @@ int			ft_tr_opt_q(t_trace *ctx, char *arg)
  * Returns:
  *   EXIT_SUCCESS
 */
-int			ft_tr_opt_w(t_trace *ctx, char *arg)
+int			ft_tr_opt_w(t_trace *ctx, const char *arg)
 {
 	if (arg == NULL)
 		return (ft_trace_error_opt_arg_require(ctx, "-w", "MAX,HERE,NEAR"));
@@ -112,7 +112,7 @@ int			ft_tr_opt_w(t_trace *ctx, char *arg)
  * Returns:
  *   EXIT_SUCCESS
 */
-int			ft_tr_opt_h(t_trace *ctx, char *arg)
+int			ft_tr_opt_h(t_trace *ctx, const char *arg)
 {
 	return (EXIT_SUCCESS);
 }

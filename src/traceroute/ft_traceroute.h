@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_traceroute.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 23:44:55 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:36:30 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ typedef struct		s_traceroute
   t_tr_time   time;
 }					t_trace;
 
-typedef int   t_tr_ft_arg(t_trace *ctx, char *arg);
+typedef int   t_tr_ft_arg(t_trace *ctx, const char *arg);
 
 /*
  *  Arguments
@@ -161,14 +161,14 @@ int     ft_tr_resolve(t_sockaddr_in *from, char *name);
  *  Parse
 */
 
-int			ft_tr_opt_f(t_trace *ctx, char *arg);
-int			ft_tr_opt_m(t_trace *ctx, char *arg);
-int			ft_tr_opt_q(t_trace *ctx, char *arg);
-int			ft_tr_opt_w(t_trace *ctx, char *arg);
-int			ft_tr_opt_h(t_trace *ctx, char *arg);
+int			ft_tr_opt_f(t_trace *ctx, const char *arg);
+int			ft_tr_opt_m(t_trace *ctx, const char *arg);
+int			ft_tr_opt_q(t_trace *ctx, const char *arg);
+int			ft_tr_opt_w(t_trace *ctx, const char *arg);
+int			ft_tr_opt_h(t_trace *ctx, const char *arg);
 
-int			ft_tr_arg_host(t_trace *ctx, char *arg);
-int			ft_tr_arg_packetlen(t_trace *ctx, char *arg);
+int			ft_tr_arg_host(t_trace *ctx, const char *arg);
+int			ft_tr_arg_packetlen(t_trace *ctx, const char *arg);
 
 /*
  *  Execute
@@ -195,12 +195,12 @@ int   ft_traceroute_execute_recv(t_trace *ctx, char *buffer, t_tr_from *from);
 void 	  ft_exit(char *s);
 void    ft_traceroute_exit(char *s);
 
-int 	  ft_trace_error_opt_bad(t_trace *ctx, char *opt);
-int 	  ft_trace_error_opt_arg_require(t_trace *ctx, char *opt, char *arg);
-int 	  ft_trace_error_opt_arg_handle(t_trace *ctx, char *opt, char *arg);
+int 	  ft_trace_error_opt_bad(t_trace *ctx, const char *opt);
+int 	  ft_trace_error_opt_arg_require(t_trace *ctx, const char *opt, const char *arg);
+int 	  ft_trace_error_opt_arg_handle(t_trace *ctx, const char *opt, const char *arg);
 
 int 	  ft_tr_error_host();
-int 	  ft_tr_error_host_resolve(t_trace *ctx, char *arg);
-int 	  ft_tr_error_packetlen(t_trace *ctx, char *opt, char *arg);
+int 	  ft_tr_error_host_resolve(t_trace *ctx, const char *arg);
+int 	  ft_tr_error_packetlen(t_trace *ctx, const char *opt, const char *arg);
 
 #endif
