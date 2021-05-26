@@ -6,7 +6,7 @@
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 18:18:34 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/27 00:55:01 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int   ft_traceroute_execute_send_init(t_tr_to *to)
 	// if (ft_sock_getaddrinfo(to->name, &to->addrinfo) == EXIT_FAILURE)
 	// 	return (EXIT_FAILURE);
 
-	to->sfd = socket(to->addrinfo.ai_family, to->addrinfo.ai_socktype, to->addrinfo.ai_protocol);
+	to->sfd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
 	if (to->sfd == INVALID_SOCKET)
-		return (EXIT_FAILURE);
+		{ printf("sfd\n") ; return (EXIT_FAILURE); }
 
 	if (setsockopt(to->sfd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
-		return (EXIT_FAILURE);
+   { printf ("opts\n"); return (EXIT_FAILURE); }
 
 	ft_memcpy(&to->saddrin, to->addrinfo.ai_addr, sizeof(to->addrinfo.ai_addr));
 	ft_memcpy(to->ip, inet_ntoa(to->saddrin.sin_addr), FT_ADDRSTRLEN);

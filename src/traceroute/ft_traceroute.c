@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_traceroute.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 17:36:44 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/27 00:48:40 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ int			ft_traceroute(int argc, const char *argv[])
 	if (ft_traceroute_parse(&ctx, argc, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 
-	if (ft_traceroute_execute(&ctx) == EXIT_FAILURE)
+	if (ft_traceroute_execute(&ctx) == EXIT_FAILURE){
+		fprintf(stderr, "Exec fail\n");
 		return (EXIT_FAILURE);
+	}
 
 	return (EXIT_SUCCESS);
 }

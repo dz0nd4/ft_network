@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_traceroute_execute_recv.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 12:37:45 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/27 01:00:48 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int   ft_traceroute_execute_recv(t_trace *ctx, char *buffer, t_tr_from *from)
   ft_memset(buff, 0, BUF_SIZE);
   hdr_icmp = (t_tr_pack_hdr_icmp *)buffer;
   hdr_udp = (t_tr_pack_hdr_udp *)&hdr_icmp->icmp.icmp_ip;
-
+  // from->cc = 0;
   gettimeofday(&ctx->time.stop, NULL);
   from->cc = ft_sock_recv(from->sfd, from->buffer, BUF_SIZE, &from->saddrin);
 

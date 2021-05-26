@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_net.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/19 15:20:44 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/27 00:46:49 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,5 @@ int			main(int argc, const char *argv[])
   // while (++key < FT_NET_MAX)
   //   if (ft_strequal(argv[0], net_command[key].name))
   //     return (net_command[key].dist(argc, argv));
-	return (ft_ping(argc, argv));
+	return (ft_traceroute(argc, argv));
 }
