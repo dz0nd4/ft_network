@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 15:06:37 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 18:41:23 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ int			ft_ping(int argc, const char *argv[])
 
 	while (g_ping >= FT_PG_RUN) {
 		if (g_ping == FT_PG_SEND) {
-			if (ft_ping_exec_send(&sock, opts, &stats) == FT_EXOK)
-				if (ft_ping_exec_receive(&sock, opts, &stats) == FT_EXOK)
-					ft_ping_exec_pckt(&sock, opts, &stats);
+			if (ft_ping_exec_send(&sock, opts, &stats) == FT_EXFAIL)
+				break;
+			if (ft_ping_exec_receive(&sock, opts, &stats) == FT_EXOK)
+				ft_ping_exec_pckt(&sock, opts, &stats);
 			if (g_ping != FT_PG_STOP)
 				g_ping = FT_PG_RUN;
 		}
