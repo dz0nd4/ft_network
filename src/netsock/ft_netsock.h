@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_netsock.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 22:42:58 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/27 00:46:31 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ typedef struct iovec        t_iovec;
 #ifdef __APPLE__
 
 # define FT_SOL_SOCKET    SOL_SOCKET // IPPROTO_IP
+# define FT_NI_NAMEREQD	  8	/* Don't return numeric addresses.  */
+
+typedef struct ip           t_ip;
 
 typedef struct s_icmphdr
 {
