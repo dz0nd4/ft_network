@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_traceroute_parse_args.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 12:38:05 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 18:19:28 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 int			ft_tr_arg_host(t_trace *ctx, const char *arg)
 {
 	ctx->to.name = (char *)arg;
+	ctx->to.addrinfo.ai_family = AF_INET;
+	ctx->to.addrinfo.ai_socktype = SOCK_RAW;
 	if (ft_sock_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == EXIT_FAILURE)
 		return (ft_tr_error_host_resolve(ctx, arg));
 	return (EXIT_SUCCESS);
