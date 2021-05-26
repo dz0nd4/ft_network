@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping_exec_init.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 18:49:12 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 22:45:30 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int  	ft_pg_exec_init_sock(t_pg_opts opts, t_pg_sock *sock)
 	int 				timeout;
 	t_addrinfo 	addrinfo;
 	
-	timeout = 30;
+	timeout = 5;
 	ft_memset(&addrinfo, 0, sizeof(t_addrinfo));
 	addrinfo.ai_family = AF_INET;
 	addrinfo.ai_socktype = SOCK_DGRAM;
@@ -84,16 +84,17 @@ static int  	ft_pg_exec_init_sock(t_pg_opts opts, t_pg_sock *sock)
 			return (FT_EXFAIL);
 
 		sock->fd = socket(addrinfo.ai_family, addrinfo.ai_socktype, IPPROTO_ICMP);
-		ft_setsockopt_ttl(&sock->fd, opts.ttl, opts.verbose);
-		ft_setsockopt_sndtimeo(&sock->fd, 1, opts.verbose);
-		ft_setsockopt_rcvtimeo(&sock->fd, 1, opts.verbose);
 
 		if (sock->fd == INVALID_SOCKET) {
-			if (opts.verbose && timeout == 29)
+			if (opts.verbose && timeout == 4)
 				fprintf(stderr, "ping: socket: Permission denied, attempting raw socket...\n");
 			addrinfo.ai_family = AF_INET;
 			addrinfo.ai_socktype = SOCK_RAW;
 		} else {
+			ft_setsockopt_ttl(&sock->fd, opts.ttl, opts.verbose);
+			ft_setsockopt_sndtimeo(&sock->fd, 1, opts.verbose);
+			ft_setsockopt_rcvtimeo(&sock->fd, 1, opts.verbose);
+
 			ft_memcpy(&sock->addrin, addrinfo.ai_addr, sizeof(t_sockaddr));
 			if (ft_sock_send(sock->fd, sock->pckt_send.msg, sock->pckt_send.msg_len, &sock->addrin) == FT_EXOK)
 				if (ft_sock_recvmsg(sock->fd, sock->pckt_recv.addr, sock->pckt_recv.msg, sock->pckt_recv.msg_len) > 0)
