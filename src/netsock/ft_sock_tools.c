@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 15:00:42 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 11:54:01 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char *ft_sock_get_icmp_type(int type)
         while (++i < 12)
                 if (type == icmp[i].type_int)
                         return  (icmp[i].type_str);
-        return ("Unkknown type");
+        return ("Unknown type");
 }
 
  

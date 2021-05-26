@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ping.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 23:47:34 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 15:38:02 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # include "../ft_network_global.h"
 
-# define FT_IPHDR_LEN                 20
+# define FT_IPHDR_LEN                 sizeof(t_ip)
 # define FT_ICMPHDR_LEN               8
 # define FT_TIMEVAL_LEN               16
 # define FT_PING_ICMPHDR              FT_IPHDR_LEN + FT_ICMPHDR_LEN
@@ -78,24 +78,23 @@ typedef struct			s_ping_opt_dispatch
 
 typedef struct    s_ping_opts
 {
-  int   argi;
-  char  *host;
-  int   verbose;
-  int   flood;
-  int   numeric_only;
-  int   ttl;
-  int   packetsize;
+  const char  *dest;
+  int         verbose;
+  int         flood;
+  int         numeric_only;
+  int         ttl;
+  int         packetsize;
 }                 t_pg_opts;
 
 /*
  *  Socket
 */
-
-typedef struct s_pg_pckt
+typedef struct s_pg_pckt_send
 {
-	t_icmphdr   hdr;
+  int         cc;
+  char        *msg;
   int         msg_len;
-}             t_pg_pckt;
+}             t_pg_pckt_send;
 
 typedef struct s_pg_pckt_recv
 {
@@ -107,14 +106,12 @@ typedef struct s_pg_pckt_recv
 
 typedef struct s_pg_sock
 {
-  int         id;
-  int         fd;
-  const char  *host;
-  t_sockaddr_in addrin;
-  t_uchar     *send_pckt;
-  int         send_pckt_len;
-  t_uchar     *recv_pckt;
-  int         recv_pckt_len;
+  int             id;
+  int             fd;
+  const char      *host;
+  t_sockaddr_in   addrin;
+  t_pg_pckt_send  pckt_send;
+  t_pg_pckt_recv  pckt_recv;
 }              t_pg_sock;
 
 /*
@@ -157,8 +154,7 @@ void 	  ft_ping_sigarlm();
 /*
  *  Options
 */
-int 	  ft_ping_opts_init(int argc, const char *argv[], t_pg_args *args, t_pg_opts	*opts);
-int		  ft_ping_opts_parse(t_pg_opts *opts, t_pg_args *args);
+int		  ft_ping_parse(t_pg_opts *opts, int argc, const char *argv[]);
 
 int     ft_ping_opt_h(t_pg_opts *opts, t_pg_args *args);
 int     ft_ping_opt_v(t_pg_opts *opts, t_pg_args *args);
@@ -170,13 +166,11 @@ int     ft_ping_opt_t(t_pg_opts *opts, t_pg_args *args);
  *  Execute
 */
 int     ft_ping_exec(const char *dst, t_pg_opts opts);
-int     ft_ping_exec_init(const char *dst, t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
-int     ft_ping_exec_finish(const char *dst, t_pg_sock *sock, t_pg_stats *stats);
+int     ft_ping_exec_init(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats);
+int     ft_ping_exec_finish(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats);
 
 int		  ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
 int		  ft_ping_exec_receive(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
-
-void 	  ft_ping_exec_sigint(int signo);
-void 	  ft_ping_exec_sigarlm(int signo);
+int     ft_ping_exec_pckt(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats);
 
 #endif

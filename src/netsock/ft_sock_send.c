@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sock_send.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 22:02:28 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:49:21 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ int    ft_sock_send(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 
 	i = sendto(fd, data, datalen, 0, (t_sockaddr *)saddrin, sizeof(t_sockaddr));
 	if (i <= 0) {
-		perror("sendto");
-		return (EXIT_FAILURE);
+		// perror("sendto");
+		return (FT_EXFAIL);
 	}
 	// if (i < 0) {
 	// 	ft_exit("sendto()");
 	// }
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }

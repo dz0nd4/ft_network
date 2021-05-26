@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_netsock.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 20:40:01 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 14:32:42 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,26 @@
 
 # include "../../libft/libft.h"
 
-# define FT_EXOK      0
-# define FT_EXFAIL    1
+// # define FT_EXOK      0
+// # define FT_EXFAIL    1
 # define FT_NI_MAXHOST          1025
 # define FT_ADDRSTRLEN 16
 
-# include <sys/socket.h>
+
+# include <stdio.h>
+
 # include <sys/time.h>
+
 # include <sys/types.h>
+# include <sys/socket.h>
 
 # include <time.h>
 # include <arpa/inet.h>
-# include <netinet/in.h>
 # include <errno.h> 
 # include <netdb.h>
 
+// # include <netinet.h>
+// # include <netinet/in.h>
 # include <netinet/ip.h>
 # include <netinet/udp.h>
 # include <netinet/ip_icmp.h>
@@ -46,34 +51,61 @@ typedef struct addrinfo     t_addrinfo;
 typedef struct ip           t_ip;
 typedef struct udphdr       t_udp;
 typedef struct icmp         t_icmp;
-// typedef struct icmphdr      t_icmphdr;
+typedef struct icmphdr      t_icmphdr;
 
 typedef struct timeval      t_timeval;
 
 typedef struct msghdr       t_msghdr;
 typedef struct iovec        t_iovec;
 
-typedef struct icmphdr
-{
-  u_int8_t type;                /* message type */
-  u_int8_t code;                /* type sub-code */
-  u_int16_t checksum;
-  union
-  {
-    struct
-    {
-      u_int16_t        id;
-      u_int16_t        sequence;
-    } echo;                        /* echo datagram */
-    u_int32_t        gateway;        /* gateway address */
-    struct
-    {
-      u_int16_t        unused;
-      u_int16_t        mtu;
-    } frag;                        /* path mtu discovery */
-  } un;
-}     t_icmphdr;
+// typedef struct s_icmphdr
+// {
+//   u_int8_t type;                /* message type */
+//   u_int8_t code;                /* type sub-code */
+//   u_int16_t checksum;
+//   union
+//   {
+//     struct
+//     {
+//       u_int16_t        id;
+//       u_int16_t        sequence;
+//     } echo;                        /* echo datagram */
+//     u_int32_t        gateway;        /* gateway address */
+//     struct
+//     {
+//       u_int16_t        unused;
+//       u_int16_t        mtu;
+//     } frag;                        /* path mtu discovery */
+//   } un;
+// }     t_icmphdr;
 
+// typedef struct s_addrinfo
+// {
+//   int ai_flags;			/* Input flags.  */
+//   int ai_family;		/* Protocol family for socket.  */
+//   int ai_socktype;		/* Socket type.  */
+//   int ai_protocol;		/* Protocol for socket.  */
+//   socklen_t ai_addrlen;		/* Length of socket address.  */
+//   struct sockaddr *ai_addr;	/* Socket address for socket.  */
+//   char *ai_canonname;		/* Canonical name for service location.  */
+//   struct s_addrinfo *ai_next;	/* Pointer to next in list.  */
+// }             t_addrinfo;
+
+/*
+ *  INTEROPERABILITY
+*/
+
+#ifdef __APPLE__
+
+# define FT_SOL_SOCKET  IPPROTO_IP
+
+#endif
+
+#ifdef __linux__
+
+# define FT_SOL_SOCKET  SOL_SOCKET
+
+#endif
 
 typedef struct  s_sock_icmp_type
 {

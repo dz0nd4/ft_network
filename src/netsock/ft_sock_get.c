@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sock_get.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/21 23:38:44 by dzonda           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:57:01 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int    ft_sock_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
 	hints.ai_socktype = SOCK_RAW;
 	hints.ai_protocol = IPPROTO_ICMP; // ! should be changed for traceroute
 
-  if (getaddrinfo(host, NULL, &hints, &result) != 0)
+  if (getaddrinfo(host, NULL, (struct addrinfo *)&hints, (struct addrinfo **)&result) != 0)
     return (EXIT_FAILURE);
 
   rp = result;
@@ -40,7 +40,7 @@ int    ft_sock_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
 	ft_memcpy(host_addrinfo, rp, sizeof(t_addrinfo));
 
 	close(sfd);
-	freeaddrinfo(result);
+	freeaddrinfo((struct addrinfo *)result);
 
   return (EXIT_SUCCESS);
 }
