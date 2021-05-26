@@ -22,6 +22,6 @@ int		ft_islower(int c);
 int		ft_isupper(int c);
 int		ft_isblank(int c);
 int		ft_isspace(int c);
-int		ft_isdigitstr(char *str);
+int		ft_isdigitstr(const char *str);
 
 #endif

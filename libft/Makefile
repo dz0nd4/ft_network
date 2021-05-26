@@ -6,13 +6,13 @@
 #    By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/10 21:08:47 by dzonda            #+#    #+#              #
-#    Updated: 2021/05/19 15:09:01 by user42           ###   ########lyon.fr    #
+#    Updated: 2021/05/26 12:53:13 by user42           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 
 NAME = libft
-VERSION = 2.1
+VERSION = 2.1.1
 EXTENSION = a
 
 MAKEFILE_NAME = Makefile-$(lastword $(subst /, ,$(NAME)))

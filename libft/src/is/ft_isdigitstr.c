@@ -12,7 +12,7 @@
 
 #include "ft_is.h"
 
-int		ft_isdigitstr(char *str)
+int		ft_isdigitstr(const char *str)
 {
   while (*str) {
     if (!ft_isdigit(*str))

@@ -19,4 +19,7 @@
 # include "./src/put/ft_put.h"
 # include "./src/to/ft_to.h"
 
+# define FT_EXOK	0
+# define FT_EXFAIL	1
+
 #endif
