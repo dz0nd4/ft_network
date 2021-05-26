@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/10 17:17:37 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 12:39:45 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int 		ft_traceroute_execute(t_trace *ctx)
 			FD_ZERO(&fds);
 			FD_SET(from->sfd, &fds);
 			if (select(from->sfd + 1, &fds, (fd_set *)0, (fd_set *)0, &from->wait) > 0)
-				if (ft_traceroute_execute_recv(ctx, &ctx->from.buffer, from) == EXIT_SUCCESS)
+				if (ft_traceroute_execute_recv(ctx, ctx->from.buffer, from) == EXIT_SUCCESS)
 					break ;
 	}
 
