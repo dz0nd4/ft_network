@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_netsock.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 14:32:42 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 18:11:26 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 # include <sys/socket.h>
 
 # include <time.h>
-# include <arpa/inet.h>
-# include <errno.h> 
+// # include <arpa/inet.h>
+// # include <errno.h> 
 # include <netdb.h>
 
 // # include <netinet.h>
@@ -47,37 +47,58 @@ typedef int                 t_socket;
 typedef struct sockaddr_in  t_sockaddr_in;
 typedef struct sockaddr     t_sockaddr;
 typedef struct in_addr      t_in_addr;
-typedef struct addrinfo     t_addrinfo;
+// typedef struct addrinfo     t_addrinfo;
 typedef struct ip           t_ip;
 typedef struct udphdr       t_udp;
 typedef struct icmp         t_icmp;
-typedef struct icmphdr      t_icmphdr;
+// typedef struct icmphdr      t_icmphdr;
 
 typedef struct timeval      t_timeval;
 
 typedef struct msghdr       t_msghdr;
 typedef struct iovec        t_iovec;
 
-// typedef struct s_icmphdr
-// {
-//   u_int8_t type;                /* message type */
-//   u_int8_t code;                /* type sub-code */
-//   u_int16_t checksum;
-//   union
-//   {
-//     struct
-//     {
-//       u_int16_t        id;
-//       u_int16_t        sequence;
-//     } echo;                        /* echo datagram */
-//     u_int32_t        gateway;        /* gateway address */
-//     struct
-//     {
-//       u_int16_t        unused;
-//       u_int16_t        mtu;
-//     } frag;                        /* path mtu discovery */
-//   } un;
-// }     t_icmphdr;
+
+
+/*
+ *  INTEROPERABILITY
+*/
+
+#ifdef __APPLE__
+
+# define FT_SOL_SOCKET    SOL_SOCKET // IPPROTO_IP
+
+typedef struct s_icmphdr
+{
+  u_int8_t type;                /* message type */
+  u_int8_t code;                /* type sub-code */
+  u_int16_t checksum;
+  union
+  {
+    struct
+    {
+      u_int16_t        id;
+      u_int16_t        sequence;
+    } echo;                        /* echo datagram */
+    u_int32_t        gateway;        /* gateway address */
+    struct
+    {
+      u_int16_t        unused;
+      u_int16_t        mtu;
+    } frag;                        /* path mtu discovery */
+  } un;
+}     t_icmphdr;
+
+typedef struct s_addrinfo {
+	int	ai_flags;	/* AI_PASSIVE, AI_CANONNAME, AI_NUMERICHOST */
+	int	ai_family;	/* PF_xxx */
+	int	ai_socktype;	/* SOCK_xxx */
+	int	ai_protocol;	/* 0 or IPPROTO_xxx for IPv4 and IPv6 */
+	socklen_t ai_addrlen;	/* length of ai_addr */
+	char	*ai_canonname;	/* canonical name for hostname */
+	struct	sockaddr *ai_addr;	/* binary address */
+	struct	s_addrinfo *ai_next;	/* next structure in linked list */
+}           t_addrinfo;
 
 // typedef struct s_addrinfo
 // {
@@ -91,19 +112,15 @@ typedef struct iovec        t_iovec;
 //   struct s_addrinfo *ai_next;	/* Pointer to next in list.  */
 // }             t_addrinfo;
 
-/*
- *  INTEROPERABILITY
-*/
-
-#ifdef __APPLE__
-
-# define FT_SOL_SOCKET  IPPROTO_IP
-
 #endif
 
 #ifdef __linux__
 
 # define FT_SOL_SOCKET  SOL_SOCKET
+
+typedef struct icmphdr  t_icmphdr;
+typedef struct addrinfo t_addrinfo;
+
 
 #endif
 
@@ -143,6 +160,11 @@ int		    ft_sock_gettime(t_timeval *tv);
 int		    ft_sock_delay();
 double    ft_sock_timediff(t_timeval *out, t_timeval *in);
 double    ft_sock_getelapsedtime(t_timeval *in);
+
+
+int       ft_setsockopt_ttl(int *fd, int ttl, int verbose);
+int       ft_setsockopt_sndtimeo(int *fd, int timeout, int verbose);
+int       ft_setsockopt_rcvtimeo(int *fd, int timeout, int verbose);
 
 /*
  *  SOCK TOOLS

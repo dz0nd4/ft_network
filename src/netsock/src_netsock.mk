@@ -3,6 +3,7 @@ SUBDIRS_NETSOCK = \
 
 SUBFILES_NETSOCK = \
 			netsock/ft_sock_get.c \
+			netsock/ft_sock_opt.c \
 			netsock/ft_sock_recv.c \
 			netsock/ft_sock_send.c \
 			netsock/ft_sock_time.c \
