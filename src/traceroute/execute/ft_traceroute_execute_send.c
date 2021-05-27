@@ -23,24 +23,25 @@
 */
 int   ft_traceroute_execute_send(t_trace *ctx, t_tr_opt *opts, t_tr_to *to)
 {
-	opts->probes++;
+	// opts->probes++;
  
- 	if (ctx->from.code == ICMP_UNREACH && opts->probes >= opts->probes_max)
-    return (0);
+ 	// if (ctx->from.code == ICMP_UNREACH && opts->probes >= opts->probes_max)
+  //   return (0);
 
-	if (opts->probes >= opts->probes_max) {
-		opts->probes = 0;
-		opts->hops++;
-	}
-  if (opts->hops > opts->hops_max)
-		return (0);
+	// if (opts->probes >= opts->probes_max) {
+	// 	opts->probes = 0;
+	// 	opts->hops++;
+	// }
+  // if (opts->hops > opts->hops_max)
+	// 	return (0);
 
 	to->hdr->ip.ip_ttl = opts->hops;
   to->hdr->udp.uh_dport = htons(opts->port + opts->hops + opts->probes); 
   gettimeofday(&ctx->time.start, NULL);
 
-	if (ft_sock_send(to->sfd, to->pack.data, opts->packetlen, &to->saddrin) == EXIT_FAILURE)
-		return (0);
+	int i = ft_sock_send(to->sfd, to->pack.data, opts->packetlen, &to->saddrin);
 
-  return (1);
+	// printf("\ntocc %d\n", i);
+
+  return (i);
 }

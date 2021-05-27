@@ -74,6 +74,7 @@ int   ft_traceroute_execute_recv_init(t_tr_from *from)
 
   if ((from->sfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET)
 		return (EXIT_FAILURE);
+  ft_setsockopt_rcvtimeo(&from->sfd, 1, 1);
   from->saddrin_size = sizeof(from->saddrin);  
   from->wait.tv_sec = waittime;
   from->wait.tv_usec = 0;

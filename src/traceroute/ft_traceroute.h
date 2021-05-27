@@ -153,6 +153,7 @@ typedef struct			s_tr_opt_dispatch
 int			ft_traceroute(int argc, const char *argv[]);
 int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[]);
 int 		ft_traceroute_execute(t_trace *ctx);
+int   ft_traceroute_execute_recv_print(t_trace *ctx);
 
 
 int     ft_tr_resolve(t_sockaddr_in *from, char *name);
