@@ -12,18 +12,20 @@
 
 #include "ft_traceroute.h"
 
-static int	ft_traceroute_parse_init(t_trace *ctx)
+static int	ft_traceroute_parse_init(t_trace *ctx, t_tr_args *args)
 {
+	args->argi = 1;
+
 	ctx->opts.argi = 1;
-	ctx->opts.hops = FT_DEFAULT_HOPS;
-	ctx->opts.hops_max = FT_DEFAULT_HOPS_MAX;
-	ctx->opts.probes_max = FT_DEFAULT_PROBES_MAX;
-	ctx->opts.port = FT_DEFAULT_PORT;
+	ctx->opts.hops = FT_HOPS_FIRST_DEFAULT;
+	ctx->opts.hops_max = FT_HOPS_MAX_DEFAULT;
+	ctx->opts.probes_max = FT_PROBES_DEFAULT;
+	ctx->opts.port = FT_PORT_DEFAULT;
 	ctx->opts.packetlen = sizeof(t_ip) + 40;
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }
 
-static int	ft_traceroute_parse_opt(t_trace *ctx, int argc, const char *argv[])
+static int	ft_traceroute_parse_opt(t_trace *ctx, t_tr_args *args)
 {
 	static t_tr_opt_d	ft_tr_opt[FT_TR_OPT_MAX] = {
 		{ FT_TR_OPT_F, "f", ft_tr_opt_f },
@@ -35,31 +37,50 @@ static int	ft_traceroute_parse_opt(t_trace *ctx, int argc, const char *argv[])
 	const char			*opt_name;
 
 	opt_key = -1;
-	opt_name = argv[ctx->opts.argi] + 1;
+	opt_name = args->argv[args->argi] + 1;
 	while (++opt_key < FT_TR_OPT_MAX)
 		if (ft_strequ(ft_tr_opt[opt_key].opt_name, opt_name))
-			return (ft_tr_opt[opt_key].opt_dist(ctx, argv[ctx->opts.argi + 1]));
+			return (ft_tr_opt[opt_key].opt_dist(ctx, args));
 	return (ft_trace_error_opt_bad(ctx, opt_name));
 }
 
 int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])
 {
-	ft_traceroute_parse_init(ctx);
+	t_tr_args args;
 
-	while (argv[ctx->opts.argi] && *argv[ctx->opts.argi] == '-') {
-		if (ft_traceroute_parse_opt(ctx, argc, argv) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-		ctx->opts.argi += 2;
+	args.argc = argc;
+	args.argv = argv;
+	ft_traceroute_parse_init(ctx, &args);
+
+	while (args.argi < args.argc) {
+		if (*argv[args.argi] == '-') {
+			if (ft_traceroute_parse_opt(ctx, &args) == FT_EXFAIL)
+				return (FT_EXFAIL);
+		} else {
+			if (ctx->opts.host == NULL)
+				ft_tr_arg_host(ctx, &args);
+				// ctx->opts.dest = argv[args.argi];
+			else if (ctx->opts.packetlen == FT_PACKETLEN_DEFAULT)
+				ft_tr_arg_packetlen(ctx, &args);
+				// ctx->opts.packetlen = arg
+			args.argi += 1;
+		}
+		// ctx->opts.argi += 2;
 	}
 
-	if (argv[ctx->opts.argi] == NULL)
+	if (ctx->opts.host == NULL)
 		return (ft_tr_error_host());
 
-	if (ft_tr_arg_host(ctx, argv[ctx->opts.argi++]) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+	if (ctx->opts.hops > ctx->opts.hops_max) {
+		fprintf(stderr, "first hop out of range\n");
+		return (FT_EXFAIL);
+	}
 
-	if (argv[ctx->opts.argi] != NULL)
-		ft_tr_arg_packetlen(ctx, argv[ctx->opts.argi]);
+	// if (ft_tr_arg_host(ctx, argv[args.argi]) == EXIT_FAILURE)
+	// 	return (EXIT_FAILURE);
 
-	return (EXIT_SUCCESS);
+	// if (argv[ctx->opts.argi] != NULL)
+	// 	ft_tr_arg_packetlen(ctx, argv[args.argi]);
+
+	return (FT_EXOK);
 }

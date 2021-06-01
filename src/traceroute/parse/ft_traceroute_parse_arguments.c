@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_traceroute_parse_args.c                         :+:      :+:    :+:   */
+/*   ft_traceroute_parse_args->c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -18,17 +18,21 @@
  * Description:
  *    
  * Returns:
- *    EXIT_SUCCESS
+ *    FT_EXOK
 */
-int			ft_tr_arg_host(t_trace *ctx, const char *arg)
+int			ft_tr_arg_host(t_trace *ctx, t_tr_args *args)
 {
+	const char *arg;
+
+	arg = args->argv[args->argi];
+	ctx->opts.host = args->argv[args->argi];
 	ctx->to.name = (char *)arg;
 	ctx->to.addrinfo.ai_family = AF_INET;
 	ctx->to.addrinfo.ai_socktype = SOCK_DGRAM;
 	ctx->to.addrinfo.ai_protocol = 0;
-	if (ft_sock_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == EXIT_FAILURE)
+	if (ft_sock_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == FT_EXFAIL)
 		return (ft_tr_error_host_resolve(ctx, arg));
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }
 
 /*
@@ -37,19 +41,19 @@ int			ft_tr_arg_host(t_trace *ctx, const char *arg)
  * Description:
  *    
  * Returns:
- *    EXIT_SUCCESS
+ *    FT_EXOK
 */
-int			ft_tr_arg_packetlen(t_trace *ctx, const char *arg)
+int			ft_tr_arg_packetlen(t_trace *ctx, t_tr_args *args)
 {
-	int i;
+	const char *arg;
 
-	i = -1;
+	arg = args->argv[args->argi];
 	if (!ft_isdigitstr(arg))
 		return (ft_tr_error_packetlen(ctx, "packetlen", arg));
 	ctx->opts.packetlen = ft_atoi(arg);
-	if (ctx->opts.packetlen > FT_PACKET_LEN_MAX) {
+	if (ctx->opts.packetlen < 0 || ctx->opts.packetlen > FT_PACKETLEN_MAX) {
 		fprintf(stderr, "too big packetlen %d specified\n", ctx->opts.packetlen);
-		return (EXIT_FAILURE);
+		return (FT_EXFAIL);
 	}
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }
