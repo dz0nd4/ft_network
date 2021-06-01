@@ -35,10 +35,10 @@ int  ft_pg_exec_recv_pckt_other(t_pg_pckt_recv pckt_recv, t_pg_stats *stats)
 
     ft_memcpy(&sockaddr_in, pckt_recv.addr, sizeof(t_sockaddr_in));
 
-    if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
+    if (ft_inet_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
 	  	return (FT_EXFAIL);
 
-    ft_sock_getnameinfo(&sockaddr_in, hostname);
+    ft_getnameinfo(&sockaddr_in, hostname);
 
     char *str_type = ft_sock_get_icmp_type(hdr->type);
     if (!ft_strequ(str_type, "Unknown type")) {
@@ -60,7 +60,7 @@ int  ft_pg_exec_recv_prpckt_reply(t_pg_pckt_recv pckt_recv, double time, t_pg_op
     ip = (t_ip  *)pckt_recv.msg;
     hdr = (t_icmphdr *)&pckt_recv.msg[FT_IPHDR_LEN];
 	
-    if (ft_sock_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
+    if (ft_inet_ntop((t_in_addr *)&sockaddr_in.sin_addr, ipv4) == EXIT_FAILURE)
 	  	return (FT_EXFAIL);
 
 
@@ -68,7 +68,7 @@ int  ft_pg_exec_recv_prpckt_reply(t_pg_pckt_recv pckt_recv, double time, t_pg_op
     printf("%ld bytes from ", pckt_recv.cc - FT_IPHDR_LEN);
 
     if (!opts.numeric_only) {
-      ft_sock_getnameinfo(&sockaddr_in, hostname);
+      ft_getnameinfo(&sockaddr_in, hostname);
       printf("%s (%s): ", hostname, ipv4);
     } else {
       printf("%s: ", ipv4);
@@ -96,7 +96,7 @@ int  ft_ping_exec_pckt(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats)
 
     if (hdr->un.echo.id == sock->id && hdr->type == ICMP_ECHOREPLY) {
         if (opts.packetsize >= FT_TIMEVAL_LEN) {
-            elapsed_time = ft_sock_getelapsedtime(tv);
+            elapsed_time = ft_getelapsedtime(tv);
             ft_ping_execute_calc_rtt(stats, elapsed_time);
         }
         ft_pg_exec_recv_prpckt_reply(sock->pckt_recv, elapsed_time, opts);

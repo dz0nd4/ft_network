@@ -46,7 +46,7 @@ static int  ft_pg_exec_init_pckt( t_pg_opts opts, t_pg_sock *sock)
 
 	if (opts.packetsize >= sizeof(t_timeval)) {
 		ft_memset(&sock->pckt_send.msg[FT_ICMPHDR_LEN], 0, sizeof(t_timeval));
-		ft_sock_gettime(tv);
+		ft_gettimeofday(tv);
 	}
 
 	hdr->checksum = ft_sock_cksum(sock->pckt_send.msg, sock->pckt_send.msg_len);
@@ -80,7 +80,7 @@ static int  	ft_pg_exec_init_sock(t_pg_opts opts, t_pg_sock *sock)
 	addrinfo.ai_socktype = SOCK_DGRAM;
 
 	while (timeout--) {
-		if (ft_sock_getaddrinfo(opts.dest, &addrinfo) == FT_EXFAIL)
+		if (ft_getaddrinfo(opts.dest, &addrinfo) == FT_EXFAIL)
 			return (FT_EXFAIL);
 
 		sock->fd = socket(addrinfo.ai_family, addrinfo.ai_socktype, IPPROTO_ICMP);
@@ -96,8 +96,8 @@ static int  	ft_pg_exec_init_sock(t_pg_opts opts, t_pg_sock *sock)
 			ft_setsockopt_rcvtimeo(&sock->fd, 1, opts.verbose);
 
 			ft_memcpy(&sock->addrin, addrinfo.ai_addr, sizeof(t_sockaddr));
-			if (ft_sock_send(sock->fd, sock->pckt_send.msg, sock->pckt_send.msg_len, &sock->addrin) == FT_EXOK)
-				if (ft_sock_recvmsg(sock->fd, sock->pckt_recv.addr, sock->pckt_recv.msg, sock->pckt_recv.msg_len) > 0)
+			if (ft_sendto(sock->fd, sock->pckt_send.msg, sock->pckt_send.msg_len, &sock->addrin) == FT_EXOK)
+				if (ft_recvmsg(sock->fd, sock->pckt_recv.addr, sock->pckt_recv.msg, sock->pckt_recv.msg_len) > 0)
 					return (FT_EXOK);
 			close(sock->fd);
 		}
@@ -124,13 +124,13 @@ int  ft_ping_exec_init(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats)
 		return (FT_EXFAIL);
 	}
 
-	if (ft_sock_ntop((t_in_addr *)&sock->addrin.sin_addr, ip) == EXIT_FAILURE)
+	if (ft_inet_ntop((t_in_addr *)&sock->addrin.sin_addr, ip) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 
 	printf("PING %s (%s) %d(%ld) bytes of data.\n",
 		opts.dest, ip, opts.packetsize, opts.packetsize + FT_PING_ICMPHDR);
 
-	ft_sock_gettime(&stats->time.start);
+	ft_gettimeofday(&stats->time.start);
 
 	return (EXIT_SUCCESS);
 }

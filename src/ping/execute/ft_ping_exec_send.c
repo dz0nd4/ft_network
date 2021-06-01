@@ -18,7 +18,7 @@
  * Description:
  *   Modify header of pckt_send: sequence, timeval & checksum
  * Returns:
- *   FT_EXOK or FT_EXFAIL if ft_sock_send fails
+ *   FT_EXOK or FT_EXFAIL if ft_sendto fails
 */
 int		ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats)
 {
@@ -33,12 +33,12 @@ int		ft_ping_exec_send(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats)
 
 	if (opts.packetsize >= sizeof(t_timeval)) {
 		ft_memset(&sock->pckt_send.msg[FT_ICMPHDR_LEN], 0, sizeof(t_timeval));
-		ft_sock_gettime(tv);
+		ft_gettimeofday(tv);
 	}
 
 	hdr->checksum = ft_sock_cksum(sock->pckt_send.msg, sock->pckt_send.msg_len);
 
-	if (ft_sock_send(sock->fd, sock->pckt_send.msg, sock->pckt_send.msg_len,
+	if (ft_sendto(sock->fd, sock->pckt_send.msg, sock->pckt_send.msg_len,
 			&sock->addrin) == FT_EXFAIL)
 		return (FT_EXFAIL);
 	

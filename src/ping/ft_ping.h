@@ -17,10 +17,10 @@
 
 # include "../ft_network_global.h"
 
-# define FT_IPHDR_LEN                 sizeof(t_ip)
-# define FT_ICMPHDR_LEN               8
-# define FT_TIMEVAL_LEN               16
-# define FT_PING_ICMPHDR              FT_IPHDR_LEN + FT_ICMPHDR_LEN
+// # define FT_IPHDR_LEN                 sizeof(t_ip)
+// # define FT_ICMPHDR_LEN               8
+// # define FT_TIMEVAL_LEN               16
+// # define FT_PING_ICMPHDR              FT_IPHDR_LEN + FT_ICMPHDR_LEN
 
 # define FT_PING_PACKETSIZE_DEFAULT	  56
 # define FT_PING_PACKETSIZE_MAX	      65507
@@ -37,7 +37,6 @@
  *  Globals
 */
 extern int g_ping;
-typedef unsigned char       t_uchar;
 
 typedef struct s_ping_args  t_pg_args;
 typedef struct s_ping_opts  t_pg_opts;

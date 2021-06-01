@@ -18,7 +18,7 @@
  * Description:
  *   Clear msg pckt_recv
  * Returns:
- *   FT_EXOK or FT_EXFAIL if ft_sock_recvmsg fails
+ *   FT_EXOK or FT_EXFAIL if ft_recvmsg fails
 */
 int		ft_ping_exec_receive(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats)
 {
@@ -36,7 +36,7 @@ int		ft_ping_exec_receive(t_pg_sock *sock, t_pg_opts opts, t_pg_stats *stats)
     hdr->un.echo.id = 0;
 
     while (hdr->un.echo.id != sock->id) {
-        pckt_recv->cc = ft_sock_recvmsg(fd, pckt_recv->addr, pckt_recv->msg, pckt_recv->msg_len);
+        pckt_recv->cc = ft_recvmsg(fd, pckt_recv->addr, pckt_recv->msg, pckt_recv->msg_len);
         if (pckt_recv->cc <= 0) {
             if (opts.verbose)
                 fprintf(stderr, "Request timeout for icmp_seq %u\n", stats->nbPcktSend);

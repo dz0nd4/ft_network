@@ -18,10 +18,10 @@ int  ft_ping_exec_finish(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats)
 	double percentPcktLoss;
 	double time;
 
-	ft_sock_gettime(&stats->time.stop);
+	ft_gettimeofday(&stats->time.stop);
 	nbPcktLoss = stats->nbPcktSend - stats->nbPcktReceive;
 	percentPcktLoss = stats->nbPcktSend ? nbPcktLoss / stats->nbPcktSend * 100 : 0;
-	time = ft_sock_timediff(&stats->time.stop, &stats->time.start);
+	time = ft_timediff(&stats->time.stop, &stats->time.start);
 
 	printf("\n--- %s ping statistics ---\n", opts.dest);
 	printf("%d packets transmitted, ", stats->nbPcktSend);
