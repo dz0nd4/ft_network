@@ -40,6 +40,28 @@ int 	ft_tr_err_opt_handle(t_tr_args *args)
 	return (EXIT_FAILURE);
 }
 
+int 	ft_tr_err_arg_host(t_tr_args *args)
+{
+  const char *arg;
+
+  arg = args->argv[args->argi];
+	fprintf(stderr, "%s: Échec temporaire dans la résolution du nom\n", arg);
+	fprintf(stderr, "Cannot handle \"host\" cmdline arg `%s' (argc %d)",
+						arg, args->argi);
+	return (EXIT_FAILURE);
+}
+
+int 	ft_tr_err_arg_packetlen(t_tr_args *args)
+{
+  const char *arg;
+
+  arg = args->argv[args->argi];
+	fprintf(stderr, "Cannot handle \"packetlen\" cmdline arg `%s' on position %d (argc %d)",
+          arg, args->argi, args->argi);
+	return (EXIT_FAILURE);
+}
+
+
 // int 	ft_tr_err_opt_out_range(t_trace *ctx, const char *opt, const char *arg)
 // {
 // 	fprintf(stderr, "Cannot handle `%s' option with arg `%s' (argc %d)",

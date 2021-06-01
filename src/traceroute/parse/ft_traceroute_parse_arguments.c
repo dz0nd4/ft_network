@@ -31,7 +31,7 @@ int			ft_tr_arg_host(t_trace *ctx, t_tr_args *args)
 	ctx->to.addrinfo.ai_socktype = SOCK_DGRAM;
 	ctx->to.addrinfo.ai_protocol = 0;
 	if (ft_sock_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == FT_EXFAIL)
-		return (ft_tr_error_host_resolve(ctx, arg));
+		return (ft_tr_err_arg_host(args));
 	return (FT_EXOK);
 }
 
@@ -49,7 +49,7 @@ int			ft_tr_arg_packetlen(t_trace *ctx, t_tr_args *args)
 
 	arg = args->argv[args->argi];
 	if (!ft_isdigitstr(arg))
-		return (ft_tr_error_packetlen(ctx, "packetlen", arg));
+		return (ft_tr_err_arg_packetlen(args));
 	ctx->opts.packetlen = ft_atoi(arg);
 	if (ctx->opts.packetlen < 0 || ctx->opts.packetlen > FT_PACKETLEN_MAX) {
 		fprintf(stderr, "too big packetlen %d specified\n", ctx->opts.packetlen);

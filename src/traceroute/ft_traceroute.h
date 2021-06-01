@@ -26,16 +26,23 @@
 # define FT_TR_ROOT             0
 
 
-# define FT_DEFAULT_HOPS         1
-# define FT_DEFAULT_HOPS_MAX     30
-# define FT_DEFAULT_PROBES_MAX   3
-# define FT_DEFAULT_PORT         33435
-# define FT_DEFAULT_PACKET_LEN sizeof(struct ip) + 40
+# define FT_HOPS_FIRST_DEFAULT         1
+# define FT_HOPS_MAX_DEFAULT           30
+# define FT_HOPS_MAX             255
 
-# define FT_PACKET_LEN_MAX      65000
+# define FT_PROBES_DEFAULT       3
+# define FT_PROBES_MAX           10
+
+# define FT_PORT_DEFAULT         33435
+
+# define FT_PACKETLEN_DEFAULT   sizeof(struct ip) + 40
+
+# define FT_PACKETLEN_MAX       65000
 
 // # define FT_NI_MAXHOST          1025
 # define FT_NI_MAXSERV          32
+
+# define FT_UDPHDR_LEN          (int)(sizeof(t_ip) + sizeof(t_udp))
 
 // struct opacket {
 // 	struct ip ip;
@@ -45,34 +52,54 @@
 // 	struct timeval tv;	/* time packet left */
 // };
 
-typedef struct  s_tr_pack_hdr_udp {
-  t_ip  ip;
-  t_udp udp;
-}       t_tr_pack_hdr_udp;
+typedef struct		s_traceroute t_trace;
 
-typedef struct  s_tr_pack_hdr_icmp {
-  t_ip  ip;
-  t_icmp icmp;
-}       t_tr_pack_hdr_icmp;
+/*
+ *  Args
+*/
+typedef struct			s_trace_args
+{
+	int           	argc;
+	const char		  **argv;
+	int         	  argi;
+}						t_tr_args;
 
-typedef struct  s_tr_packet_hdr {
-  t_ip  ip;
-  t_udp udp;
-}       t_tr_pack_hdr;
+/*
+ *  Options
+*/
+typedef enum			e_trace_opt_key
+{
+	FT_TR_OPT_F,
+	FT_TR_OPT_M,
+	FT_TR_OPT_Q,  
+	FT_TR_OPT_W,
+	FT_TR_OPT_MAX
+}						t_tr_opt_key;
 
-typedef struct  s_tr_opacket {
-  t_tr_pack_hdr hdr;
-  char  *data;
-  int   datalen;
-}       t_tr_opacket;
+typedef struct    s_trace_options
+{
+  int   argi;
+  const char  *host;
+  int         packetlen;
+  int         hops;
+  int         hops_max;
+  int         probes;
+  int         probes_max;
+  int         port;
+}                 t_tr_opts;
 
-typedef struct  s_tr_packet {
-  t_ip  ip;
-  t_udp udp;
-  char  *data;
-  int   datalen;
-}       t_tr_pack;
+typedef int   t_tr_ft_opt(t_trace *ctx, t_tr_args *args);
 
+typedef struct			s_trace_option_dispatch
+{
+	t_tr_opt_key		opt_key;
+	char				    *opt_name;
+	t_tr_ft_opt	    *opt_dist;
+}						t_tr_opt_d;
+
+/*
+ *  Execute
+*/
 typedef struct    s_tr_time
 {
   t_timeval start;
@@ -81,7 +108,6 @@ typedef struct    s_tr_time
 
 typedef struct    s_tr_sock
 {
-  t_tr_pack udp_pack;
   char  *data;
   int   datalen;
 }                 t_tr_sock;
@@ -105,80 +131,70 @@ typedef struct    s_tr_to
   t_sockaddr_in   saddrin;
   char            *name;
   char            ip[FT_ADDRSTRLEN];
-  t_tr_pack       pack;
-  t_tr_pack_hdr   *hdr;
+  char            *data;
+  int             datalen;
+  t_tr_time   time;
 }                 t_tr_to;
 
-typedef struct    s_tr_options
-{
-  int   argi;
-  int   hops;
-  int   hops_max;
-  int   probes;
-  int   probes_max;
-  int   port;
-  int   packetlen;
-}                 t_tr_opt;
+// typedef struct    s_tr_options
+// {
+//   int   argi;
+//   int   hops;
+//   int   hops_max;
+//   int   probes;
+//   int   probes_max;
+//   int   port;
+//   int   packetlen;
+// }                 t_tr_opts;
 
 typedef struct		s_traceroute
 {
-  t_tr_opt    opts;
+  t_tr_opts    opts;
   t_tr_to     to;
   t_tr_from   from;
   t_tr_time   time;
 }					t_trace;
 
-typedef int   t_tr_ft_arg(t_trace *ctx, const char *arg);
 
-/*
- *  Arguments
-*/
-
-typedef enum			e_tr_opt_key
-{
-	FT_TR_OPT_F,
-	FT_TR_OPT_M,
-	FT_TR_OPT_Q,  
-	FT_TR_OPT_W,
-	FT_TR_OPT_MAX
-}						t_tr_opt_key;
-
-typedef struct			s_tr_opt_dispatch
-{
-	t_tr_opt_key		opt_key;
-	char				    *opt_name;
-	t_tr_ft_arg	    *opt_dist;
-}						t_tr_opt_d;
 
 int			ft_traceroute(int argc, const char *argv[]);
-int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[]);
-int 		ft_traceroute_execute(t_trace *ctx);
-int   ft_traceroute_execute_recv_print(t_trace *ctx);
-
+int 		ft_traceroute_exec(t_trace *ctx, t_tr_opts *opts);
+int 	ft_traceroute_exec_init(t_trace *ctx, t_tr_to *to);
+// int     ft_traceroute_exec_recv(t_trace *ctx, t_tr_opts *opts);
+// int     ft_traceroute_exec_recv_print(t_trace *ctx, t_tr_opts *opts, t_tr_from *from);
 
 int     ft_tr_resolve(t_sockaddr_in *from, char *name);
 
 /*
  *  Parse
 */
+int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[]);
 
-int			ft_tr_opt_f(t_trace *ctx, const char *arg);
-int			ft_tr_opt_m(t_trace *ctx, const char *arg);
-int			ft_tr_opt_q(t_trace *ctx, const char *arg);
-int			ft_tr_opt_w(t_trace *ctx, const char *arg);
-int			ft_tr_opt_h(t_trace *ctx, const char *arg);
+int			ft_tr_opt_f(t_trace *ctx, t_tr_args *args);
+int			ft_tr_opt_m(t_trace *ctx, t_tr_args *args);
+int			ft_tr_opt_q(t_trace *ctx, t_tr_args *args);
+int			ft_tr_opt_w(t_trace *ctx, t_tr_args *args);
+int			ft_tr_opt_h(t_trace *ctx, t_tr_args *args);
 
-int			ft_tr_arg_host(t_trace *ctx, const char *arg);
-int			ft_tr_arg_packetlen(t_trace *ctx, const char *arg);
+int			ft_tr_arg_host(t_trace *ctx, t_tr_args *args);
+int			ft_tr_arg_packetlen(t_trace *ctx, t_tr_args *args);
+
+int 	  ft_tr_err_opt_require_arg(t_tr_args *args, const char *desc);
+int 	  ft_tr_err_opt_handle(t_tr_args *args);
+int 	  ft_tr_err_arg_host(t_tr_args *args);
+int 	  ft_tr_err_arg_packetlen(t_tr_args *args);
+
 
 /*
  *  Execute
 */
-int   ft_traceroute_execute_send_init(t_tr_to *to);
-int   ft_traceroute_execute_pack_init(t_trace *ctx, t_tr_to *to);
+int   ft_traceroute_exec_send_init(t_trace *ctx, t_tr_to *to);
+int   ft_traceroute_exec_pack_init(t_trace *ctx, t_tr_to *to);
 int   ft_traceroute_execute_recv_init(t_tr_from *from);
-int   ft_traceroute_execute_send(t_trace *ctx, t_tr_opt *opts, t_tr_to *to);
-int   ft_traceroute_execute_recv(t_trace *ctx, char *buffer, t_tr_from *from);
+
+int   ft_traceroute_exec_send(t_tr_opts *opts, t_tr_to *to);
+int   ft_traceroute_exec_recv(t_tr_opts *opts, t_tr_to *to, t_tr_from *from);
+int   ft_traceroute_exec_recv_print(t_tr_opts *opts, t_tr_from *from, t_tr_to to);
 
 /*
  *  Socket

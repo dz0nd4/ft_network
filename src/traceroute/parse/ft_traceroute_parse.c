@@ -41,7 +41,8 @@ static int	ft_traceroute_parse_opt(t_trace *ctx, t_tr_args *args)
 	while (++opt_key < FT_TR_OPT_MAX)
 		if (ft_strequ(ft_tr_opt[opt_key].opt_name, opt_name))
 			return (ft_tr_opt[opt_key].opt_dist(ctx, args));
-	return (ft_trace_error_opt_bad(ctx, opt_name));
+	fprintf(stderr, "Bad option `%s` (argc %d)\n", opt_name, args->argi);
+	return (FT_EXFAIL);
 }
 
 int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])
@@ -68,8 +69,10 @@ int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[])
 		// ctx->opts.argi += 2;
 	}
 
-	if (ctx->opts.host == NULL)
-		return (ft_tr_error_host());
+	if (ctx->opts.host == NULL) {
+		fprintf(stderr, "Specify \"host\" missing argument.\n");
+		return (FT_EXFAIL);
+	}
 
 	if (ctx->opts.hops > ctx->opts.hops_max) {
 		fprintf(stderr, "first hop out of range\n");
