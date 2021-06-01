@@ -30,10 +30,6 @@ int			ft_tr_opt_f(t_trace *ctx, t_tr_args *args)
 	if (!ft_isdigitstr(opt_arg))
 		return (ft_tr_err_opt_handle(args));
 	ctx->opts.hops = ft_atoi(opt_arg);
-	// if (ctx->opts.hops > ctx->opts.hops_max) {
-	// 	fprintf(stderr, "first hop out of range\n");
-	// 	return (FT_EXFAIL);
-	// }
 
 	args->argi += 2;
 	return (FT_EXOK);
@@ -57,10 +53,6 @@ int			ft_tr_opt_m(t_trace *ctx, t_tr_args *args)
 	if (!ft_isdigitstr(opt_arg))
 		return (ft_tr_err_opt_handle(args));
 	ctx->opts.hops_max = ft_atoi(opt_arg);
-	// if (ctx->opts.hops > ctx->opts.hops_max) {
-	// 	fprintf(stderr, "first hop out of range\n");
-	// 	return (FT_EXFAIL);
-	// }
 
 	if (ctx->opts.hops_max > FT_HOPS_MAX) {
 		fprintf(stderr, "max hops cannot be more than %d\n", FT_HOPS_MAX);
@@ -93,21 +85,6 @@ int			ft_tr_opt_q(t_trace *ctx, t_tr_args *args)
 		fprintf(stderr, "no more than %d probes per hop\n", FT_PROBES_MAX);
 		return (FT_EXFAIL);
 	}
-	return (FT_EXOK);
-}
-
-/*
- * ft_tr_opt_w
- *
- * Description:
- *   -w:
- * Returns:
- *   FT_EXOK
-*/
-int			ft_tr_opt_w(t_trace *ctx, t_tr_args *args)
-{
-	if (args == NULL)
-		return (ft_tr_err_opt_require_arg(args, "MAX,HERE,NEAR"));
 	return (FT_EXOK);
 }
 

@@ -25,60 +25,42 @@ int			ft_traceroute_usage(char *prgm)
 
 	fprintf(stderr, "Arguments:\n");
 	fprintf(stderr, "+     host	The host to traceroute to\n");
-	return (EXIT_FAILURE);
+	return (FT_EXFAIL);
 }
 
 int			ft_traceroute(int argc, const char *argv[])
 {
 	t_trace	ctx;
-	t_tr_to to;
-	t_tr_from from;
+	// t_tr_to to;
+	// t_tr_from from;
 	t_tr_opts *opts = &ctx.opts;
+	t_tr_sock	to;
+	t_tr_sock	from;
 
 	ft_memset(&ctx, 0, sizeof(ctx));
 
-	if (geteuid() != FT_TR_ROOT) {
-		fprintf(stderr, "/!\\ You don't have root privileges /!\\\n");
-		// return (EXIT_FAILURE);
-	}
+	if (ft_traceroute_parse(&ctx, argc, argv) == FT_EXFAIL)
+		return (FT_EXFAIL);
 
-	if (argc < 2)
-		return (ft_traceroute_usage((char *)argv[0]));
+	if (ft_traceroute_exec_init_to(&ctx, &to) == FT_EXFAIL)
+		return (FT_EXFAIL);
 
-	if (ft_traceroute_parse(&ctx, argc, argv) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-
-	if (ft_traceroute_exec_init(&ctx, &to) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-
-	printf("traceroute to %s (%s), %d hops max, %d byte packets",
-		to.name, to.ip, opts->hops_max, opts->packetlen);
-
-	while (opts->hops < opts->hops_max) {
-		printf("\n%2d ", opts->hops);
-
-		while (opts->probes < opts->probes_max) {
-			ft_traceroute_exec_send(opts, &to);
+	// if (ft_traceroute_exec_init_from(&ctx.opts, &from) == FT_EXFAIL)
+	// 	return (FT_EXFAIL);
+	// if (ft_traceroute_exec_init_from(opts, &from) == FT_EXFAIL)
+	// 	return (FT_EXFAIL);
 	
-			if (ft_traceroute_exec_recv(opts, &to, &from) == FT_EXOK)
-				ft_traceroute_exec_recv_print(opts, &from, to);
-			else
-				printf(" *");
+	// printf("traceroute to %s (%s), %d hops max, %d byte packets",
+	// 	opts->host, inet_ntoa(to.saddrin.sin_addr), opts->hops_max, opts->packetlen);
 
-			close(from.sfd);
-			fflush(stdout);
-			opts->probes += 1;	
-		}
+	// while (opts->hops < opts->hops_max) {
+	// 	printf("\n%2d ", opts->hops);
 
-		opts->probes = 0;
-		opts->hops += 1;
-	}
-
-
-	// if (ft_traceroute_exec(&ctx, &ctx.opts) == EXIT_FAILURE){
-	// 	fprintf(stderr, "Exec fail\n");
-	// 	return (EXIT_FAILURE);
+		ft_traceroute_exec(&ctx.opts, &to, &from);
+	ft_traceroute_exec_finish_to(&ctx, &to);
+	// 	opts->probes = 0;
+	// 	opts->hops += 1;
 	// }
 
-	return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }

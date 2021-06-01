@@ -11,36 +11,22 @@
 /* ************************************************************************** */
 
 #include "ft_traceroute.h"
-
-int   ft_traceroute_exec_send_init(t_trace *ctx, t_tr_to *to)
+int 	ft_traceroute_exec_init_to(t_trace *tr, t_tr_sock *to)
 {
-  const int on = 1;
+	const int on = 1;
+	const char *datagram = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~.";
+	t_ip 			*ip;
+	t_udp			*udp;
 
-	// if (ft_sock_getaddrinfo(to->name, &to->addrinfo) == EXIT_FAILURE)
-	// 	return (EXIT_FAILURE);
+	if ((to->fd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) == INVALID_SOCKET)
+		return (FT_EXFAIL);
+	if (setsockopt(to->fd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
+   return (EXIT_FAILURE);
 
-	to->sfd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
-	if (to->sfd == INVALID_SOCKET)
-		{ printf("sfd\n") ; return (EXIT_FAILURE); }
+	ft_memcpy(&to->saddrin, tr->to.addrinfo.ai_addr, sizeof(tr->to.addrinfo.ai_addr));
 
-	if (setsockopt(to->sfd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
-   { printf ("opts\n"); return (EXIT_FAILURE); }
-
-	ft_memcpy(&to->saddrin, ctx->to.addrinfo.ai_addr, sizeof(ctx->to.addrinfo.ai_addr));
-	ft_memcpy(to->ip, inet_ntoa(to->saddrin.sin_addr), FT_ADDRSTRLEN);
-  to->name = ctx->to.name;
-
-
-  return (EXIT_SUCCESS);
-}
-
-int   ft_traceroute_exec_pack_init(t_trace *ctx, t_tr_to *to)
-{
-  const char *datagram = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~.";
-  t_ip  *ip;
-  t_udp *udp;
-
-  if ((to->data = ft_memalloc(ctx->opts.packetlen)) == NULL)
+	to->datalen = tr->opts.packetlen;
+  if ((to->data = ft_memalloc(tr->opts.packetlen)) == NULL)
     return (EXIT_FAILURE);
 
   ip = (t_ip *)to->data;
@@ -48,7 +34,7 @@ int   ft_traceroute_exec_pack_init(t_trace *ctx, t_tr_to *to)
 
   ip->ip_hl = 5; // Header len (5 * 4 Bytes)
   ip->ip_v = 4;
-  ip->ip_len = ctx->opts.packetlen;
+  ip->ip_len = tr->opts.packetlen;
 	ip->ip_id = getpid();
 	ip->ip_p = IPPROTO_UDP;
   ip->ip_dst = to->saddrin.sin_addr;
@@ -56,31 +42,38 @@ int   ft_traceroute_exec_pack_init(t_trace *ctx, t_tr_to *to)
 
 	udp->uh_sport = htons(getpid());
 	udp->uh_ulen = htons((u_short)(ip->ip_len - sizeof(t_ip)));  
-  udp->uh_dport = htons(ctx->opts.port); 
+  udp->uh_dport = htons(tr->opts.port);
 
-  int datai = FT_UDPHDR_LEN;
-  int datalen = ctx->opts.packetlen - datai;
+	int i = FT_UDPHDR_LEN;
+	int idata = 0;
 
-  while (datalen > 0) {
-		ft_memcpy(&to->data[datai], datagram, datalen);
-    datai += 64;
-    datalen -= 64;
-  }
+	// while (i < to->datalen) {
+	// 	to->data[i] = datagram[idata];
+	// 	i += 1;
+	// 	if (++idata == ft_strlen(datagram))
+	// 		idata = 0;
+	// }
 
-  return (EXIT_SUCCESS);
+	return (FT_EXOK);
 }
 
-int   ft_traceroute_execute_recv_init(t_tr_from *from)
+int 	ft_traceroute_exec_init_from(t_tr_opts *opts, t_tr_sock *from)
 {
   const int waittime = 5;
 
-  ft_memset(from, 0, sizeof(t_tr_from));
+  // ft_memset(from, 0, sizeof(t_tr_from));
 
-  if ((from->sfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET)
-		return (EXIT_FAILURE);
+  if ((from->fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET)
+		return (FT_EXFAIL);
   // ft_setsockopt_rcvtimeo(&from->sfd, 1, 1);
-  from->saddrin_size = sizeof(from->saddrin);
-  from->wait.tv_sec = waittime;
-  from->wait.tv_usec = 0;
-  return (EXIT_SUCCESS);
+
+	from->datalen = opts->packetlen;
+  if ((from->data = ft_memalloc(opts->packetlen)) == NULL)
+    return (FT_EXFAIL);
+
+  // from->saddrin_size = sizeof(from->saddrin);
+  from->tv.tv_sec = waittime;
+  from->tv.tv_usec = 0;
+
+	return (FT_EXOK);
 }

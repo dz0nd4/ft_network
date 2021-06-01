@@ -12,48 +12,34 @@
 
 #include "ft_traceroute.h"
 
-int 	ft_traceroute_exec_init(t_trace *ctx, t_tr_to *to)
+int 		ft_traceroute_exec(t_tr_opts *opts, t_tr_sock *to, t_tr_sock *prom)
 {
-	if (ft_traceroute_exec_send_init(ctx, to) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-
-	if (ft_traceroute_exec_pack_init(ctx, to) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-
-	// if (ft_traceroute_execute_recv_init(&ctx->from) == EXIT_FAILURE)
-	// 	return (EXIT_FAILURE);
-
-	
-	return (EXIT_SUCCESS);
-}
-
-int 		ft_traceroute_exec(t_trace *ctx, t_tr_opts *opts)
-{
-	t_tr_to to;
-	t_tr_from from;
-
-	if (ft_traceroute_exec_init(ctx, &to) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	// ft_traceroute_execute_recv_init(&from);
+	t_tr_sock from;
 
 	printf("traceroute to %s (%s), %d hops max, %d byte packets",
-		to.name, to.ip, opts->hops_max, opts->packetlen);
+		opts->host, inet_ntoa(to->saddrin.sin_addr), opts->hops_max, opts->packetlen);
 
+  // ft_traceroute_execute_recv_init(&from);
 	while (opts->hops < opts->hops_max) {
 		printf("\n%2d ", opts->hops);
 
+		if (ft_traceroute_exec_init_from(opts, &from) == FT_EXFAIL)
+			return (FT_EXFAIL);
+
 		while (opts->probes < opts->probes_max) {
-			ft_traceroute_exec_send(opts, &to);
-	
-			if (ft_traceroute_exec_recv(opts, &to, &from) == FT_EXOK)
-				ft_traceroute_exec_recv_print(opts, &from, to);
+			// ft_traceroute_exec_send(opts, to);
+			ft_traceroute_exec_send(opts, to);
+
+			if (ft_traceroute_exec_recv(opts, to, &from) == FT_EXOK)
+				ft_traceroute_exec_pckt(opts, to, &from);
 			else
 				printf(" *");
 
-			close(from.sfd);
 			fflush(stdout);
-			opts->probes += 1;	
+			opts->probes += 1;
 		}
+
+		ft_traceroute_exec_finish_from(opts, &from);
 
 		opts->probes = 0;
 		opts->hops += 1;

@@ -72,7 +72,7 @@ typedef enum			e_trace_opt_key
 	FT_TR_OPT_F,
 	FT_TR_OPT_M,
 	FT_TR_OPT_Q,  
-	FT_TR_OPT_W,
+	FT_TR_OPT_H,
 	FT_TR_OPT_MAX
 }						t_tr_opt_key;
 
@@ -106,10 +106,14 @@ typedef struct    s_tr_time
   t_timeval stop;
 }                 t_tr_time;
 
-typedef struct    s_tr_sock
+typedef struct    s_trace_sock
 {
-  char  *data;
-  int   datalen;
+  int           fd;
+  t_sockaddr_in saddrin;
+  int           cc;
+  char          *data;
+  int           datalen;
+  t_timeval     tv;
 }                 t_tr_sock;
 
 typedef struct    s_tr_from
@@ -136,34 +140,20 @@ typedef struct    s_tr_to
   t_tr_time   time;
 }                 t_tr_to;
 
-// typedef struct    s_tr_options
-// {
-//   int   argi;
-//   int   hops;
-//   int   hops_max;
-//   int   probes;
-//   int   probes_max;
-//   int   port;
-//   int   packetlen;
-// }                 t_tr_opts;
-
 typedef struct		s_traceroute
 {
   t_tr_opts    opts;
   t_tr_to     to;
   t_tr_from   from;
   t_tr_time   time;
+  t_tr_sock   sto;
+  t_tr_sock   sfrom;
 }					t_trace;
 
 
 
 int			ft_traceroute(int argc, const char *argv[]);
-int 		ft_traceroute_exec(t_trace *ctx, t_tr_opts *opts);
-int 	ft_traceroute_exec_init(t_trace *ctx, t_tr_to *to);
-// int     ft_traceroute_exec_recv(t_trace *ctx, t_tr_opts *opts);
-// int     ft_traceroute_exec_recv_print(t_trace *ctx, t_tr_opts *opts, t_tr_from *from);
-
-int     ft_tr_resolve(t_sockaddr_in *from, char *name);
+int			ft_traceroute_usage(char *prgm);
 
 /*
  *  Parse
@@ -173,7 +163,6 @@ int			ft_traceroute_parse(t_trace *ctx, int argc, const char *argv[]);
 int			ft_tr_opt_f(t_trace *ctx, t_tr_args *args);
 int			ft_tr_opt_m(t_trace *ctx, t_tr_args *args);
 int			ft_tr_opt_q(t_trace *ctx, t_tr_args *args);
-int			ft_tr_opt_w(t_trace *ctx, t_tr_args *args);
 int			ft_tr_opt_h(t_trace *ctx, t_tr_args *args);
 
 int			ft_tr_arg_host(t_trace *ctx, t_tr_args *args);
@@ -188,36 +177,16 @@ int 	  ft_tr_err_arg_packetlen(t_tr_args *args);
 /*
  *  Execute
 */
-int   ft_traceroute_exec_send_init(t_trace *ctx, t_tr_to *to);
-int   ft_traceroute_exec_pack_init(t_trace *ctx, t_tr_to *to);
-int   ft_traceroute_execute_recv_init(t_tr_from *from);
+int 		ft_traceroute_exec(t_tr_opts *opts, t_tr_sock *to, t_tr_sock *from);
 
-int   ft_traceroute_exec_send(t_tr_opts *opts, t_tr_to *to);
-int   ft_traceroute_exec_recv(t_tr_opts *opts, t_tr_to *to, t_tr_from *from);
-int   ft_traceroute_exec_recv_print(t_tr_opts *opts, t_tr_from *from, t_tr_to to);
+int 	  ft_traceroute_exec_init_to(t_trace *tr, t_tr_sock *to);
+int 	  ft_traceroute_exec_init_from(t_tr_opts *opts, t_tr_sock *from);
 
-/*
- *  Socket
-*/
+int     ft_traceroute_exec_send(t_tr_opts *opts, t_tr_sock *to);
+int     ft_traceroute_exec_recv(t_tr_opts *opts, t_tr_sock *to, t_tr_sock *from);
+int     ft_traceroute_exec_pckt(t_tr_opts *opts, t_tr_sock *to, t_tr_sock *from);
 
-// int     ft_sock_getaddrinfo(const char *host, t_addrinfo *result);
-// int     ft_sock_send(int fd, char *data, int datalen, t_sockaddr_in *saddrin);
-// int     ft_sock_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin);
-// int			ft_sock_pton(struct in_addr *addr, char *ipv4);
-
-/*
- *  Errors
-*/
-
-void 	  ft_exit(char *s);
-void    ft_traceroute_exit(char *s);
-
-int 	  ft_trace_error_opt_bad(t_trace *ctx, const char *opt);
-int 	  ft_trace_error_opt_arg_require(t_trace *ctx, const char *opt, const char *arg);
-int 	  ft_trace_error_opt_arg_handle(t_trace *ctx, const char *opt, const char *arg);
-
-int 	  ft_tr_error_host();
-int 	  ft_tr_error_host_resolve(t_trace *ctx, const char *arg);
-int 	  ft_tr_error_packetlen(t_trace *ctx, const char *opt, const char *arg);
+int 	  ft_traceroute_exec_finish_to(t_trace *tr, t_tr_sock *to);
+int 	  ft_traceroute_exec_finish_from(t_tr_opts *opts, t_tr_sock *from);
 
 #endif

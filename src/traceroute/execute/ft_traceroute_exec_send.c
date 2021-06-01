@@ -20,7 +20,7 @@
  * Returns:
  *    The number data send
 */
-int   ft_traceroute_exec_send(t_tr_opts *opts, t_tr_to *to)
+int   ft_traceroute_exec_send(t_tr_opts *opts, t_tr_sock *to)
 {
   t_ip *ip;
   t_udp *udp;
@@ -32,9 +32,36 @@ int   ft_traceroute_exec_send(t_tr_opts *opts, t_tr_to *to)
 	ip->ip_ttl = opts->hops;
   udp->uh_dport = htons(opts->port + opts->hops + opts->probes); 
 
-	ft_sock_gettime(&to->time.start);
+	ft_gettimeofday(&to->tv);
 
-	i = ft_sock_send(to->sfd, to->data, opts->packetlen, &to->saddrin);
+	i = ft_sendto(to->fd, to->data, to->datalen, &to->saddrin);
 
   return (i);
 }
+
+/*
+ * ft_traceroute_execute_send
+ *
+ * Description:
+ *    Send probe with custom TTL
+ * Returns:
+ *    The number data send
+*/
+// int   ft_traceroute_exec_send(t_tr_opts *opts, t_tr_to *to)
+// {
+//   t_ip *ip;
+//   t_udp *udp;
+// 	int i;
+
+// 	ip = (t_ip *)to->data;
+// 	udp = (t_udp *)&to->data[FT_IPHDR_LEN];
+
+// 	ip->ip_ttl = opts->hops;
+//   udp->uh_dport = htons(opts->port + opts->hops + opts->probes); 
+
+// 	ft_gettimeofday(&to->time.start);
+
+// 	i = ft_sendto(to->sfd, to->data, opts->packetlen, &to->saddrin);
+
+//   return (i);
+// }
