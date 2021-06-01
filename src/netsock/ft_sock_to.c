@@ -13,7 +13,7 @@
 #include "ft_netsock.h"
 
 /*
- * ft_sock_ntop
+ * ft_inet_ntop
  *
  * Description:
  *    Abstraction over inet_ntop function.
@@ -22,7 +22,7 @@
  * Returns:
  *    FT_EXOK or FT_EXFAIL if inet_ntop fail
 */
-int		ft_sock_ntop(t_in_addr *src, char *dst)
+int		ft_inet_ntop(t_in_addr *src, char *dst)
 {
 	if (inet_ntop(AF_INET, src, dst, FT_ADDRSTRLEN) == NULL) {
       fprintf(stderr, "inet_ntop\n");
@@ -31,7 +31,7 @@ int		ft_sock_ntop(t_in_addr *src, char *dst)
 	return (FT_EXOK);
 }
 
-int			ft_sock_pton(t_in_addr *addr, char *ipv4)
+int			ft_inet_pton(t_in_addr *addr, char *ipv4)
 {
 	int domain;
 	int	s;

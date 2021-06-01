@@ -12,7 +12,7 @@
 
 #include "ft_netsock.h"
 
-int    ft_sock_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
+int    ft_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
 {
   int           sfd;
 	t_addrinfo		hints;
@@ -46,15 +46,15 @@ int    ft_sock_getaddrinfo(const char *host, t_addrinfo *host_addrinfo)
 }
 
 /*
- * ft_sock_getnameinfo
+ * ft_getnameinfo
  *
  * Description:
- *    Abstraction over ft_sock_getnameinfo function.
+ *    Abstraction over ft_getnameinfo function.
  * 		It assumes dst is FT_NI_MAXHOST length
  * Returns:
  *    The number of data read or -1
 */
-int    ft_sock_getnameinfo(t_sockaddr_in *host, char *name)
+int    ft_getnameinfo(t_sockaddr_in *host, char *name)
 {
     socklen_t len;
     char hbuf[FT_NI_MAXHOST];
@@ -63,8 +63,8 @@ int    ft_sock_getnameinfo(t_sockaddr_in *host, char *name)
 
     if (getnameinfo((t_sockaddr *)host, len, hbuf, sizeof(hbuf), NULL, 0, FT_NI_NAMEREQD)) {
         // fprintf(stderr, "could not resolve hostname\n");
-        // if (ft_sock_ntop((t_in_addr *)&host->sin_addr, hbuf) == EXIT_FAILURE)
-	      //   return (FT_EXFAIL);
+        if (ft_inet_ntop((t_in_addr *)&host->sin_addr, hbuf) == EXIT_FAILURE)
+	        return (FT_EXFAIL);
         ft_strcpy(name, hbuf);
         // s = malloc(sizeof(NI_MAXHOST));
     }
@@ -74,3 +74,34 @@ int    ft_sock_getnameinfo(t_sockaddr_in *host, char *name)
 
     return 0;
 }
+
+// int ft_tr_resolve(t_sockaddr_in *from, char *name)
+// {
+//     struct sockaddr_in sa;    /* input */
+//     socklen_t len;         /* input */
+//     char hbuf[FT_NI_MAXHOST];
+
+//     memset(&sa, 0, sizeof(struct sockaddr_in));
+
+//     char *s = NULL;
+
+//     /* For IPv4*/
+//     sa.sin_family = AF_INET;
+//     sa.sin_addr.s_addr = inet_addr(inet_ntoa(from->sin_addr));
+//     len = sizeof(struct sockaddr_in);
+
+//     if (getnameinfo((struct sockaddr *) &sa, len, hbuf, sizeof(hbuf), 
+//         NULL, 0, NI_NAMEREQD)) {
+//         // printf("could not resolve hostname\n");
+//         // s = malloc(sizeof(NI_MAXHOST));
+//         ft_strcpy(name, inet_ntoa(from->sin_addr));
+
+//     }
+//     else {
+//         // printf("host=%s\n", hbuf);
+//         // s = malloc(sizeof(NI_MAXHOST));
+//         ft_strcpy(name, hbuf);
+//     }
+
+//     return 0;
+// }

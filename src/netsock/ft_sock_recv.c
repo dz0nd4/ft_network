@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sock_recv.c                                     :+:      :+:    :+:   */
+/*   ft_recvfrom.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,14 +13,14 @@
 #include "ft_netsock.h"
 
 /*
- * ft_sock_recv
+ * ft_recvfrom
  *
  * Description:
  *    Abstraction over recvmsg function.
  * Returns:
  *    The number of data read or -1
 */
-int    ft_sock_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
+int    ft_recvfrom(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 {
 	int saddrin_size;
 	int i;
@@ -28,7 +28,7 @@ int    ft_sock_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 	saddrin_size = sizeof(t_sockaddr);
 	i = recvfrom(fd, data, datalen, 0, (t_sockaddr *)saddrin, &saddrin_size);
 	if (i < 0) {
-        perror("recvfrom");
+        // perror("recvfrom");
 		return (-1);
     }
 	// if (i < 0) {
@@ -38,14 +38,14 @@ int    ft_sock_recv(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 }
 
 /*
- * ft_sock_recvmsg
+ * ft_recvmsg
  *
  * Description:
  *    Abstraction over recvmsg function.
  * Returns:
  *    The number of data read or -1
 */
-int     ft_sock_recvmsg(int sfd, char *addr, char *packet, int packetlen)
+int     ft_recvmsg(int sfd, char *addr, char *packet, int packetlen)
 {
     t_iovec iov;
     t_msghdr msg;

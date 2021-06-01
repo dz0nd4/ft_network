@@ -13,14 +13,14 @@
 #include "ft_netsock.h"
 
 /*
- * ft_sock_gettime
+ * ft_gettimeofday
  *
  * Description:
  *    Abstraction over gettimeofday function.å
  * Returns:
  *    EXIT_SUCCESS or EXIT_FAILURE if gettimeofday fail
 */
-int		ft_sock_gettime(t_timeval *tv)
+int		ft_gettimeofday(t_timeval *tv)
 {
 	if (gettimeofday(tv, NULL) == -1)
       return(EXIT_FAILURE);
@@ -28,22 +28,22 @@ int		ft_sock_gettime(t_timeval *tv)
 }
 
 /*
- * ft_sock_delay
+ * ft_delay
  *
  * Description:
  *    Simple delay function.
  * Returns:
  *    The number of data read or -1
 */
-int		ft_sock_delay()
+int		ft_delay()
 {
   t_timeval start;
   t_timeval stop;
 	double elapsedTime;
 
-	ft_sock_gettime(&start);
+	ft_gettimeofday(&start);
 	while (1) {
-		ft_sock_gettime(&stop);
+		ft_gettimeofday(&stop);
 		elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;      // sec to ms
     elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;   // us to ms
 
@@ -54,14 +54,14 @@ int		ft_sock_delay()
 }
 
 /*
- * ft_sock_timediff()
+ * ft_timediff()
  *
  * Description:
  *    Subtract 2 timeval structs to get the elapsed time.
  * Returns:
  *    The elapsed time
 */
-double     ft_sock_timediff(t_timeval *out, t_timeval *in)
+double     ft_timediff(t_timeval *out, t_timeval *in)
 {
     double elapsedTime = (out->tv_sec - in->tv_sec) * 1000.0;      
     elapsedTime += (out->tv_usec - in->tv_usec) / 1000.0;  
@@ -69,17 +69,17 @@ double     ft_sock_timediff(t_timeval *out, t_timeval *in)
 }
 
 /*
- * ft_sock_getelapsedtime()
+ * ft_getelapsedtime()
  *
  * Description:
  *    Subtract 2 timeval structs to get the elapsed time.
  * Returns:
  *    The elapsed time
 */
-double     ft_sock_getelapsedtime(t_timeval *in)
+double     ft_getelapsedtime(t_timeval *in)
 {
 		t_timeval out;
 
-		ft_sock_gettime(&out);
-    return (ft_sock_timediff(&out, in));
+		ft_gettimeofday(&out);
+    return (ft_timediff(&out, in));
 }

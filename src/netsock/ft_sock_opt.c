@@ -13,7 +13,7 @@
 #include "ft_netsock.h"
 
 /*
- * ft_sock_recv
+ * ft_recvfrom
  *
  * Description:
  *    Abstraction over recvmsg function.

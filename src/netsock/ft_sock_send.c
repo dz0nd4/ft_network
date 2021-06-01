@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sock_send.c                                     :+:      :+:    :+:   */
+/*   ft_sendto.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -20,7 +20,7 @@
  * Returns:
  *    The number of data read or -1
 */
-int    ft_sock_send(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
+int    ft_sendto(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
 {
 	int i;
 
