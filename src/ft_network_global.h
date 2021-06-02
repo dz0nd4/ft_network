@@ -21,6 +21,8 @@
 # define FT_SUCCESS   0
 # define FT_FAILURE   1
 
+typedef unsigned char       t_uchar;
+
 // # define FT_EXOK      0
 // # define FT_EXFAIL    1
 
