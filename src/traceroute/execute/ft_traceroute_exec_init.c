@@ -11,19 +11,33 @@
 /* ************************************************************************** */
 
 #include "ft_traceroute.h"
+
 int 	ft_traceroute_exec_init_to(t_trace *tr, t_tr_sock *to)
 {
 	const int on = 1;
 	const char *datagram = "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~.";
 	t_ip 			*ip;
 	t_udp			*udp;
+	t_addrinfo	addrinfo;
+
+	ft_memset(&addrinfo, 0, sizeof(0));
+
+	addrinfo.ai_family = AF_INET;
+	addrinfo.ai_socktype = SOCK_DGRAM;
+	addrinfo.ai_protocol = IPPROTO_UDP;
+
+	if (ft_getaddrinfo(tr->opts.host, &addrinfo) == FT_EXFAIL) {
+		fprintf(stderr, "Unkown host\n");
+		return (FT_EXFAIL);
+		// return (ft_tr_err_arg_host(args));
+	}
 
 	if ((to->fd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) == INVALID_SOCKET)
 		return (FT_EXFAIL);
 	if (setsockopt(to->fd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
    return (EXIT_FAILURE);
 
-	ft_memcpy(&to->saddrin, tr->to.addrinfo.ai_addr, sizeof(tr->to.addrinfo.ai_addr));
+	ft_memcpy(&to->saddrin, addrinfo.ai_addr, sizeof(addrinfo.ai_addr));
 
 	to->datalen = tr->opts.packetlen;
   if ((to->data = ft_memalloc(tr->opts.packetlen)) == NULL)
@@ -47,12 +61,12 @@ int 	ft_traceroute_exec_init_to(t_trace *tr, t_tr_sock *to)
 	int i = FT_UDPHDR_LEN;
 	int idata = 0;
 
-	// while (i < to->datalen) {
-	// 	to->data[i] = datagram[idata];
-	// 	i += 1;
-	// 	if (++idata == ft_strlen(datagram))
-	// 		idata = 0;
-	// }
+	while (i < to->datalen) {
+		to->data[i] = datagram[idata];
+		i += 1;
+		if (++idata == ft_strlen(datagram))
+			idata = 0;
+	}
 
 	return (FT_EXOK);
 }

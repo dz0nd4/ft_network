@@ -22,16 +22,17 @@
 */
 int			ft_tr_arg_host(t_trace *ctx, t_tr_args *args)
 {
-	const char *arg;
+	// const char *arg;
+	t_addrinfo	addrinfo;
 
-	arg = args->argv[args->argi];
+	// arg = args->argv[args->argi];
 	ctx->opts.host = args->argv[args->argi];
-	ctx->to.name = (char *)arg;
-	ctx->to.addrinfo.ai_family = AF_INET;
-	ctx->to.addrinfo.ai_socktype = SOCK_DGRAM;
-	ctx->to.addrinfo.ai_protocol = 0;
-	if (ft_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == FT_EXFAIL)
-		return (ft_tr_err_arg_host(args));
+	// ctx->to.name = (char *)arg;
+	// addrinfo.ai_family = AF_INET;
+	// addrinfo.ai_socktype = SOCK_DGRAM;
+	// addrinfo.ai_protocol = IPPROTO_UDP;
+	// if (ft_getaddrinfo(ctx->to.name, &ctx->to.addrinfo) == FT_EXFAIL)
+	// 	return (ft_tr_err_arg_host(args));
 	return (FT_EXOK);
 }
 
