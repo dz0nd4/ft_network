@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/05/26 22:45:30 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/07/27 13:54:33 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,121 +16,98 @@
  * ft_pg_exec_init_pckt
  *
  * Description:
- *   Dynamic allocate packets for sending and receiving data 
+ *   Dynamic allocate packets for sending and receiving data
  * Returns:
  *   ft_ping_usage function
-*/
-static int  ft_pg_exec_init_pckt( t_pg_opts opts, t_pg_sock *sock)
-{
-	t_icmphdr	*hdr;
-	t_timeval *tv;
-	int i;
+ */
+// static int ft_pg_exec_init_pckt(t_pg_opts opts, t_pg_sock *sock) {
+//   int i;
 
-	sock->pckt_send.msg_len = FT_ICMPHDR_LEN + opts.packetsize;
-	sock->pckt_send.msg = (char *)ft_memalloc(sock->pckt_send.msg_len);
-	if (sock->pckt_send.msg == NULL)
-		return (FT_EXFAIL);
-	hdr = (t_icmphdr *)&sock->pckt_send.msg[0];
-	tv = (t_timeval *)&sock->pckt_send.msg[FT_ICMPHDR_LEN];
-	i = FT_ICMPHDR_LEN;
+//   // ft_memset(&sock->pckt_send, 0, sizeof(sock->pckt_send));
+//   // sock->pckt_send.msg_len = FT_PING_HDR + opts.packetsize;
+//   // sock->pckt_send.msg = (char *)ft_memalloc(sock->pckt_send.msg_len);
+//   // if (sock->pckt_send.msg == NULL) return (FT_EXFAIL);
 
-	hdr->type = ICMP_ECHO;
-	hdr->un.echo.id = getpid() & 0xFFFF;
-	hdr->un.echo.sequence = 0;
-	hdr->checksum = 0;
+//   // ft_sock_pckt_icmp(sock->pckt_send.msg, sock->pckt_send.msg_len,
+//   //                   sock->pckt_send.addrin);
 
-	while (i < (sock->pckt_send.msg_len  - 1))
-		sock->pckt_send.msg[i++] = i + '0';
-	sock->pckt_send.msg[i] = 0;
+//   // ft_memset(&sock->pckt_recv, 0, sizeof(sock->pckt_recv));
+//   // sock->pckt_recv.msg_len = FT_PING_HDR + opts.packetsize;
+//   // sock->pckt_recv.msg = (char *)ft_memalloc(sock->pckt_recv.msg_len);
+//   // if (sock->pckt_recv.msg == NULL) {
+//   //   free(sock->pckt_send.msg);
+//   //   return (FT_EXFAIL);
+//   // }
 
+//   return (FT_EXOK);
+// }
 
-	if (opts.packetsize >= sizeof(t_timeval)) {
-		ft_memset(&sock->pckt_send.msg[FT_ICMPHDR_LEN], 0, sizeof(t_timeval));
-		ft_gettimeofday(tv);
-	}
+// /*
+//  * ft_pg_exec_init_sock
+//  *
+//  * Description:
+//  *   Function for initialize the socket && target info
+//  * Returns:
+//  *
+//  */
+// static int ft_pg_exec_init_sock(t_pg_opts opts, t_pg_sock *sock) {
+//   t_addrinfo addrinfo;
 
-	hdr->checksum = ft_sock_cksum(sock->pckt_send.msg, sock->pckt_send.msg_len);
+//   ft_memset(&addrinfo, 0, sizeof(t_addrinfo));
+//   addrinfo.ai_family = AF_INET;
+//   addrinfo.ai_socktype = SOCK_DGRAM;
 
-	ft_memset(&sock->pckt_recv, 0, sizeof(sock->pckt_recv));
-	sock->pckt_recv.msg_len = FT_PING_ICMPHDR + opts.packetsize;
-	sock->pckt_recv.msg = (char *)ft_memalloc(sock->pckt_recv.msg_len);
-	if (sock->pckt_recv.msg == NULL) {
-		free(sock->pckt_send.msg);
-		return (FT_EXFAIL);
-	}
-	return (FT_EXOK);
-}
+//   if (ft_getaddrinfo(opts.dest, &addrinfo) == FT_EXFAIL) {
+//     fprintf(stderr, "ping: cannot resolve %s: Unknown host\n", opts.dest);
+//     return (FT_EXFAIL);
+//   }
 
-/*
- * ft_pg_exec_init_sock
- *
- * Description:
- *   Function for fix the bug on MacOS with getaddrinfo
- * Returns:
- * 
-*/
-static int  	ft_pg_exec_init_sock(t_pg_opts opts, t_pg_sock *sock)
-{	
-	int 				timeout;
-	t_addrinfo 	addrinfo;
-	
-	timeout = 5;
-	ft_memset(&addrinfo, 0, sizeof(t_addrinfo));
-	addrinfo.ai_family = AF_INET;
-	addrinfo.ai_socktype = SOCK_DGRAM;
+//   sock->fd = socket(addrinfo.ai_family, addrinfo.ai_socktype, IPPROTO_ICMP);
 
-	while (timeout--) {
-		if (ft_getaddrinfo(opts.dest, &addrinfo) == FT_EXFAIL)
-			return (FT_EXFAIL);
+//   if (sock->fd == INVALID_SOCKET) {
+//     if (opts.verbose)
+//       fprintf(stderr,
+//               "ping: socket: Permission denied, attempting raw socket...\n");
 
-		sock->fd = socket(addrinfo.ai_family, addrinfo.ai_socktype, IPPROTO_ICMP);
+//     ft_memset(&addrinfo, 0, sizeof(t_addrinfo));
+//     addrinfo.ai_family = AF_INET;
+//     addrinfo.ai_socktype = SOCK_RAW;
+//     addrinfo.ai_protocol = IPPROTO_ICMP;
 
-		if (sock->fd == INVALID_SOCKET) {
-			if (opts.verbose && timeout == 4)
-				fprintf(stderr, "ping: socket: Permission denied, attempting raw socket...\n");
-			addrinfo.ai_family = AF_INET;
-			addrinfo.ai_socktype = SOCK_RAW;
-		} else {
-			ft_setsockopt_ttl(&sock->fd, opts.ttl, opts.verbose);
-			ft_setsockopt_sndtimeo(&sock->fd, 1, opts.verbose);
-			ft_setsockopt_rcvtimeo(&sock->fd, 1, opts.verbose);
+//     if (ft_getaddrinfo(opts.dest, &addrinfo) == FT_EXFAIL) {
+//       fprintf(stderr, "ping: cannot resolve %s: Unknown host\n", opts.dest);
+//       return (FT_EXFAIL);
+//     }
 
-			ft_memcpy(&sock->addrin, addrinfo.ai_addr, sizeof(t_sockaddr));
-			if (ft_sendto(sock->fd, sock->pckt_send.msg, sock->pckt_send.msg_len, &sock->addrin) == FT_EXOK)
-				if (ft_recvmsg(sock->fd, sock->pckt_recv.addr, sock->pckt_recv.msg, sock->pckt_recv.msg_len) > 0)
-					return (FT_EXOK);
-			close(sock->fd);
-		}
-	}
+//     sock->fd = ft_socket_icmp();
+//     // sock->fd = socket(addrinfo.ai_family, addrinfo.ai_socktype,
+//     // IPPROTO_ICMP);
+//     if (sock->fd == INVALID_SOCKET) {
+//       fprintf(stderr, "ping: socket: Permission denied for raw socket\n");
+//       return (FT_EXFAIL);
+//     }
+//   }
 
-	return (FT_EXFAIL);
-}
+//   ft_setsockopt_ttl(&sock->fd, opts.ttl, opts.verbose);
+//   ft_setsockopt_sndtimeo(&sock->fd, 1, opts.verbose);
+//   ft_setsockopt_rcvtimeo(&sock->fd, 1, opts.verbose);
+//   ft_memcpy(&sock->pckt_send.addrin, addrinfo.ai_addr, sizeof(t_sockaddr));
 
-int  ft_ping_exec_init(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats)
-{	
-	char ip[FT_ADDRSTRLEN];
+//   return (FT_EXOK);
+// }
 
-	if (!(getuid() == 0))
-		if (opts.verbose)
-			fprintf(stderr, "No privileges \n");
-	
-	sock->id = getpid() & 0xFFFF;
+// int ft_ping_exec_init(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats) {
+//   if (!(getuid() == 0))
+//     fprintf(stderr,
+//             "/!\\ You are running this program without privileges ! /!\\
+//             \n");
 
-	if (ft_pg_exec_init_pckt(opts, sock) == FT_EXFAIL)
-		return (FT_EXFAIL);
+//   sock->id = getpid() & 0xFFFF;
 
-	if (ft_pg_exec_init_sock(opts, sock) == FT_EXFAIL) {
-		fprintf(stderr, "%s: Échec temporaire dans la résolution du nom\n", opts.dest);
-		return (FT_EXFAIL);
-	}
+//   // if (ft_pg_exec_init_pckt(opts, sock) == FT_EXFAIL) return (FT_EXFAIL);
+//   if (ft_pg_exec_init_sock(opts, sock) == FT_EXFAIL) return (FT_EXFAIL);
 
-	if (ft_inet_ntop((t_in_addr *)&sock->addrin.sin_addr, ip) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+//   ft_gettimeofday(&stats->start);
 
-	printf("PING %s (%s) %d(%ld) bytes of data.\n",
-		opts.dest, ip, opts.packetsize, opts.packetsize + FT_PING_ICMPHDR);
-
-	ft_gettimeofday(&stats->time.start);
-
-	return (EXIT_SUCCESS);
-}
+//   return (FT_EXOK);
+// }

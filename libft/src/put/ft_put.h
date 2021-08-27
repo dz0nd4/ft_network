@@ -1,23 +1,22 @@
 /* ************************************************************************** */
-/*                                                          LE - /            */
-/*                                                              /             */
-/*   ft_put.h                                         .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: dzonda <marvin@le-101.fr>                  +:+   +:    +:    +:+     */
-/*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/12/13 03:34:15 by dzonda       #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/13 03:38:12 by dzonda      ###    #+. /#+    ###.fr     */
-/*                                                         /                  */
-/*                                                        /                   */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_put.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/12/13 03:34:15 by dzonda            #+#    #+#             */
+/*   Updated: 2021/07/25 11:34:07 by user42           ###   ########lyon.fr   */
+/*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PUT_H
 # define FT_PUT_H
 
-# include "../to/ft_to.h"
+# include "../ft_libft_global.h"
 
 int 	ft_putchar_fd(char c, int fd);
-int	    ft_putchar(int c);
+int	  ft_putchar(char c);
 
 void	ft_putendl_fd(const char *s, int fd);
 void	ft_putendl(const char *s);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_netsock.h"
+#include "../ft_sock.h"
 
 /*
  * ft_recvfrom
@@ -19,22 +19,22 @@
  *    Abstraction over recvmsg function.
  * Returns:
  *    The number of data read or -1
-*/
-int    ft_recvfrom(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
-{
-	int saddrin_size;
-	int i;
+ */
+int ft_recvfrom(int fd, char *data, int datalen, t_sockaddr_in *saddrin) {
+  int saddrin_size;
+  int i;
 
-	saddrin_size = sizeof(t_sockaddr);
-	i = recvfrom(fd, data, datalen, 0, (t_sockaddr *)saddrin, &saddrin_size);
-	if (i < 0) {
-        // perror("recvfrom");
-		return (-1);
-    }
-	// if (i < 0) {
-	// 	ft_exit("sendto()");
-	// }
-	return (i);
+  saddrin_size = sizeof(t_sockaddr);
+  i = recvfrom(fd, data, datalen, 0, (t_sockaddr *)saddrin,
+               (unsigned int *restrict) & saddrin_size);
+  if (i < 0) {
+    perror("recvfrom");
+    // return (i);
+  }
+  // if (i < 0) {
+  // 	ft_exit("sendto()");
+  // }
+  return (i);
 }
 
 /*
@@ -44,25 +44,23 @@ int    ft_recvfrom(int fd, char *data, int datalen, t_sockaddr_in *saddrin)
  *    Abstraction over recvmsg function.
  * Returns:
  *    The number of data read or -1
-*/
-int     ft_recvmsg(int sfd, char *addr, char *packet, int packetlen)
-{
-    t_iovec iov;
-    t_msghdr msg;
-    int cc;
+ */
+int ft_recvmsg(int fd, char *addr, char *packet, int packetlen) {
+  t_iovec iov;
+  t_msghdr msg;
+  int cc;
 
-    ft_memset(&iov, 0, sizeof(iov));
-    ft_memset(&msg, 0, sizeof(msg));
+  ft_memset(&iov, 0, sizeof(iov));
+  ft_memset(&msg, 0, sizeof(msg));
 
-    iov.iov_base = packet;
-    iov.iov_len = packetlen;
-    msg.msg_name = addr;
-    msg.msg_namelen = FT_ADDRSTRLEN;
-    msg.msg_iov = &iov;
-    msg.msg_iovlen = 1;
+  iov.iov_base = packet;
+  iov.iov_len = packetlen;
+  msg.msg_name = addr;
+  msg.msg_namelen = FT_ADDRSTRLEN;
+  msg.msg_iov = &iov;
+  msg.msg_iovlen = 1;
 
-    cc = recvmsg(sfd, &msg, MSG_WAITALL);
-    if (cc < 0)
-        return (-1);
-    return (cc);
+  cc = recvmsg(fd, &msg, MSG_WAITALL);
+
+  return (cc);
 }

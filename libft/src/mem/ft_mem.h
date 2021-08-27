@@ -14,8 +14,7 @@
 #ifndef FT_MEM_H
 # define FT_MEM_H
 
-# include <stdlib.h>
-# include <unistd.h>
+# include "../ft_libft_global.h"
 
 void	*ft_memalloc(size_t size);
 void	*ft_memccpy(void *dst, const void *src, int c, size_t n);
