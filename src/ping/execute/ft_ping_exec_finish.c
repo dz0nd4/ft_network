@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/29 23:12:01 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 15:47:19 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,6 @@ int ft_ping_exec_finish(t_ping *ctx) {
   }
 
   printf("\n");
-
-  // free(sock->pckt_send.msg);
-  // free(sock->pckt_recv.msg);
-  // close(sock->fd);
 
   return (FT_EXOK);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/11 18:27:46 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 14:42:08 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <sys/types.h>
 
 // #include "./netsock/ft_netsock.h"
-#include "../libftsock/libftsock.h"
+#include "./netutils/ft_sock.h"
 
 #define FT_SUCCESS 0
 #define FT_FAILURE 1
