@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 16:02:16 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 17:01:24 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  * Returns:
  *   ft_ping_usage function
  */
-int ft_ping_opt_h(t_pg_opts *opts, t_arg *arg) {
+int ft_ping_opt_h(t_ping_opts *opts, t_arg *arg) {
   (void)opts;
   (void)arg;
   return (ft_ping_usage());
@@ -34,7 +34,7 @@ int ft_ping_opt_h(t_pg_opts *opts, t_arg *arg) {
  * Returns:
  *   FT_EXOK
  */
-int ft_ping_opt_v(t_pg_opts *opts, t_arg *arg) {
+int ft_ping_opt_v(t_ping_opts *opts, t_arg *arg) {
   opts->verbose = 1;
   arg->i += 1;
   return (FT_EXOK);
@@ -47,7 +47,7 @@ int ft_ping_opt_v(t_pg_opts *opts, t_arg *arg) {
  *   -n: Numeric output only.  No attempt will be made to lookup symbolic names
  * for host addresses. Returns: FT_EXOK
  */
-int ft_ping_opt_n(t_pg_opts *opts, t_arg *arg) {
+int ft_ping_opt_n(t_ping_opts *opts, t_arg *arg) {
   opts->numeric_only = 1;
   arg->i += 1;
   return (FT_EXOK);
@@ -61,7 +61,7 @@ int ft_ping_opt_n(t_pg_opts *opts, t_arg *arg) {
  * Returns:
  *   FT_EXOK
  */
-int ft_ping_opt_s(t_pg_opts *opts, t_arg *arg) {
+int ft_ping_opt_s(t_ping_opts *opts, t_arg *arg) {
   const char *argv = arg->v[arg->i + 1];
   unsigned int argvi = 0;
 
@@ -90,7 +90,7 @@ int ft_ping_opt_s(t_pg_opts *opts, t_arg *arg) {
  * Returns:
  *   FT_EXOK
  */
-int ft_ping_opt_t(t_pg_opts *opts, t_arg *arg) {
+int ft_ping_opt_t(t_ping_opts *opts, t_arg *arg) {
   const char *argv = arg->v[arg->i + 1];
   int argvi = 0;
 
@@ -102,7 +102,8 @@ int ft_ping_opt_t(t_pg_opts *opts, t_arg *arg) {
 
   argvi = (unsigned int)ft_atoi(argv);
   if (argvi > FT_UINT8_MAX) {
-    fprintf(stderr, "ft_ping: ttl %d out of range\n", argvi);
+    fprintf(stderr, "ft_ping: ttl %d out of range. Maximum is %d\n", argvi,
+            FT_PING_TTL_MAX);
     return (FT_EXFAIL);
   }
 

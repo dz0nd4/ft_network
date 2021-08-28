@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:08:53 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 13:19:48 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,10 @@
 #define FT_NI_MAXHOST 1025
 #define FT_ADDRSTRLEN 16
 
-/* TOLIB */
-
-#define FT_UINT8_MAX 0xFF    /* 255 */
-#define FT_UINT16_MAX 0xFFFF /* 65535 */
-
-typedef struct s_arg {
-  int i;
-  int c;
-  const char **v;
-} t_arg;
-
-typedef struct s_map_istr {
-  int key;
-  char *value;
-} t_map_istr;
-
 /*
   GLOBAL
 */
 
-#define FT_PING_HDR (FT_IPHDR_LEN + FT_ICMPHDR_LEN)
 #define FT_TRACE_HDR (FT_IPHDR_LEN + FT_UDPHDR_LEN)
 
 #define FT_SOL_SOCKET SOL_SOCKET

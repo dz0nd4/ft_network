@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/11 05:46:03 by dzonda            #+#    #+#              #
-#    Updated: 2021/08/27 17:15:29 by user42           ###   ########lyon.fr    #
+#    Updated: 2021/08/28 16:58:51 by user42           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ NAME = ft_ping
 SRCDIR = src
 OBJDIR = obj
 LIBDIR = libft
+LIBFT = $(LIBDIR)/libft.a
 
 include $(SRCDIR)/src.mk 
 
@@ -86,14 +87,13 @@ endef
 
 .PHONY: all clean fclean re lib
 
-all: lib $(NAME) setcap
+all: lib $(NAME)
 
-$(NAME): $(OBJDIRS) $(OBJS)
+$(NAME): $(LIBFT) $(OBJS)
 	$(call print_step, Linking , $@ , $(COLOR_GREEN))
 	$(HIDE)$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(NAME)
 
 -include $(DEPS)
-
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(call print_step, Building , $@ , $(COLOR_YELLOW))
 	$(HIDE)$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ -MMD

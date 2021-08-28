@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:03:49 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 16:05:17 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@
  * Returns:
  *   FT_EXOK or FT_EXFAIL if ft_sendto fails
  */
-int ft_ping_exec_send(t_ping *ctx) {
+
+int ft_ping_exec_send(t_ping_res *res, t_ping_opts opts, t_ping_ctx ctx) {
   t_pckt pckt;
   t_pckt_opt opt;
 
   ft_memset(&pckt, 0, sizeof(pckt));
   ft_memset(&opt, 0, sizeof(opt));
 
-  pckt.len = (FT_PING_HDR + ctx->pg_opts.packetsize) & FT_UINT16_MAX;
-  pckt.to = ctx->to;
+  pckt.len = (FT_PING_HDR + opts.packetsize) & FT_UINT16_MAX;
+  pckt.to = ctx.to;
   if ((pckt.data = (t_uchar *)ft_memalloc(pckt.len)) == NULL)
     return (FT_EXFAIL);
 
@@ -37,19 +38,19 @@ int ft_ping_exec_send(t_ping *ctx) {
 
   opt.ip.len = pckt.len;
   opt.ip.proto = IPPROTO_ICMP;
-  opt.ip.ttl = ctx->pg_opts.ttl;
-  opt.ip.daddr = ctx->to.sin_addr.s_addr;
+  opt.ip.ttl = opts.ttl;
+  opt.ip.daddr = ctx.to.sin_addr.s_addr;
 
-  opt.icmp.seq = (ctx->stats.nbPcktSend + 1) & FT_UINT16_MAX;
+  opt.icmp.seq = (res->nbPcktSend + 1) & FT_UINT16_MAX;
 
   ft_pckt_ip_opt_set(&pckt, &opt.ip);
   ft_pckt_icmp_opt_set(&pckt, &opt.icmp);
 
-  if (ft_sendto(ctx->fd, (char *)pckt.data, pckt.len, &ctx->to) == FT_EXFAIL)
+  if (ft_sendto(ctx.fd, (char *)pckt.data, pckt.len, &ctx.to) == FT_EXFAIL)
     return (FT_EXFAIL);
 
   free(pckt.data);
-  ctx->stats.nbPcktSend += 1;
+  res->nbPcktSend += 1;
 
   return (FT_EXOK);
 }

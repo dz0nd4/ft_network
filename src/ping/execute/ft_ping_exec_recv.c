@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 16:25:29 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 17:06:26 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int ft_ping_exec_print_addr(t_sockaddr_in *addrin, int numeric_only) {
   return (FT_EXOK);
 }
 
-int ft_ping_exec_recv_pckt_false(t_pckt pckt, t_pg_opts opts) {
+int ft_ping_exec_recv_pckt_false(t_pckt pckt, t_ping_opts opts) {
   t_icmphdr *icmp = (t_icmphdr *)&pckt.data[FT_IPHDR_LEN];
   char hostname[FT_NI_MAXHOST];
   ft_bzero(hostname, FT_NI_MAXHOST);
@@ -69,8 +69,8 @@ int ft_ping_exec_recv_pckt_false(t_pckt pckt, t_pg_opts opts) {
   return (FT_EXOK);
 }
 
-int ft_ping_exec_recv_pckt_reply(t_pckt pckt, t_pg_opts opts,
-                                 t_pg_stats *stats) {
+int ft_ping_exec_recv_pckt_reply(t_pckt pckt, t_ping_opts opts,
+                                 t_ping_res *stats) {
   t_iphdr *ip = (t_iphdr *)&pckt.data[0];
   t_icmphdr *icmp = (t_icmphdr *)&pckt.data[FT_IPHDR_LEN];
   t_timeval *tv = (t_timeval *)&pckt.data[FT_PING_HDR];
@@ -107,30 +107,30 @@ int ft_ping_exec_recv_pckt_reply(t_pckt pckt, t_pg_opts opts,
  * Returns:
  *   FT_EXOK or FT_EXFAIL if ft_recvmsg fails
  */
-int ft_ping_exec_recv(t_ping *ctx) {
+int ft_ping_exec_recv(t_ping_res *res, t_ping_opts opts, t_ping_ctx ctx) {
+  t_icmphdr *icmphdr = NULL;
   t_pckt pckt;
 
   ft_memset(&pckt, 0, sizeof(pckt));
-
-  pckt.len = (FT_PING_HDR + ctx->pg_opts.packetsize) & FT_UINT16_MAX;
+  pckt.len = (FT_PING_HDR + opts.packetsize) & FT_UINT16_MAX;
   if ((pckt.data = (t_uchar *)ft_memalloc(pckt.len)) == NULL)
     return (FT_EXFAIL);
 
-  // t_iphdr *iphdr = (t_iphdr *)&pckt.data[0];
-  t_icmphdr *icmphdr = (t_icmphdr *)&pckt.data[FT_IPHDR_LEN];
-  // t_timeval *tv = (t_timeval *)&pckt.data[FT_PING_HDR];
+  pckt.cc = ft_recvmsg(ctx.fd, (char *)&pckt.to, (char *)pckt.data, pckt.len);
+  if (pckt.cc < 0) {
+    free(pckt.data);
+    return (FT_EXFAIL);
+  }
 
-  pckt.cc = ft_recvmsg(ctx->fd, (char *)&pckt.to, (char *)pckt.data, pckt.len);
-  if (pckt.cc < 0) return (FT_EXFAIL);
-
+  icmphdr = (t_icmphdr *)&pckt.data[FT_IPHDR_LEN];
   if (icmphdr->type != ICMP_ECHOREPLY) {
-    ft_ping_exec_recv_pckt_false(pckt, ctx->pg_opts);
-  } else if (icmphdr->un.echo.id == ctx->id) {
-    ft_ping_exec_recv_pckt_reply(pckt, ctx->pg_opts, &ctx->stats);
+    ft_ping_exec_recv_pckt_false(pckt, opts);
+  } else if (icmphdr->un.echo.id == ctx.id) {
+    ft_ping_exec_recv_pckt_reply(pckt, opts, res);
+    res->nbPcktReceive += 1;
   }
 
   free(pckt.data);
-  ctx->stats.nbPcktReceive += 1;
 
   return (FT_EXOK);
 }

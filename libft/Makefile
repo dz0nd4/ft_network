@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/10 21:08:47 by dzonda            #+#    #+#              #
-#    Updated: 2021/07/26 09:52:41 by user42           ###   ########lyon.fr    #
+#    Updated: 2021/08/28 16:50:05 by user42           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ OBJDIR = obj
 include $(SRCDIR)/src.mk 
 SRCDIRS = $(foreach dir, $(SUBDIR), $(addprefix $(SRCDIR)/, $(dir)))
 OBJDIRS = $(foreach dir, $(SUBDIR), $(addprefix $(OBJDIR)/, $(dir)))
-INCLUDES = $(foreach dir, $(SRCDIRS), $(addprefix -I, $(dir)))
+INCLUDES += $(foreach dir, $(SRCDIRS), $(addprefix -I, $(dir)))
 
 SRCS = $(foreach file, $(SUBFILE), $(addprefix $(SRCDIR)/, $(file)))
 OBJS = $(subst $(SRCDIR),$(OBJDIR),$(SRCS:.c=.o))

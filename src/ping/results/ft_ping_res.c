@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ping_exec_finish.c                              :+:      :+:    :+:   */
+/*   ft_ping_res.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:03:45 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 16:59:49 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,10 @@
 
 #include "../ft_ping.h"
 
-static int ft_ping_exec_finish_rtt(t_pg_stats *stats) {
-  double tsumTime;
-  double tsum2Time;
-  double mdev;
-
-  tsumTime = stats->sumTime / (double)stats->nbPcktReceive;
-  tsum2Time = stats->sum2Time / (double)stats->nbPcktReceive;
-  mdev = ft_sqrt(tsum2Time - (tsumTime * tsumTime));
+static int ft_ping_exec_finish_rtt(t_ping_res *stats) {
+  double tsumTime = stats->sumTime / (double)stats->nbPcktReceive;
+  double tsum2Time = stats->sum2Time / (double)stats->nbPcktReceive;
+  double mdev = ft_sqrt(tsum2Time - (tsumTime * tsumTime));
 
   printf("rtt min/avg/max/mdev = ");
   printf("%0.3f/%0.3f/%0.3f/%0.3f ms", stats->minTime,
@@ -30,15 +26,11 @@ static int ft_ping_exec_finish_rtt(t_pg_stats *stats) {
   return (FT_EXOK);
 }
 
-static int ft_ping_exec_finish_stats(const char *dest, t_pg_stats *stats) {
-  double nbPcktLoss;
-  double percentPcktLoss;
-  double time;
-
-  nbPcktLoss = stats->nbPcktSend - stats->nbPcktReceive;
-  percentPcktLoss =
+static int ft_ping_exec_finish_stats(const char *dest, t_ping_res *stats) {
+  double nbPcktLoss = stats->nbPcktSend - stats->nbPcktReceive;
+  double percentPcktLoss =
       stats->nbPcktSend ? nbPcktLoss / stats->nbPcktSend * 100 : 0;
-  time = ft_getelapsedtime(&stats->start);
+  double time = ft_getelapsedtime(&stats->start);
 
   printf("\n--- %s ping statistics ---\n", dest);
   printf("%d packets transmitted, ", stats->nbPcktSend);
@@ -49,12 +41,12 @@ static int ft_ping_exec_finish_stats(const char *dest, t_pg_stats *stats) {
   return (FT_EXOK);
 }
 
-int ft_ping_exec_finish(t_ping *ctx) {
-  ft_ping_exec_finish_stats(ctx->pg_opts.dest, &ctx->stats);
+int ft_ping_res(t_ping_res stats, t_ping_opts opts) {
+  ft_ping_exec_finish_stats(opts.dest, &stats);
 
-  if (ctx->stats.nbPcktSend > 0 && ctx->stats.maxTime > 0 &&
-      ctx->pg_opts.packetsize >= (int)FT_TIMEVAL_LEN) {
-    ft_ping_exec_finish_rtt(&ctx->stats);
+  if (stats.nbPcktSend > 0 && stats.maxTime > 0 &&
+      opts.packetsize >= (int)FT_TIMEVAL_LEN) {
+    ft_ping_exec_finish_rtt(&stats);
   }
 
   printf("\n");

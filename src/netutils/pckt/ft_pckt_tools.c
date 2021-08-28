@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:02:53 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 13:31:25 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,14 @@
  */
 unsigned short ft_checksum(void *b, int len) {
   unsigned short *buf = b;
-  register long sum = 0;
+  long sum = 0;
 
   while (len > 1) {
-    /*  This is the inner loop */
     sum += *buf++;
     len -= 2;
   }
-
-  /*  Add left-over byte, if any */
   if (len > 0) sum += *(unsigned char *)buf;
 
-  /*  Fold 32-bit sum to 16 bits */
   while (sum >> 16) sum = (sum & 0xffff) + (sum >> 16);
 
   return ((unsigned short)~sum);

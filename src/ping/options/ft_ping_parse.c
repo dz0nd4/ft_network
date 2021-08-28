@@ -6,23 +6,13 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/11 19:44:10 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 15:29:08 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_ping.h"
 
-static int ft_pg_parse_init(t_arg *arg, t_pg_opts *opts) {
-  arg->i = 1;
-  opts->ttl = FT_PING_TTL_DEFAULT;
-  opts->packetsize = FT_PING_PACKETSIZE_DEFAULT;
-
-  // opts->opt.proto = IPPROTO_ICMP;
-  // opts->opt.ttl = FT_PING_TTL_DEFAULT;
-  return (FT_EXOK);
-}
-
-static int ft_pg_parse_opt(t_pg_opts *opts, t_arg *arg) {
+static int ft_pg_parse_opt(t_ping_opts *opts, t_arg *arg) {
   static t_ping_opt_d ft_ping_opt[FT_PING_OPT_MAX] = {
       {FT_PING_OPT_H, "h", ft_ping_opt_h}, {FT_PING_OPT_V, "v", ft_ping_opt_v},
       {FT_PING_OPT_N, "n", ft_ping_opt_n}, {FT_PING_OPT_S, "s", ft_ping_opt_s},
@@ -49,12 +39,12 @@ static int ft_pg_parse_opt(t_pg_opts *opts, t_arg *arg) {
  * Returns:
  *   FT_EXOK or FT_EXFAIL if ft_pg_parse_opt fails or dest is null
  */
-int ft_ping_parse(t_pg_opts *opts, int argc, const char *argv[]) {
+int ft_ping_parse(t_ping_opts *opts, int argc, const char *argv[]) {
   t_arg arg;
 
   arg.c = argc;
   arg.v = argv;
-  ft_pg_parse_init(&arg, opts);
+  arg.i = 1;
 
   while (arg.i < arg.c) {
     if (*argv[arg.i] == '-') {

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:08:37 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 16:06:41 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,31 @@
 
 #include "../ft_net_global.h"
 
+/*
+ *  Default values
+ */
 #define FT_PING_PACKETSIZE_DEFAULT 56
-#define FT_PING_PACKETSIZE_MAX 65507
-
 #define FT_PING_TTL_DEFAULT 64
-#define FT_PING_TTL_MAX 255
-
 #define FT_PING_DEFAULT_DELAY 1
 #define FT_PING_DEFAULT_RECVTIMEOUT 1
 
-#define FT_PING_STOP 0
-#define FT_PING_RUN 1
-#define FT_PING_SEND 2
-
-// typedef struct s_ping_args t_arg;
-typedef struct s_ping_opts t_pg_opts;
-typedef int t_ping_opt_ft(t_pg_opts *opts, t_arg *args);
+/*
+ *  Max values
+ */
+#define FT_PING_PACKETSIZE_MAX 65507
+#define FT_PING_TTL_MAX 255
 
 /*
  *  Globals
  */
-extern int g_ping;
+#define FT_PING_HDR (FT_IPHDR_LEN + FT_ICMPHDR_LEN)
+#define FT_PING_STOP 0
+#define FT_PING_RUN 1
+#define FT_PING_SEND 2
 
-/*
- *  Args
- */
-// typedef struct s_ping_args {
-//   int argc;
-//   const char **argv;
-//   int argi;
-// } t_arg;
+extern int g_ping;
+typedef struct s_ping_opts t_ping_opts;
+typedef int t_ping_opt_ft(t_ping_opts *opts, t_arg *args);
 
 /*
  *  Options
@@ -74,12 +69,12 @@ typedef struct s_ping_opts {
   int ttl;
   int packetsize;
   t_pckt_opt opt;
-} t_pg_opts;
+} t_ping_opts;
 
 /*
- *  Statistics
+ *  Results
  */
-typedef struct s_ping_stats {
+typedef struct s_ping_results {
   t_timeval start;
   int nbPcktSend;
   int nbPcktReceive;
@@ -89,15 +84,16 @@ typedef struct s_ping_stats {
   double maxTime;
   double sumTime;
   double sum2Time;
-} t_pg_stats;
+} t_ping_res;
 
-typedef struct s_ping {
-  int fd;
+/*
+ *  Context
+ */
+typedef struct s_ping_context {
   int id;
+  int fd;
   t_sockaddr_in to;
-  t_pg_opts pg_opts;
-  t_pg_stats stats;
-} t_ping;
+} t_ping_ctx;
 
 /*
  *  FUNCTIONS PROTOYPES
@@ -111,28 +107,24 @@ void ft_ping_sigarlm();
 /*
  *  Options
  */
-int ft_ping_parse(t_pg_opts *opts, int argc, const char *argv[]);
+int ft_ping_parse(t_ping_opts *opts, int argc, const char *argv[]);
 
-int ft_ping_opt_h(t_pg_opts *opts, t_arg *args);
-int ft_ping_opt_v(t_pg_opts *opts, t_arg *args);
-int ft_ping_opt_n(t_pg_opts *opts, t_arg *args);
-int ft_ping_opt_s(t_pg_opts *opts, t_arg *args);
-int ft_ping_opt_t(t_pg_opts *opts, t_arg *args);
+int ft_ping_opt_h(t_ping_opts *opts, t_arg *args);
+int ft_ping_opt_v(t_ping_opts *opts, t_arg *args);
+int ft_ping_opt_n(t_ping_opts *opts, t_arg *args);
+int ft_ping_opt_s(t_ping_opts *opts, t_arg *args);
+int ft_ping_opt_t(t_ping_opts *opts, t_arg *args);
 
 /*
  *  Execute
  */
-int ft_ping_execute(t_pg_opts opts);
-
-// int ft_ping_exec_init(t_pg_opts opts, t_pg_sock *sock, t_pg_stats *stats);
-int ft_ping_exec_finish(t_ping *ctx);
-int ft_ping_exec_send(t_ping *ctx);
-int ft_ping_exec_recv(t_ping *ctx);
+int ft_ping_exec(t_ping_res *stats, t_ping_opts opts);
+int ft_ping_exec_send(t_ping_res *res, t_ping_opts opts, t_ping_ctx ctx);
+int ft_ping_exec_recv(t_ping_res *res, t_ping_opts opts, t_ping_ctx ctx);
 
 /*
- *  Print
+ *  Result
  */
-// int ft_ping_exec_print_dest(t_pg_opts opts, t_pg_sock *sock);
-int ft_ping_exec_print_addr(t_sockaddr_in *addrin, int numeric_only);
+int ft_ping_res(t_ping_res res, t_ping_opts opts);
 
 #endif

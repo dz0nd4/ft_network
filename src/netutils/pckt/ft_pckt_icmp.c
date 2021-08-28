@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:02:59 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/28 13:20:19 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void ft_pckt_icmp_opt_set(t_pckt *pckt, t_pckt_icmp *opts) {
   icmp->un.echo.sequence = opts->seq;
   icmp->checksum = 0;
 
-  if ((pckt->len - FT_PING_HDR) >= FT_TIMEVAL_LEN) {
-    ft_pckt_set_time(&pckt->data[FT_PING_HDR]);
+  if ((pckt->len - (FT_IPHDR_LEN + FT_ICMPHDR_LEN)) >= FT_TIMEVAL_LEN) {
+    ft_pckt_set_time(&pckt->data[(FT_IPHDR_LEN + FT_ICMPHDR_LEN)]);
   }
 
   icmp->checksum =
