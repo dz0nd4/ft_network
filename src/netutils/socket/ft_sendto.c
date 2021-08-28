@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pcap_open.c                                     :+:      :+:    :+:   */
+/*   ft_sendto.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/14 13:56:03 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/05/26 22:58:22 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_sock.h"
+#include "ft_socket.h"
 
 /*
- * ft_pcap_open_live
+ * ft_sendto
  *
  * Description:
- *    Abstraction over pcap_open_live function.
+ *    Abstraction over sendto function.
  * Returns:
  *    The number of data read or -1
  */
-int ft_pcap_open_live(pcap_t **handle, char *dev_name) {
-  char errbuf[PCAP_ERRBUF_SIZE]; /* Error string */
+int ft_sendto(int fd, char *data, int datalen, t_sockaddr_in *saddrin) {
+  socklen_t size;
+  int i;
 
-  /* Open the session in promiscuous mode */
-  *handle = pcap_open_live(dev_name, BUFSIZ, 1, 1000, errbuf);
-  if (*handle == NULL) {
-    fprintf(stderr, "Couldn't open device %s: %s\n", dev_name, errbuf);
-    return (FT_EXFAIL);
+  size = sizeof(t_sockaddr);
+  i = sendto(fd, data, datalen, 0, (t_sockaddr *)saddrin, size);
+  if (i < 0) {
+    perror("sendto");
   }
-  return (FT_EXOK);
+
+  return (i);
 }

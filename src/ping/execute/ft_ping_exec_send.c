@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/30 14:09:10 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:03:49 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int ft_ping_exec_send(t_ping *ctx) {
   ft_pckt_ip_opt_set(&pckt, &opt.ip);
   ft_pckt_icmp_opt_set(&pckt, &opt.icmp);
 
-  if (ft_sendto(ctx->fd, pckt.data, pckt.len, &ctx->to) == FT_EXFAIL)
+  if (ft_sendto(ctx->fd, (char *)pckt.data, pckt.len, &ctx->to) == FT_EXFAIL)
     return (FT_EXFAIL);
 
   free(pckt.data);

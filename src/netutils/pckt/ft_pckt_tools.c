@@ -6,49 +6,67 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/28 13:54:12 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:02:53 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_sock.h"
+#include "ft_pckt.h"
 
 /*
- Checksums - IP and TCP
+ * ft_checksum
+ *
+ * Description:
+ *    One's complement function
+ * Returns:
+ *
  */
-unsigned short csum(unsigned short *ptr, int nbytes) {
-  register long sum;
-  unsigned short oddbyte;
-  register short answer;
+unsigned short ft_checksum(void *b, int len) {
+  unsigned short *buf = b;
+  register long sum = 0;
 
-  sum = 0;
-  while (nbytes > 1) {
-    sum += *ptr++;
-    nbytes -= 2;
-  }
-  if (nbytes == 1) {
-    oddbyte = 0;
-    *((u_char *)&oddbyte) = *(u_char *)ptr;
-    sum += oddbyte;
+  while (len > 1) {
+    /*  This is the inner loop */
+    sum += *buf++;
+    len -= 2;
   }
 
-  sum = (sum >> 16) + (sum & 0xffff);
-  sum = sum + (sum >> 16);
-  answer = (short)~sum;
+  /*  Add left-over byte, if any */
+  if (len > 0) sum += *(unsigned char *)buf;
 
-  return (answer);
+  /*  Fold 32-bit sum to 16 bits */
+  while (sum >> 16) sum = (sum & 0xffff) + (sum >> 16);
+
+  return ((unsigned short)~sum);
 }
 
+/*
+ * ft_pckt_random_data
+ *
+ * Description:
+ *   Fill packet with random data
+ * Returns:
+ *   FT_EXOK or FT_EXFAIL if ft_inet_ntop fails
+ */
 t_uchar *ft_pckt_random_data(t_uchar *data, t_uint16 len) {
   t_uint16 i = 0;
 
   while (i < len) {
-    data[i++] = i + '0';
+    data[i] = i + '0';
+    i += 1;
   }
   data[i] = 0;
 
   return (data);
 }
 
+/*
+ * ft_pckt_set_time
+ *
+ * Description:
+ *   Set the time in a packet
+ * Returns:
+ *   FT_EXOK or FT_EXFAIL if ft_inet_ntop fails
+ */
 void ft_pckt_set_time(t_uchar *data) {
   t_timeval tv;
 

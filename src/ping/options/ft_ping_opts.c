@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/26 18:51:56 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 16:02:16 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int ft_ping_opt_n(t_pg_opts *opts, t_arg *arg) {
  *   FT_EXOK
  */
 int ft_ping_opt_s(t_pg_opts *opts, t_arg *arg) {
-  const char argv = arg->v[arg->i + 1];
+  const char *argv = arg->v[arg->i + 1];
   unsigned int argvi = 0;
 
   if (!ft_isdigitstr(argv)) {
@@ -72,7 +72,7 @@ int ft_ping_opt_s(t_pg_opts *opts, t_arg *arg) {
 
   argvi = (unsigned int)ft_atoi(argv);
   if (argvi > (FT_UINT16_MAX - FT_PING_HDR)) {
-    fprintf(stderr, "ft_ping packet size %u is too large. Maximum is %d\n",
+    fprintf(stderr, "ft_ping packet size %u is too large. Maximum is %ld\n",
             argvi, FT_UINT16_MAX - FT_PING_HDR);
     return (FT_EXFAIL);
   }
@@ -91,7 +91,7 @@ int ft_ping_opt_s(t_pg_opts *opts, t_arg *arg) {
  *   FT_EXOK
  */
 int ft_ping_opt_t(t_pg_opts *opts, t_arg *arg) {
-  const char argv = arg->v[arg->i + 1];
+  const char *argv = arg->v[arg->i + 1];
   int argvi = 0;
 
   if (!ft_isdigitstr(argv)) {

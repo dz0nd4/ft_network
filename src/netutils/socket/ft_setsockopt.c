@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sock_opt.c                                      :+:      :+:    :+:   */
+/*   ft_setsockopt.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/19 21:17:34 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:00:50 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_sock.h"
+#include "ft_socket.h"
 
 /*
- * ft_recvfrom
+ * ft_setsockopt_ttl
  *
  * Description:
- *    Abstraction over recvmsg function.
+ *    Abstraction over setsockopt function.
  * Returns:
  *    The number of data read or -1
  */
@@ -29,6 +29,14 @@ int ft_setsockopt_ttl(int *fd, int ttl, int verbose) {
   return (FT_EXFAIL);
 }
 
+/*
+ * ft_setsockopt_sndtimeo
+ *
+ * Description:
+ *    Abstraction over setsockopt function.
+ * Returns:
+ *    The number of data read or -1
+ */
 int ft_setsockopt_sndtimeo(int *fd, int timeout, int verbose) {
   t_timeval tv;
 
@@ -44,6 +52,14 @@ int ft_setsockopt_sndtimeo(int *fd, int timeout, int verbose) {
   return (FT_EXFAIL);
 }
 
+/*
+ * ft_setsockopt_sndtimeo
+ *
+ * Description:
+ *    Abstraction over setsockopt function.
+ * Returns:
+ *    The number of data read or -1
+ */
 int ft_setsockopt_rcvtimeo(int *fd, int timeout, int verbose) {
   t_timeval tv;
 

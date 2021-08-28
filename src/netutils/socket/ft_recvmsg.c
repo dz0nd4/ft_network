@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/28 13:49:42 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:00:55 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ft_sock.h"
+#include "ft_socket.h"
 
 /*
  * ft_recvmsg

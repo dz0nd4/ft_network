@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/30 23:19:20 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 16:25:29 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ int ft_ping_exec_recv_pckt_false(t_pckt pckt, t_pg_opts opts) {
 
   if (opts.verbose) {
     printf("icmp_type=%u %s icmp_code=%u ", icmp->type,
-           ft_icmp_pr_type(icmp->type), icmp->code);
+           ft_pckt_icmp_type(icmp->type), icmp->code);
     if (icmp->type == ICMP_DEST_UNREACH)
-      printf("%s\n", ft_icmp_pr_code_unreach(icmp->code));
+      printf("%s\n", ft_pckt_icmp_code_unreach(icmp->code));
     if (icmp->type == ICMP_REDIRECT)
-      printf("%s\n", ft_icmp_pr_code_redir(icmp->code));
+      printf("%s\n", ft_pckt_icmp_code_redir(icmp->code));
     if (icmp->type == ICMP_TIME_EXCEEDED)
-      printf("%s\n", ft_icmp_pr_code_exc(icmp->code));
+      printf("%s\n", ft_pckt_icmp_code_exc(icmp->code));
   } else {
-    printf("%s\n", ft_icmp_pr_type(icmp->type));
+    printf("%s\n", ft_pckt_icmp_type(icmp->type));
   }
 
   return (FT_EXOK);
@@ -80,7 +80,7 @@ int ft_ping_exec_recv_pckt_reply(t_pckt pckt, t_pg_opts opts,
   ft_ping_exec_print_addr(&pckt.to, opts.numeric_only);
   printf("icmp_seq=%u ttl=%d ", icmp->un.echo.sequence, ip->ttl);
 
-  if (opts.packetsize >= FT_TIMEVAL_LEN) {
+  if (opts.packetsize >= (int)FT_TIMEVAL_LEN) {
     elapsed_time = ft_getelapsedtime(tv);
 
     if (stats->minTime == 0 || elapsed_time < stats->minTime)
@@ -97,12 +97,6 @@ int ft_ping_exec_recv_pckt_reply(t_pckt pckt, t_pg_opts opts,
   printf("\n");
 
   return (FT_EXOK);
-}
-
-int ft_ping_exec_recv_pckt(t_ping *ctx, t_pckt pckt) {
-  t_iphdr *iphdr = (t_iphdr *)&pckt.data[0];
-  t_icmphdr *icmphdr = (t_icmphdr *)&pckt.data[FT_IPHDR_LEN];
-  t_timeval *tv = (t_timeval *)&pckt.data[FT_PING_HDR];
 }
 
 /*
@@ -122,11 +116,11 @@ int ft_ping_exec_recv(t_ping *ctx) {
   if ((pckt.data = (t_uchar *)ft_memalloc(pckt.len)) == NULL)
     return (FT_EXFAIL);
 
-  t_iphdr *iphdr = (t_iphdr *)&pckt.data[0];
+  // t_iphdr *iphdr = (t_iphdr *)&pckt.data[0];
   t_icmphdr *icmphdr = (t_icmphdr *)&pckt.data[FT_IPHDR_LEN];
-  t_timeval *tv = (t_timeval *)&pckt.data[FT_PING_HDR];
+  // t_timeval *tv = (t_timeval *)&pckt.data[FT_PING_HDR];
 
-  pckt.cc = ft_recvmsg(ctx->fd, (char *)&pckt.to, pckt.data, pckt.len);
+  pckt.cc = ft_recvmsg(ctx->fd, (char *)&pckt.to, (char *)pckt.data, pckt.len);
   if (pckt.cc < 0) return (FT_EXFAIL);
 
   if (icmphdr->type != ICMP_ECHOREPLY) {

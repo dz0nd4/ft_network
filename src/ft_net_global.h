@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_net.h                                           :+:      :+:    :+:   */
+/*   ft_net_global.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 17:03:33 by user42           ###   ########lyon.fr   */
+/*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
+/*   Updated: 2021/08/27 14:42:08 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_NET_H
-#define FT_NET_H
+#ifndef FT_NETWORK_GLOBAL_H
+#define FT_NETWORK_GLOBAL_H
 
-#include "../ping/ft_ping.h"
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
-typedef int t_dist(int argc, const char *argv[]);
+// #include "./netsock/ft_netsock.h"
+#include "../libft/libft.h"
+#include "./netutils/ft_netutils.h"
 
-typedef enum e_net_key {
-  FT_NET_PING,
-  FT_NET_TRACEROUTE,
-  FT_NET_NMAP,
-  FT_NET_MAX
-} t_net_key;
+#define FT_SUCCESS 0
+#define FT_FAILURE 1
 
-typedef struct s_net {
-  char *name;
-  t_dist *dist;
-} t_net;
+typedef unsigned char t_uchar;
+typedef unsigned int t_uint;
+
+// # define FT_EXOK      0
+// # define FT_EXFAIL    1
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/30 14:08:48 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 15:58:30 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ping.h"
 
-static int ft_ping_exec_init2(t_ping *ctx) {
+static int ft_ping_exec_init(t_ping *ctx) {
   t_addrinfo addr;
 
   ft_memset(&addr, 0, sizeof(t_addrinfo));
@@ -67,9 +67,7 @@ int ft_ping_execute(t_pg_opts opts) {
   ft_memset(&pckt, 0, sizeof(pckt));
   ft_memset(&stats, 0, sizeof(stats));
 
-  // if (ft_ping_exec_init(opts, &sock, &stats) == FT_EXFAIL) return
-  // (FT_EXFAIL);
-  if (ft_ping_exec_init2(&ctx) == FT_EXFAIL) return (FT_EXFAIL);
+  if (ft_ping_exec_init(&ctx) == FT_EXFAIL) return (FT_EXFAIL);
 
   signal(SIGINT, ft_ping_sigint);
   signal(SIGALRM, ft_ping_sigarlm);
@@ -81,10 +79,15 @@ int ft_ping_execute(t_pg_opts opts) {
          opts.packetsize + FT_PING_HDR);
 
   ft_gettimeofday(&ctx.stats.start);
+
   while (g_ping >= FT_PING_RUN) {
     if (g_ping == FT_PING_SEND) {
-      if (ft_ping_exec_send(&ctx) == FT_EXFAIL) break;
-      if (g_ping != FT_PING_STOP) g_ping = FT_PING_RUN;
+      if (ft_ping_exec_send(&ctx) == FT_EXFAIL) {
+        break;
+      }
+      if (g_ping != FT_PING_STOP) {
+        g_ping = FT_PING_RUN;
+      }
     }
     ft_ping_exec_recv(&ctx);
   }

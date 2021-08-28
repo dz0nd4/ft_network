@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/27 15:47:19 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:03:45 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int ft_ping_exec_finish(t_ping *ctx) {
   ft_ping_exec_finish_stats(ctx->pg_opts.dest, &ctx->stats);
 
   if (ctx->stats.nbPcktSend > 0 && ctx->stats.maxTime > 0 &&
-      ctx->pg_opts.packetsize >= FT_TIMEVAL_LEN) {
+      ctx->pg_opts.packetsize >= (int)FT_TIMEVAL_LEN) {
     ft_ping_exec_finish_rtt(&ctx->stats);
   }
 

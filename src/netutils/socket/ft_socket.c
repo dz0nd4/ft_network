@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nmap_conf_scan.c                                :+:      :+:    :+:   */
+/*   ft_socket.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:12:50 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/22 19:39:59 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:00:47 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nmap.h"
+#include "ft_socket.h"
 
-int ft_nmap_config_scan(char *ip) {
-  fprintf(stdout,
-          "\n Scan Configuration \n"
-          " ------------------------------------------------ \n");
+int ft_socket_raw() {
+  const int on = 1;
+  int fd;
 
-  fprintf(stdout, "Target IP address: %s \n\n", ip);
+  if ((fd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) == INVALID_SOCKET)
+    return (INVALID_SOCKET);
+  if (setsockopt(fd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
+    return (INVALID_SOCKET);
+  return (fd);
+}
 
-  // fprintf(stdout, " ------------------------------------------------
-  // \n\n\n");
-  return (FT_EXOK);
+int ft_socket_icmp() {
+  const int on = 1;
+  int fd;
+
+  if ((fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP)) == INVALID_SOCKET)
+    return (INVALID_SOCKET);
+  if (setsockopt(fd, IPPROTO_IP, IP_HDRINCL, (char *)&on, sizeof(on)) < 0)
+    return (INVALID_SOCKET);
+  return (fd);
 }

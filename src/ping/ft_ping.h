@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 20:10:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/30 14:08:48 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/27 17:08:37 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <signal.h>
 
-#include "../ft_network_global.h"
+#include "../ft_net_global.h"
 
 #define FT_PING_PACKETSIZE_DEFAULT 56
 #define FT_PING_PACKETSIZE_MAX 65507
