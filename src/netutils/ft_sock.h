@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sock.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: dzonda <dzonda@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 22:14:00 by dzonda            #+#    #+#             */
-/*   Updated: 2021/08/20 14:07:49 by user42           ###   ########lyon.fr   */
+/*   Updated: 2022/02/16 12:25:34 by dzonda           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@
 #define FT_UINT8_MAX 0xFF    /* 255 */
 #define FT_UINT16_MAX 0xFFFF /* 65535 */
 
-typedef struct s_arg {
-  int i;
-  int c;
-  const char **v;
-} t_arg;
+// typedef struct s_arg {
+//   int i;
+//   int c;
+//   const char **v;
+// } t_arg;
 
-typedef struct s_map_istr {
-  int key;
-  char *value;
-} t_map_istr;
+// typedef struct s_map_istr {
+//   int key;
+//   char *value;
+// } t_map_istr;
 
 /*
   GLOBAL

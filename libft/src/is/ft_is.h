@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 03:43:56 by dzonda            #+#    #+#             */
-/*   Updated: 2021/07/25 11:34:00 by user42           ###   ########lyon.fr   */
+/*   Updated: 2021/08/09 09:44:26 by user42           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int		ft_isblank(int c);
 int		ft_isspace(int c);
 int		ft_isdigitstr(const char *str);
 int		ft_ishex(int c);
+int   ft_ishexstr(const char *str);
 
 #endif

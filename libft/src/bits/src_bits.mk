@@ -5,4 +5,5 @@ SUBFILES_BITS = \
 			bits/ft_printb.c \
 			bits/ft_rotate.c \
 			bits/ft_shift.c \
-			bits/ft_swap.c
+			bits/ft_swap.c \
+			bits/ft_setget.c
